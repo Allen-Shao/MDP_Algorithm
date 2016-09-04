@@ -57,5 +57,11 @@ public class MapGrid {
 		this.obstacle = o;
 	}
 
+	public void reset(){
+		explored = false;
+		obstacle = false;
+		visited = false;
+	}
+
 
 }
