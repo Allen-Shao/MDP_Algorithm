@@ -1,11 +1,14 @@
 package map;
 
-public final class Constants {
+public final class MapConstants {
 
 
 	//Number of map row and column, +2 to include the border wall
 	public static final int MAP_COL = 17;
 	public static final int MAP_ROW = 22;
+
+	//Grid size 10 cm
+	public static final int GRID_SIZE = 10;
 
 	//Define start zone
 	public static final int START_X_MIN = 1;
