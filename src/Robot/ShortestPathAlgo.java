@@ -31,6 +31,8 @@ public class ShortestPathAlgo {
 			return;
 		}
 
+		
+
 		opened.add(this.start);
 
 		while (!opened.isEmpty()){
@@ -47,7 +49,7 @@ public class ShortestPathAlgo {
 			ArrayList<MapGrid> neighbours = findNeighbour(current);
 			for (int i; i<neighbours.size();i++){
 				if (!gridInTheList(neighbours[i], closed)){
-					
+
 
 
 				}

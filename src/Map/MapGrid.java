@@ -70,6 +70,9 @@ public class MapGrid {
 		explored = false;
 		obstacle = false;
 		visited = false;
+		gscore = 100000;
+		hscore = 100000;
+		fscore = 100000;
 	}
 
 
