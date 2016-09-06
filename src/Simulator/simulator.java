@@ -4,7 +4,9 @@ import javax.swing.*;
 
 import java.util.*;
 import java.io.*;
-import map.*;
+import map.Map;
+import map.MapConstants;
+import map.MapGrid;
 import robot.*;
 
 public class Simulator {
@@ -25,7 +27,7 @@ public class Simulator {
 
 	private static JPanel robotMapButtons = null;
 
-	private static Map map = null;
+	private static Map stpMap = null;  //shortest path map
 
 	private static Robot smartRobot = null;
 
@@ -37,11 +39,11 @@ public class Simulator {
 	//This is non-gui version for testing
 
 	public static void main(String[] args){
-		map = new Map();
+		stpMap = new Map();
 
-		map.loadMap("map.txt");
+		stpMap.loadMap("map.txt");
 
-		map.printMap();
+		stpMap.printMap();
 
 		
 

@@ -12,7 +12,7 @@ public class MapGrid {
 	private int hscore;
 	private int fscore;
 
-	public Grid(int x, int y){
+	public MapGrid(int x, int y){
 		this.xPos = x;
 		this.yPos = y;
 

@@ -1,5 +1,9 @@
 package map;
 
+import java.util.*;
+import java.io.*;
+
+
 public class Map{
 
 	protected MapGrid [][] grids = null;
@@ -14,13 +18,13 @@ public class Map{
 		}		
 	}
 
-	public Grid[][] getGrids(){
+	public MapGrid[][] getGrids(){
 		return grids;
 	}
 
 	public void resetMap(){
 		for (int i = 0; i < MapConstants.MAP_ROW; i++){
-			for (int j = 0; j < Constants.MAP_COL; j++){
+			for (int j = 0; j < MapConstants.MAP_COL; j++){
 				grids[i][j].reset();
 			}
 		}	
@@ -51,7 +55,7 @@ public class Map{
 	}
 
 
-	public loadMap(String filename){
+	public void loadMap(String filename){
 
 		BufferedReader brStream;
 		FileReader frStream;
@@ -61,11 +65,11 @@ public class Map{
 			brStream = new BufferedReader(frStream);
 
 			int input;
-			int i = 1; j = 1;
+			int i = 1, j = 1;
 			while (i <= MapConstants.MAP_ROW - 1){
-				while (input = brStream.read()) != 10){
+				while ((input = brStream.read()) != 10){
 					if (input == 49){
-						Grids[i][j].setObstacle(true);
+						grids[i][j].setObstacle(true);
 					}
 					j++;
 				}
@@ -79,17 +83,17 @@ public class Map{
 		for (int i=0;i<MapConstants.MAP_ROW;i++){
 			for (int j=0; j<MapConstants.MAP_COL;j++){
 				if (isBorder(i,j)){
-					Grids[i][j].setObstacle(true);
+					grids[i][j].setObstacle(true);
 				}
 			}
 		}
 
 	}
 
-	public printMap(){
+	public void printMap(){
 		for (int i=0;i<MapConstants.MAP_ROW;i++){
 			for (int j=0; j<MapConstants.MAP_COL;j++){
-				if (Grids[i][j].isObstacle()){
+				if (grids[i][j].isObstacle()){
 					System.out.print("1");
 				}
 				else {
