@@ -1,4 +1,4 @@
-package Simulator;
+package simulator;
 
 import javax.swing.*;
 
@@ -55,7 +55,7 @@ public class Simulator {
 		mainCards = new JPanel(new CardLayout());
 		buttonsCards = new JPanel(new CardLayout());
 
-		
+
 
 
 

@@ -15,10 +15,14 @@ public final class MapConstants {
 	public static final int START_X_MAX = 3;
 	public static final int START_Y_MIN = 1;
 	public static final int START_Y_MAX = 3;
+	public static final int START_X_CENTER = 2;
+	public static final int START_Y_CENTER = 2;
 
 	//Define goal zone
 	public static final int GOAL_X_MIN = MAP_ROW - 4;
 	public static final int GOAL_X_MAX = MAP_ROW - 2;
 	public static final int GOAL_Y_MIN = MAP_COL - 4;
 	public static final int GOAL_Y_MAX = MAP_COL - 2;
+	public static final int GOAL_X_CENTER = MAP_ROW - 3;
+	public static final int GOAL_Y_CENTER = MAP_COL - 3;
 }

@@ -1,4 +1,4 @@
-package Map;
+package map;
 
 public class MapGrid {
 	private int xPos;
@@ -8,6 +8,10 @@ public class MapGrid {
 	private boolean obstacle;
 	private boolean visited;
 
+	private int gscore;
+	private int hscore;
+	private int fscore;
+
 	public Grid(int x, int y){
 		this.xPos = x;
 		this.yPos = y;
@@ -15,6 +19,11 @@ public class MapGrid {
 		explored = false;
 		obstacle = false;
 		visited = false;
+
+		//set to infinity
+		gscore = 100000;
+		hscore = 100000;
+		fscore = 100000;
 	}
 
 	public int getRow(){
