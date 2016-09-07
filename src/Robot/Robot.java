@@ -6,7 +6,7 @@ import java.util.*;
 public class Robot {
 	private int xPos;
 	private int yPos;
-	private int heading;      //Direction of the robot 1, 2, 3, 4
+	private int heading;      //Direction of the robot 1:right, 2:down, 3:left, 4:up
 	
 	private ArrayList<Sensor> sensors = null;
 	
