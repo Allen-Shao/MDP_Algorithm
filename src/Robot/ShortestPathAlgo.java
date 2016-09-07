@@ -16,12 +16,19 @@ public class ShortestPathAlgo {
 	private ArrayList<MapGrid> opened = new ArrayList();
 	private ArrayList<MapGrid> closed = new ArrayList();
 
+	private double gscore[][];
+	private double hscore[][];
+	private double fscore[][];
+
 	public ShortestPathAlgo(Map m, Robot r){
 		this.stpMap = m;
 		this.robot = r;
 
 		this.start = stpMap.getGrid(MapConstants.START_X_CENTER, MapConstants.START_Y_CENTER);
 		this.goal = stpMap.getGrid(MapConstants.GOAL_X_CENTER, MapConstants.GOAL_Y_CENTER);
+
+		//initial gscore
+		for (int i=0;i)
 
 	}
 

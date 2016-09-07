@@ -7,10 +7,8 @@ public class MapGrid {
 	private boolean explored;
 	private boolean obstacle;
 	private boolean visited;
+	private boolean virtualWall;
 
-	private int gscore;
-	private int hscore;
-	private int fscore;
 
 	public MapGrid(int x, int y){
 		this.xPos = x;
@@ -19,11 +17,8 @@ public class MapGrid {
 		explored = false;
 		obstacle = false;
 		visited = false;
+		virtualWall = false;
 
-		//set to infinity
-		gscore = 100000;
-		hscore = 100000;
-		fscore = 100000;
 	}
 
 	public int getRow(){
@@ -46,6 +41,10 @@ public class MapGrid {
 		return visited;
 	}
 
+	public boolean isVirtualWall(){
+		return virtualWall;
+	}
+
 	public void setRow(int x){
 		this.xPos = x;
 	}
@@ -66,13 +65,15 @@ public class MapGrid {
 		this.obstacle = o;
 	}
 
+	public void setVirtualWall(boolean v){
+		this.virtualWall = v;
+	}
+
 	public void reset(){
 		explored = false;
 		obstacle = false;
 		visited = false;
-		gscore = 100000;
-		hscore = 100000;
-		fscore = 100000;
+		virtualWall = false;
 	}
 
 

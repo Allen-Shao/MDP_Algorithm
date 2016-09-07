@@ -18,7 +18,7 @@ public class Map{
 		}		
 	}
 
-	public MapGrid[][] getGrid(int i, int j){
+	public MapGrid getGrid(int i, int j){
 		return grids[i][j];
 	}
 
@@ -55,6 +55,22 @@ public class Map{
 	}
 
 
+	public void addObstacle(int i, int j){
+		this.grids[i][j].setObstacle(true);
+
+		//set virtual wall
+		for (int m=-1; m<2; m++){
+			for (int n=-1; n<2; n++){
+				if ((i+m)>0 && (i+m)<MapConstants.MAP_ROW && (j+n)>0 && (j+n)<MapConstants.MAP_COL){
+					if (grids[i+m][j+n].isObstacle() == false)
+						this.grids[i+m][j+n].setVirtualWall(true);
+				}
+			}
+		}
+
+	}
+
+
 	public void loadMap(String filename){
 
 		BufferedReader brStream;
@@ -69,10 +85,14 @@ public class Map{
 			while (i <= MapConstants.MAP_ROW - 1){
 				while ((input = brStream.read()) != 10 && (input != -1)){
 					if (input == 49){
-						grids[i][j].setObstacle(true);
+						addObstacle(i, j);
+						printMap();
 					}
-					System.out.println(input);
+					//System.out.println(input);
 					j++;
+				}
+				if (i == 3){
+					System.exit(0);
 				}
 				i++; j=1;
 			}
@@ -84,7 +104,7 @@ public class Map{
 		for (int i=0;i<MapConstants.MAP_ROW;i++){
 			for (int j=0; j<MapConstants.MAP_COL;j++){
 				if (isBorder(i,j)){
-					grids[i][j].setObstacle(true);
+					addObstacle(i, j);
 				}
 			}
 		}
@@ -92,6 +112,22 @@ public class Map{
 	}
 
 	public void printMap(){
+		for (int i=0;i<MapConstants.MAP_ROW;i++){
+			for (int j=0; j<MapConstants.MAP_COL;j++){
+				if (grids[i][j].isVirtualWall()){
+					System.out.print("2");
+				}else if (grids[i][j].isObstacle()){
+					System.out.print("1");
+				}
+				else {
+					System.out.print("0");
+				}
+			}
+			System.out.println();
+		}
+
+		System.out.println();
+
 		for (int i=0;i<MapConstants.MAP_ROW;i++){
 			for (int j=0; j<MapConstants.MAP_COL;j++){
 				if (grids[i][j].isObstacle()){
@@ -103,6 +139,12 @@ public class Map{
 			}
 			System.out.println();
 		}
+
+		System.out.println();
+		System.out.println();
+		System.out.println();
+
+
 	}
 
 

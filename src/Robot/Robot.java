@@ -15,12 +15,12 @@ public class Robot {
 	
 	
 	public Robot(MapGrid pos, int h){
-		this.postion = pos;
+		this.position = pos;
 		this.heading = h;
 	}
 
-	public MapGrid getPositon(){
-		return this.postion;
+	public MapGrid getPosition(){
+		return this.position;
 	}
 	
 	
