@@ -64,7 +64,7 @@ public class Map{
 			for (int n=-1; n<2; n++){
 				if ((i+m)>0 && (i+m)<MapConstants.MAP_ROW && (j+n)>0 && (j+n)<MapConstants.MAP_COL){
 					if (grids[i+m][j+n].isObstacle() == false && grids[i+m][j+n].isVirtualWall() == false){
-						System.out.printf("%d %d\n", i+m, j+n);
+						// System.out.printf("%d %d\n", i+m, j+n);
 						this.grids[i+m][j+n].setVirtualWall(true);
 					}
 				}
@@ -89,13 +89,10 @@ public class Map{
 				while ((input = brStream.read()) != 10 && (input != -1)){
 					if (input == 49){
 						addObstacle(i, j);
-						printMap();
+						// printMap();
 					}
 					//System.out.println(input);
 					j++;
-				}
-				if (i == 3){
-					System.exit(0);
 				}
 				i++; j=1;
 			}
@@ -114,7 +111,7 @@ public class Map{
 
 	}
 
-	public void printMap(){
+	public void printMapWithVirtualWall(){
 		for (int i=0;i<MapConstants.MAP_ROW;i++){
 			for (int j=0; j<MapConstants.MAP_COL;j++){
 				if (grids[i][j].isVirtualWall()){
@@ -129,7 +126,11 @@ public class Map{
 			System.out.println();
 		}
 
-		System.out.println();
+		// System.out.println();
+
+	}
+
+	public void printMap(){
 
 		for (int i=0;i<MapConstants.MAP_ROW;i++){
 			for (int j=0; j<MapConstants.MAP_COL;j++){
@@ -143,10 +144,7 @@ public class Map{
 			System.out.println();
 		}
 
-		System.out.println();
-		System.out.println();
-		System.out.println();
-
+		// System.out.println();
 
 	}
 
