@@ -6,7 +6,7 @@ import map.MapConstants
 import robot.Robot;
 
 public class ShortestPathAlgo {
-	private Map map;
+	private Map stpMap;     //shortest path map
 	private Robot robot;
 
 
@@ -17,20 +17,20 @@ public class ShortestPathAlgo {
 	private ArrayList<MapGrid> closed = new ArrayList();
 
 	public ShortestPathAlgo(Map m, Robot r){
-		this.map = m;
+		this.stpMap = m;
 		this.robot = r;
-		this.start.setRow(MapConstants.START_X_CENTER);
-		this.start.setCol(MapConstants.START_Y_CENTER);
-		this.goal.setRow(MapConstants.GOAL_X_CENTER);
-		this.goal.setCol(MapConstants.GOAL_Y_CENTER);
+
+		this.start = stpMap.getGrid(MapConstants.START_X_CENTER, MapConstants.START_Y_CENTER);
+		this.goal = stpMap.getGrid(MapConstants.GOAL_X_CENTER, MapConstants.GOAL_Y_CENTER);
+
 	}
 
 	public void runShortestPath(){
-		//To be implemented
-		if (robot is not at start point){
+		
+		if (sameGrid(robot.getPostion(), start)){
+			//To be implemented
 			return;
 		}
-
 
 
 		opened.add(this.start);

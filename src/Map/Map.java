@@ -18,8 +18,8 @@ public class Map{
 		}		
 	}
 
-	public MapGrid[][] getGrids(){
-		return grids;
+	public MapGrid[][] getGrid(int i, int j){
+		return grids[i][j];
 	}
 
 	public void resetMap(){
