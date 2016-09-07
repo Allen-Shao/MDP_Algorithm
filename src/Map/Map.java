@@ -57,13 +57,16 @@ public class Map{
 
 	public void addObstacle(int i, int j){
 		this.grids[i][j].setObstacle(true);
+		this.grids[i][j].setVirtualWall(false); //if it is set to obstacle, it is not a virtual wall
 
 		//set virtual wall
 		for (int m=-1; m<2; m++){
 			for (int n=-1; n<2; n++){
 				if ((i+m)>0 && (i+m)<MapConstants.MAP_ROW && (j+n)>0 && (j+n)<MapConstants.MAP_COL){
-					if (grids[i+m][j+n].isObstacle() == false)
+					if (grids[i+m][j+n].isObstacle() == false && grids[i+m][j+n].isVirtualWall() == false){
+						System.out.printf("%d %d\n", i+m, j+n);
 						this.grids[i+m][j+n].setVirtualWall(true);
+					}
 				}
 			}
 		}

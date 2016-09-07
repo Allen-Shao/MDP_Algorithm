@@ -44,8 +44,10 @@ public class Simulator {
 		stpMap.loadMap("map.txt");
 
 		stpMap.printMap();
-
 		
+		if (stpMap.getGrid(1, 4).isVirtualWall()){
+			System.out.println("(1,4) is isVirtualWall");
+		}
 
 
 	}
