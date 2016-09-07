@@ -31,7 +31,7 @@ public class ShortestPathAlgo {
 			return;
 		}
 
-		
+
 
 		opened.add(this.start);
 
@@ -39,7 +39,7 @@ public class ShortestPathAlgo {
 			MapGrid current = opened[0];
 
 
-			if (sameGrid(current goal))
+			if (sameGrid(current, goal))
 				//To be implemented
 				return;
 
