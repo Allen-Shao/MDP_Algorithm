@@ -67,10 +67,11 @@ public class Map{
 			int input;
 			int i = 1, j = 1;
 			while (i <= MapConstants.MAP_ROW - 1){
-				while ((input = brStream.read()) != 10){
+				while ((input = brStream.read()) != 10 && (input != -1)){
 					if (input == 49){
 						grids[i][j].setObstacle(true);
 					}
+					System.out.println(input);
 					j++;
 				}
 				i++; j=1;
