@@ -22,6 +22,10 @@ public class Robot {
 	public MapGrid getPosition(){
 		return this.position;
 	}
+
+	public int getHeading(){
+		return this.heading;
+	}
 	
 	
 	

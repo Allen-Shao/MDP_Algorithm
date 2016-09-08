@@ -29,7 +29,7 @@ public class Simulator {
 
 	private static Map stpMap = null;  //shortest path map
 
-	private static Robot smartRobot = null;
+	private static Robot mdpRobot = null;
 
 	private static int startPosRow = 2;
 	private static int startPosCol = 2;
