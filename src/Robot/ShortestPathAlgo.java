@@ -144,10 +144,9 @@ public class ShortestPathAlgo {
 
 	private double calculateGscore(MapGrid cur, MapGrid next, int heading){
 		double move = RobotConstants.MOVE_COST; //always one step
-		double turn = 0;
+		double turn = getTurnTimes(cur, next, heading) * RobotConstants.TURN_COST;
 
-
-
+		return (move + turn);
 	}
 
 	private int getTurnTimes(MapGrid cur, MapGrid next, int heading){
