@@ -146,6 +146,65 @@ public class ShortestPathAlgo {
 		double move = RobotConstants.MOVE_COST; //always one step
 		double turn = 0;
 
+
+
+	}
+
+	private int getTurnTimes(MapGrid cur, MapGrid next, int heading){
+		switch (heading) {
+			case 1: //current direction to right
+				if (next.getRow() == cur.getRow()){
+					if (next.getRow() >= cur.getRow()){
+						return 0; // cur -> next no need to turn
+					} else {
+						return 2;  // next cur->   need to turn twice
+					}
+				}
+				else {
+					return 1; // next
+							  // cur ->         turn once
+				}				
+				break;
+			case 2: //current direction to down
+				if (next.getCol() == cur.getCol()){
+					if (next.getCol() <= cur.getCol()){
+						return 0; // cur
+								  // next   no need to turn
+					} else {
+						return 2;  // next   need to turn twice
+					}			   // cur
+				}
+				else {
+					return 1; // next cur   need to turn once
+				}			  				
+				break;
+			case 3: //current direction to left
+				if (next.getRow() == cur.getRow()){
+					if (next.getRow() <= cur.getRow()){
+						return 0; // next <- cur no need to turn
+					} else {
+						return 2;  // <-cur next  need to turn twice
+					}
+				}
+				else {
+					return 1; // next
+							  // <- cur         turn once
+				}				
+				break;
+			case 4://current direction to up
+				if (next.getCol() == cur.getCol()){
+					if (next.getCol() >= cur.getCol()){
+						return 0; // next
+								  // cur    no need to turn
+					} else {
+						return 2;  // cur   need to turn twice
+					}			   // next
+				}
+				else {
+					return 1; // next cur   need to turn once
+				}			  				
+				break;
+		}
 	}
 
 
