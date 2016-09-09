@@ -28,8 +28,6 @@ public class ShortestPathAlgo {
 		this.start = stpMap.getGrid(MapConstants.START_X_CENTER, MapConstants.START_Y_CENTER);
 		this.goal = stpMap.getGrid(MapConstants.GOAL_X_CENTER, MapConstants.GOAL_Y_CENTER);
 
-		//initial gscore
-		for (int i=0;i)
 
 	}
 
