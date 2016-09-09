@@ -7,7 +7,7 @@ import robot.Robot;
 
 import java.util.*;
 
-public class ShortestPathAlgo {
+public class ShortestPathAlgo{
 	private Map stpMap;     //shortest path map
 	private Robot robot;
 
@@ -27,11 +27,9 @@ public class ShortestPathAlgo {
 
 		this.start = stpMap.getGrid(MapConstants.START_X_CENTER, MapConstants.START_Y_CENTER);
 		this.goal = stpMap.getGrid(MapConstants.GOAL_X_CENTER, MapConstants.GOAL_Y_CENTER);
-
-
 	}
 
-	public void runShortestPath(){
+	private void runShortestPath(){
 		
 		if (sameGrid(robot.getPostion(), start)){
 			//To be implemented
@@ -69,6 +67,7 @@ public class ShortestPathAlgo {
 			if (closed.contains(stpMap.getGrid(goal.getRow(), goal.getCol()))){
 				System.out.println("Shortest Path found.");
 				//To be implemented
+				
 				return;
 			}
 
@@ -87,11 +86,11 @@ public class ShortestPathAlgo {
 					}
 					else {
 						double currentGscore = gscore[curNeighbour.getRow()][curNeighbour.getCol()];
-						double newGscore = gscore [current.getRow()][current.getCol()] 
+						double newGscore = gscore[current.getRow()][current.getCol()] 
 							+ calculateGscore(current, curNeighbour, robot.getHeading());
 						if (newGscore < currentGscore){
 							gscore[curNeighbour.getRow()][curNeighbour.getCol()] = newGscore;
-							parents.put(curNeighbour, current);
+							parent.put(curNeighbour, current);
 						}
 
 					}
@@ -228,9 +227,6 @@ public class ShortestPathAlgo {
 		if (!temp.isObstacle() || !temp.isVirtualWall()){
 			neighbours.add(temp);
 		}
-	}
-
-		neighbours.remove(cur);
 
 		return neighbours;	
 	}

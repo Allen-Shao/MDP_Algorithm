@@ -44,11 +44,17 @@ public class Simulator {
 		stpMap.loadMap("map.txt");
 
 		stpMap.printMapWithVirtualWall();
-		
-	
 
+		stpMap.printMap();
+			
 
 	}
+
+
+
+
+
+
 
 
 
