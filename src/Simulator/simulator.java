@@ -48,6 +48,9 @@ public class Simulator {
 		stpMap.printMap();
 			
 
+
+			
+
 	}
 
 
