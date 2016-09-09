@@ -46,12 +46,18 @@ public class Simulator {
 		stpMap.printMapWithVirtualWall();
 
 		stpMap.printMap();
+
+		mdpRobot = new Robot(new MapGrid(2,2), 1);
+
+		ShortestPathAlgo s = new ShortestPathAlgo(stpMap, mdpRobot);
+
+		HashMap<MapGrid, MapGrid> result = s.runShortestPath();
+
+		System.out.println(result);
 			
-
-
-			
-
 	}
+
+}
 
 
 
@@ -90,13 +96,3 @@ public class Simulator {
 
 	// 	mainCards = new JPanel(new CardLayout());
 	// 	buttonsCards = new JPanel(new CardLayout());
-
-
-
-
-
-
-
-
-
-}
