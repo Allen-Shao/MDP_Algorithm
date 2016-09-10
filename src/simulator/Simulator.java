@@ -53,9 +53,12 @@ public class Simulator {
 
 		HashMap<MapGrid, MapGrid> result = s.runShortestPath();
 
-		System.out.println(result);
-			
-	}
+		// System.out.println(result);
+
+		for (MapGrid next : result.keySet()){
+			String key = next.toString();
+					
+		}
 
 }
 

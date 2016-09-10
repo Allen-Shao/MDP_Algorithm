@@ -76,5 +76,9 @@ public class MapGrid {
 		virtualWall = false;
 	}
 
+	public String toString(){
+		return "("+ Integer.toString(this.xPos) + ", " + Integer.toString(this.yPos) + ")";
+	}
+
 
 }
