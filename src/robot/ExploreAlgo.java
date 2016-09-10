@@ -19,6 +19,11 @@ public class ExploreAlgo{
 
 		this.knownMap = new Map();
 		knownMap.addBorder();
+	}
+
+	public Map runExploration(){
+
+		
 
 	}
 

@@ -29,6 +29,8 @@ public class Simulator {
 
 	private static Map stpMap = null;  //shortest path map
 
+	private static Map trueMap = null;
+
 	private static Robot mdpRobot = null;
 
 	private static int startPosRow = 2;
@@ -39,33 +41,34 @@ public class Simulator {
 	//This is non-gui version for testing
 
 	public static void main(String[] args){
-		stpMap = new Map();
+		// stpMap = new Map();
 
-		stpMap.loadMap("map.txt");
+		// stpMap.loadMap("map.txt");
 
-		// stpMap.addObstacle(10, 14);
+		// stpMap.printMapWithVirtualWall();
 
-		stpMap.printMapWithVirtualWall();
+		// mdpRobot = new Robot(new MapGrid(2,2), 1);
 
+		// ShortestPathAlgo s = new ShortestPathAlgo(stpMap, mdpRobot);
 
+		// Stack<MapGrid> result = s.runShortestPath();
 
-		// stpMap.printMap();
+		// s.printPath(result);
+
+		trueMap = new Map();
 
 		mdpRobot = new Robot(new MapGrid(2,2), 1);
 
-		ShortestPathAlgo s = new ShortestPathAlgo(stpMap, mdpRobot);
+		stpMap.loadMap("map.txt");
 
-		Stack<MapGrid> result = s.runShortestPath();
-
-		// System.out.println(result);
-		s.printPath(result);
-
-
-
-
-
-
+		ExploreAlgo e = new ExploreAlgo(trueMap, mdpRobot);
+						
 		
+
+
+
+
+
 
 	}
 
