@@ -12,8 +12,6 @@ public class Robot {
 	private ArrayList<Sensor> sensors = null;
 	
 	
-	
-	
 	public Robot(MapGrid pos, int h){
 		this.position = pos;
 		this.heading = h;
@@ -26,8 +24,26 @@ public class Robot {
 	public int getHeading(){
 		return this.heading;
 	}
-	
-	
+
+	public ArrayList<Sensor> getSensors(){
+		return this.sensors;
+	}
+
+	public void setPosition(MapGrid pos){
+		this.position = pos;
+	}
+
+	public void setHeading(int h){
+		this.heading = h;
+	}
+
+	public void addSensor(Sensor s){
+		sensors.add(s);
+	}
+
+	public void removeSensor(Sensor s){
+		sensors.remove(s);
+	}
 	
 	
 	
