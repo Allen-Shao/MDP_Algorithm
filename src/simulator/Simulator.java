@@ -60,6 +60,13 @@ public class Simulator {
 		// System.out.println(result);
 		s.printPath(result);
 
+
+
+
+
+
+		
+
 	}
 
 }
