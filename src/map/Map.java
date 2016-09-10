@@ -73,6 +73,16 @@ public class Map{
 
 	}
 
+	public void addBorder(){
+		for (int i=0;i<MapConstants.MAP_ROW;i++){
+			for (int j=0; j<MapConstants.MAP_COL;j++){
+				if (isBorder(i,j)){
+					addObstacle(i, j);
+				}
+			}
+		}
+	}
+
 
 	public void loadMap(String filename){
 
@@ -101,14 +111,7 @@ public class Map{
 		}
 
 		//add border
-		for (int i=0;i<MapConstants.MAP_ROW;i++){
-			for (int j=0; j<MapConstants.MAP_COL;j++){
-				if (isBorder(i,j)){
-					addObstacle(i, j);
-				}
-			}
-		}
-
+		addBorder();
 	}
 
 	public void printMapWithVirtualWall(){
