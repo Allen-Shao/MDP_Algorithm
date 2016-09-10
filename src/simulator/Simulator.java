@@ -43,22 +43,24 @@ public class Simulator {
 
 		stpMap.loadMap("map.txt");
 
+		// stpMap.addObstacle(10, 14);
+
 		stpMap.printMapWithVirtualWall();
 
-		stpMap.printMap();
+
+
+		// stpMap.printMap();
 
 		mdpRobot = new Robot(new MapGrid(2,2), 1);
 
 		ShortestPathAlgo s = new ShortestPathAlgo(stpMap, mdpRobot);
 
-		HashMap<MapGrid, MapGrid> result = s.runShortestPath();
+		Stack<MapGrid> result = s.runShortestPath();
 
 		// System.out.println(result);
+		s.printPath(result);
 
-		for (MapGrid next : result.keySet()){
-			String key = next.toString();
-					
-		}
+	}
 
 }
 

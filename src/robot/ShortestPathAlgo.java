@@ -31,13 +31,13 @@ public class ShortestPathAlgo{
 
 	}
 
-	public HashMap<MapGrid, MapGrid> runShortestPath(){
+	public Stack<MapGrid> runShortestPath(){
 		
 		if (!sameGrid(stpRobot.getPosition(), start)){
 			System.out.println("The robot is not in the start zone!");
 			// System.out.printf("%d %d", stpRobot.getPosition().getRow(), stpRobot.getPosition().getCol());
 			// System.out.printf("%d %d", start.getRow(), start.getCol());
-			return parent;
+			return null;
 		}
 
 		//initialize gscore
@@ -52,6 +52,12 @@ public class ShortestPathAlgo{
 				}
 			}
 		}
+		// for (int i = 0; i < MapConstants.MAP_ROW;i++){
+		// 	for (int j = 0; j < MapConstants.MAP_COL;j++){
+		// 		System.out.printf("%6.1f ", gscore[i][j]);
+		// 	}
+		// 	System.out.println();
+		// }			
 
 		//set gscore for start point
 		gscore[start.getRow()][start.getCol()] = 0;
@@ -69,8 +75,14 @@ public class ShortestPathAlgo{
 			if (closed.contains(stpMap.getGrid(goal.getRow(), goal.getCol()))){
 				System.out.println("Shortest Path found.");
 				//To be implemented
-				
-				return parent;
+				// for (int i = 0; i < MapConstants.MAP_ROW;i++){
+				// 	for (int j = 0; j < MapConstants.MAP_COL;j++){
+				// 		System.out.printf("%6.1f ", gscore[i][j]);
+				// 	}
+				// 	System.out.println();
+				// }				
+
+				return generatePath(goal);  //get the path towards goal
 			}
 
 			opened.remove(current);
@@ -78,6 +90,7 @@ public class ShortestPathAlgo{
 
 			//find neighbours
 			ArrayList<MapGrid> neighbours = findNeighbour(current);
+			// System.out.println(neighbours.size());
 
 			for (int i=0; i<neighbours.size();i++){
 				MapGrid curNeighbour = neighbours.get(i);
@@ -85,13 +98,13 @@ public class ShortestPathAlgo{
 					if (!opened.contains(curNeighbour)){
 						parent.put(curNeighbour, current);
 						gscore[curNeighbour.getRow()][curNeighbour.getCol()] = 
-							gscore [current.getRow()][current.getCol()] 
+							gscore[current.getRow()][current.getCol()] 
 							+ calculateGscore(current, curNeighbour, stpRobot.getHeading());
 						opened.add(curNeighbour);
 					}
 					else {
 						double currentGscore = gscore[curNeighbour.getRow()][curNeighbour.getCol()];
-						double newGscore = gscore[current.getRow()][current.getCol()] 
+						double newGscore = currentGscore 
 							+ calculateGscore(current, curNeighbour, stpRobot.getHeading());
 						if (newGscore < currentGscore){
 							gscore[curNeighbour.getRow()][curNeighbour.getCol()] = newGscore;
@@ -103,8 +116,14 @@ public class ShortestPathAlgo{
 					
 			}
 		}
-		System.out.println("Path NOT Found!");
-		return parent;
+		// System.out.println("Path NOT Found!");
+		// for (int i = 0; i < MapConstants.MAP_ROW;i++){
+		// 	for (int j = 0; j < MapConstants.MAP_COL;j++){
+		// 		System.out.printf("%6.1f ", gscore[i][j]);
+		// 	}
+		// 	System.out.println();
+		// }
+		return null;
 	}
 
 	private MapGrid findMinimumCost(ArrayList<MapGrid> list, double[][] gscore, MapGrid goal){
@@ -210,6 +229,16 @@ public class ShortestPathAlgo{
 		return 0;
 	}
 
+	private Stack<MapGrid> generatePath(MapGrid goal){
+		Stack<MapGrid> path = new Stack<MapGrid>();
+		MapGrid current = stpMap.getGrid(goal.getRow(), goal.getCol());
+		while (current != null){
+			path.push(current);
+			current = parent.get(current);
+		}
+		return path;
+	}
+
 
 	private ArrayList<MapGrid> findNeighbour(MapGrid cur){
 		ArrayList<MapGrid> neighbours = new ArrayList<MapGrid>();
@@ -229,7 +258,7 @@ public class ShortestPathAlgo{
 
 		for (int i=0; i<tempList.size(); i++){
 			MapGrid temp = tempList.get(i);
-			if (!temp.isObstacle() || !temp.isVirtualWall()){
+			if (!temp.isObstacle() && !temp.isVirtualWall()){
 				neighbours.add(temp);
 			}
 		}
@@ -239,6 +268,12 @@ public class ShortestPathAlgo{
 
 	private boolean sameGrid(MapGrid a, MapGrid b){
 		return (a.getCol() == b.getCol()) && (a.getRow() == b.getCol());
+	}
+
+	public void printPath(Stack<MapGrid> path){
+		while (!path.isEmpty()){
+			System.out.println(path.pop().toString());
+		}
 	}
 
 }

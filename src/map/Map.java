@@ -84,8 +84,8 @@ public class Map{
 			brStream = new BufferedReader(frStream);
 
 			int input;
-			int i = 1, j = 1;
-			while (i <= MapConstants.MAP_ROW - 1){
+			int i = MapConstants.MAP_ROW-1, j = 1;
+			while (i >= 1){
 				while ((input = brStream.read()) != 10 && (input != -1)){
 					if (input == 49){
 						addObstacle(i, j);
@@ -94,7 +94,7 @@ public class Map{
 					//System.out.println(input);
 					j++;
 				}
-				i++; j=1;
+				i--; j=1;
 			}
 		} catch (IOException e){
 			System.out.println(e);
