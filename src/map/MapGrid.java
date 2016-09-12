@@ -16,7 +16,6 @@ public class MapGrid {
 
 		explored = false;
 		obstacle = false;
-		visited = false;
 		virtualWall = false;
 
 	}
@@ -35,10 +34,6 @@ public class MapGrid {
 
 	public boolean isObstacle(){
 		return obstacle;
-	}
-
-	public boolean isVisited(){
-		return visited;
 	}
 
 	public boolean isVirtualWall(){
@@ -72,7 +67,6 @@ public class MapGrid {
 	public void reset(){
 		explored = false;
 		obstacle = false;
-		visited = false;
 		virtualWall = false;
 	}
 

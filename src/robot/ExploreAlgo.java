@@ -4,6 +4,7 @@ import map.Map;
 import map.MapGrid;
 import map.MapConstants;
 import robot.Robot;
+import robot.Sensor;
 
 import java.util.*;
 
@@ -129,6 +130,72 @@ public class ExploreAlgo{
 	private void robotTurnRight(){
 		int newHeading = (expRobot.getPosition()+1)%4;
 		expRobot.setHeading(newHeading);		
+	}
+
+	private boolean hasObstacleInFront(){
+		MapGrid curPos = expRobot.getPosition();
+		MapGrid frontGrid;
+		int curRow = curPos.getRow();
+		int curCol = curPos.getCol();
+		int curHeading = expRobot.getHeading();
+		switch (curHeading){
+			case 1:
+				frontGrid = knownMap.getGrid(curRow, curCol+1);
+				return frontGrid.isObstacle() || frontGrid.isVirtualWall();
+			case 2:
+				frontGrid = knownMap.getGrid(curRow-1, curCol);
+				return frontGrid.isObstacle() || frontGrid.isVirtualWall();
+			case 3:
+				frontGrid = knownMap.getGrid(curRow, curCol-1);
+				return frontGrid.isObstacle() || frontGrid.isVirtualWall();
+			case 4:
+				frontGrid = knownMap.getGrid(curRow+1, curCol);
+				return frontGrid.isObstacle() || frontGrid.isVirtualWall();
+		}
+	}
+
+	private boolean hasObstacleOnLeft(){
+		MapGrid curPos = expRobot.getPosition();
+		MapGrid leftGrid;
+		int curRow = curPos.getRow();
+		int curCol = curPos.getCol();
+		int curHeading = expRobot.getHeading();
+		switch (curHeading){
+			case 1:
+				leftGrid = knownMap.getGrid(curRow+1, curCol);
+				return frontGrid.isObstacle() || frontGrid.isVirtualWall();
+			case 2:
+				leftGrid = knownMap.getGrid(curRow, curCol+1);
+				return frontGrid.isObstacle() || frontGrid.isVirtualWall();
+			case 3:
+				leftGrid = knownMap.getGrid(curRow-1, curCol);
+				return frontGrid.isObstacle() || frontGrid.isVirtualWall();
+			case 4:
+				leftGrid = knownMap.getGrid(curRow, curCol-1);
+				return frontGrid.isObstacle() || frontGrid.isVirtualWall();
+		}
+	}
+
+	private boolean hasObstacleOnRight(){
+		MapGrid curPos = expRobot.getPosition();
+		MapGrid rightGrid;
+		int curRow = curPos.getRow();
+		int curCol = curPos.getCol();
+		int curHeading = expRobot.getHeading();
+		switch (curHeading){
+			case 1:
+				rightGrid = knownMap.getGrid(curRow-1, curCol);
+				return frontGrid.isObstacle() || frontGrid.isVirtualWall();
+			case 2:
+				rightGrid = knownMap.getGrid(curRow, curCol-1);
+				return frontGrid.isObstacle() || frontGrid.isVirtualWall();
+			case 3:
+				rightGrid = knownMap.getGrid(curRow+1, curCol);
+				return frontGrid.isObstacle() || frontGrid.isVirtualWall();
+			case 4:
+				rightGrid = knownMap.getGrid(curRow, curCol+1);
+				return frontGrid.isObstacle() || frontGrid.isVirtualWall();
+		}
 	}
 
 
