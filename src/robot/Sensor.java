@@ -7,6 +7,8 @@ public class Sensor {
 						  //               2, right;
 						  //               3, back;
 						  //               4, left;
+	private int sensorXPos; // use 0, -1, 1
+	private int sensorYPos;
 
 	public Sensor(int r, int d){
 		this.range = r;
