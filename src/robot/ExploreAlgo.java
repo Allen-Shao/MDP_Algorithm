@@ -45,21 +45,25 @@ public class ExploreAlgo{
 						xtemp = sensorCurPos.getRow();
 						ytemp = sensorCurPos.getCol()+i;
 						knownMap.getGrid(xtemp, ytemp) = trueMap.getGrid(xtemp, ytemp);
+						knownMap.getGrid(xtemp, ytemp).setExplored(true);
 						break;
 					case 2:
 						xtemp = sensorCurPos.getRow()-i;
 						ytemp = sensorCurPos.getCol();
 						knownMap.getGrid(xtemp, ytemp) = trueMap.getGrid(xtemp, ytemp);
+						knownMap.getGrid(xtemp, ytemp).setExplored(true);
 						break;
 					case 3:
 						xtemp = sensorCurPos.getRow();
 						ytemp = sensorCurPos.getCol()-i;
 						knownMap.getGrid(xtemp, ytemp) = trueMap.getGrid(xtemp, ytemp);
+						knownMap.getGrid(xtemp, ytemp).setExplored(true);
 						break;
 					case 4:
 						xtemp = sensorCurPos.getRow()+i;
 						ytemp = sensorCurPos.getCol();
 						knownMap.getGrid(xtemp, ytemp) = trueMap.getGrid(xtemp, ytemp);
+						knownMap.getGrid(xtemp, ytemp).setExplored(true);
 						break;
 				}
 			}
