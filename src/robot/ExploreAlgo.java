@@ -36,21 +36,28 @@ public class ExploreAlgo{
 		MapGrid curPos = expRobot.getPosition();
 		for (Sensor s : sensors){
 			int detectDirection = getDetectDirection(s.getDirection(), expRobot.getHeading());
+			int xtemp, ytemp;
+			MapGrid sensorCurPos = 
 			for (int i=1; i<=s.getRange();i++){
 				switch (detectDirection){
 					case 1:
-						knownMap.getGrid(curPos.getRow(), curPos.getCol()+i) = 
-						trueMap.getGrid(curPos.getRow(), curPos.getCol()+i);
+						xtemp = curPos.getRow()+s.getRow();
+						ytemp = curPos.getCol()+s.getCol()+i;
+						knownMap.getGrid(xtemp, ytemp) = trueMap.getGrid(xtemp, ytemp);
 						break;
 					case 2:
-						knownMap.getGrid(curPos.getRow()-i, curPos.getCol()) = 
-						trueMap.getGrid(curPos.getRow()-i, curPos.getCol());
+						xtemp = curPos.getRow()-s.getRow()-i;
+						ytemp = curPos.getCol()+s.getCol();
+						knownMap.getGrid(xtemp, ytemp) = trueMap.getGrid(xtemp, ytemp);
 						break;
 					case 3:
-						knownMap.getGrid(curPos.getRow(), curPos.getCol()-i) = 
-						trueMap.getGrid(curPos.getRow(), curPos.getCol()-i);
+						xtemp = curPos.getRow()+s.getRow();
+						ytemp = curPos.getCol()-s.getCol()-i;
+						knownMap.getGrid(xtemp, ytemp) = trueMap.getGrid(xtemp, ytemp);
 						break;
 					case 4:
+						xtemp = curPos.getRow()+s.getRow()+i;
+						ytemp = curPos.getCol()+s.getCol();
 						knownMap.getGrid(curPos.getRow()+i, curPos.getCol()) = 
 						trueMap.getGrid(curPos.getRow()+i, curPos.getCol());
 						break;
@@ -58,6 +65,31 @@ public class ExploreAlgo{
 			}
 		}
 
+	}
+
+
+
+	private MapGrid getSensorCurrentPosition(Sensor s){
+		int r, c; //row, col
+		switch (expRobot.getHeading()){
+			case 1:
+				r = expRobot.getRow()+s.getRow();
+				c = expRobot.getCol()+s.getCol();
+				break;
+			case 2:
+				r = expRobot.getRow()-s.getCol();
+				c = expRobot.getCol()+s.getRow();
+				break;
+			case 3:
+				r = expRobot.getRow()-s.getRow();
+				c = expRobot.getCol()-s.getCol();
+				break;
+			case 4:
+				r = expRobot.getRow()+s.getCol();
+				c = expRobot.getCol()-s.getRow();
+				break;
+		}
+		return new MapGrid(r,c);
 	}
 
 

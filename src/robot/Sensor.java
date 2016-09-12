@@ -7,8 +7,8 @@ public class Sensor {
 						  //               2, right;
 						  //               3, back;
 						  //               4, left;
-	private int xPos; // use 0, -1, 1
-	private int yPos;
+	private int row; // use 0, -1, 1 to represent 
+	private int col; // relative position of the centre of the robot
 
 	public Sensor(int r, int d, int x, int y){
 		this.range = r;
@@ -25,12 +25,12 @@ public class Sensor {
 		return this.direction;
 	}
 
-	public int getXPos(){
-		return this.xPos;
+	public int getRow(){
+		return this.row;
 	}
 
-	public int getYPos(){
-		return this.yPos;
+	public int getCol(){
+		return this.col;
 	}
 	
 
