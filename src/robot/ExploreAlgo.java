@@ -37,29 +37,28 @@ public class ExploreAlgo{
 		for (Sensor s : sensors){
 			int detectDirection = getDetectDirection(s.getDirection(), expRobot.getHeading());
 			int xtemp, ytemp;
-			MapGrid sensorCurPos = 
+			MapGrid sensorCurPos = getSensorCurrentPosition(s);
 			for (int i=1; i<=s.getRange();i++){
 				switch (detectDirection){
 					case 1:
-						xtemp = curPos.getRow()+s.getRow();
-						ytemp = curPos.getCol()+s.getCol()+i;
+						xtemp = sensorCurPos.getRow();
+						ytemp = sensorCurPos.getCol()+i;
 						knownMap.getGrid(xtemp, ytemp) = trueMap.getGrid(xtemp, ytemp);
 						break;
 					case 2:
-						xtemp = curPos.getRow()-s.getRow()-i;
-						ytemp = curPos.getCol()+s.getCol();
+						xtemp = sensorCurPos.getRow()-i;
+						ytemp = sensorCurPos.getCol();
 						knownMap.getGrid(xtemp, ytemp) = trueMap.getGrid(xtemp, ytemp);
 						break;
 					case 3:
-						xtemp = curPos.getRow()+s.getRow();
-						ytemp = curPos.getCol()-s.getCol()-i;
+						xtemp = sensorCurPos.getRow();
+						ytemp = sensorCurPos.getCol()-i;
 						knownMap.getGrid(xtemp, ytemp) = trueMap.getGrid(xtemp, ytemp);
 						break;
 					case 4:
-						xtemp = curPos.getRow()+s.getRow()+i;
-						ytemp = curPos.getCol()+s.getCol();
-						knownMap.getGrid(curPos.getRow()+i, curPos.getCol()) = 
-						trueMap.getGrid(curPos.getRow()+i, curPos.getCol());
+						xtemp = sensorCurPos.getRow()+i;
+						ytemp = sensorCurPos.getCol();
+						knownMap.getGrid(xtemp, ytemp) = trueMap.getGrid(xtemp, ytemp);
 						break;
 				}
 			}
@@ -68,7 +67,7 @@ public class ExploreAlgo{
 	}
 
 
-
+	//This is bad. This is really bad. Unbearably ugly implementation.
 	private MapGrid getSensorCurrentPosition(Sensor s){
 		int r, c; //row, col
 		switch (expRobot.getHeading()){
