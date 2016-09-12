@@ -35,11 +35,9 @@ public class ExploreAlgo{
 	private void sensorDetect(ArrayList<Sensor> sensors){
 		MapGrid curPos = expRobot.getPosition();
 		for (Sensor s : sensors){
-			int detectDirection = (s.getDirection()+expRobot.getHeading()-1) % 4;
-			if (detectDirection == 0)
-				detectDirection = 4;
+			int detectDirection = getDetectDirection(s.getDirection(), expRobot.getHeading());
 			for (int i=1; i<=s.getRange();i++){
-				switch (expRobot.getHeading()){
+				switch (detectDirection){
 					case 1:
 						knownMap.getGrid(curPos.getRow(), curPos.getCol()+i) = 
 						trueMap.getGrid(curPos.getRow(), curPos.getCol()+i);
@@ -60,6 +58,16 @@ public class ExploreAlgo{
 			}
 		}
 
+	}
+
+
+
+	private int getDetectDirection(int sHeading, int rHeading){
+		int detectDirection = (sHeading+rHeading-1) % 4;
+		if (detectDirection == 0)
+			return 4;
+		else
+			return detectDirection;
 	}
 
 	private void robotMoveForward(){
