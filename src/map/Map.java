@@ -114,6 +114,9 @@ public class Map{
 		addBorder();
 	}
 
+
+
+	//Print for debugging
 	public void printMapWithVirtualWall(){
 		for (int i=0;i<MapConstants.MAP_ROW;i++){
 			for (int j=0; j<MapConstants.MAP_COL;j++){
@@ -148,6 +151,28 @@ public class Map{
 		}
 
 		System.out.println();
+
+	}
+
+	public void printExplorationProgress(){
+		for (int i=0;i<MapConstants.MAP_ROW;i++){
+			for (int j=0; j<MapConstants.MAP_COL;j++){
+				if (!grids[i][j].isExplored() && !isBorder(i, j)){
+					System.out.print("x");
+				} else if (grids[i][j].isObstacle()){
+					System.out.print("1");
+				}
+				else if (grids[i][j].isVirtualWall()){
+					System.out.print("2");
+				}
+				else {
+					System.out.print("0");
+				}
+			}
+			System.out.println();
+		}
+
+		System.out.println();	
 
 	}
 

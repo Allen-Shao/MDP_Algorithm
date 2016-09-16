@@ -13,8 +13,8 @@ public class Sensor {
 	public Sensor(int r, int d, int x, int y){
 		this.range = r;
 		this.direction = d;
-		this.xPos = x;
-		this.yPos = y;
+		this.row = x;
+		this.col = y;
 	}
 
 	public int getRange(){

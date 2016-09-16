@@ -28,13 +28,18 @@ public class ExploreAlgo{
 
 		while(true){
 
+			sensorDetect();
+			knownMap.printExplorationProgress();
+
+
 
 		}
 		
 
 	}
 
-	private void sensorDetect(ArrayList<Sensor> sensors){
+	private void sensorDetect(){
+		ArrayList<Sensor> sensors = expRobot.getSensors();
 		MapGrid curPos = expRobot.getPosition();
 		for (Sensor s : sensors){
 			int detectDirection = getDetectDirection(s.getDirection(), expRobot.getHeading());
@@ -45,7 +50,7 @@ public class ExploreAlgo{
 					case 1:
 						xtemp = sensorCurPos.getRow();
 						ytemp = sensorCurPos.getCol()+i;
-						knownMap.getGrid(xtemp, ytemp) = trueMap.getGrid(xtemp, ytemp);
+						knownMap.getGrid(1, 1) = trueMap.getGrid(xtemp, ytemp);
 						knownMap.getGrid(xtemp, ytemp).setExplored(true);
 						break;
 					case 2:
@@ -78,20 +83,20 @@ public class ExploreAlgo{
 		int r, c; //row, col
 		switch (expRobot.getHeading()){
 			case 1:
-				r = expRobot.getRow()+s.getRow();
-				c = expRobot.getCol()+s.getCol();
+				r = expRobot.getPosition().getRow()+s.getRow();
+				c = expRobot.getPosition().getCol()+s.getCol();
 				break;
 			case 2:
-				r = expRobot.getRow()-s.getCol();
-				c = expRobot.getCol()+s.getRow();
+				r = expRobot.getPosition().getRow()-s.getCol();
+				c = expRobot.getPosition().getCol()+s.getRow();
 				break;
 			case 3:
-				r = expRobot.getRow()-s.getRow();
-				c = expRobot.getCol()-s.getCol();
+				r = expRobot.getPosition().getRow()-s.getRow();
+				c = expRobot.getPosition().getCol()-s.getCol();
 				break;
 			case 4:
-				r = expRobot.getRow()+s.getCol();
-				c = expRobot.getCol()-s.getRow();
+				r = expRobot.getPosition().getRow()+s.getCol();
+				c = expRobot.getPosition().getCol()-s.getRow();
 				break;
 		}
 		return new MapGrid(r,c);
@@ -126,14 +131,14 @@ public class ExploreAlgo{
 	}
 
 	private void robotTurnLeft(){
-		int newHeading = expRobot.getPosition()-1;
+		int newHeading = expRobot.getHeading()-1;
 		if (newHeading == 0)
 			newHeading = 4;
 		expRobot.setHeading(newHeading);		
 	}
 
 	private void robotTurnRight(){
-		int newHeading = (expRobot.getPosition()+1)%4;
+		int newHeading = (expRobot.getHeading()+1)%4;
 		expRobot.setHeading(newHeading);		
 	}
 
@@ -168,16 +173,16 @@ public class ExploreAlgo{
 		switch (curHeading){
 			case 1:
 				leftGrid = knownMap.getGrid(curRow+1, curCol);
-				return !leftGrid.isExplored() || leftGrid.isObstacle() || lefttGrid.isVirtualWall();
+				return !leftGrid.isExplored() || leftGrid.isObstacle() || leftGrid.isVirtualWall();
 			case 2:
 				leftGrid = knownMap.getGrid(curRow, curCol+1);
 				return !leftGrid.isExplored() || leftGrid.isObstacle() || leftGrid.isVirtualWall();
 			case 3:
 				leftGrid = knownMap.getGrid(curRow-1, curCol);
-				return !lefttGrid.isExplored() || leftGrid.isObstacle() || leftGrid.isVirtualWall();
+				return !leftGrid.isExplored() || leftGrid.isObstacle() || leftGrid.isVirtualWall();
 			case 4:
 				leftGrid = knownMap.getGrid(curRow, curCol-1);
-				return !leftGrid.isExplored() || lefttGrid.isObstacle() || leftGrid.isVirtualWall();
+				return !leftGrid.isExplored() || leftGrid.isObstacle() || leftGrid.isVirtualWall();
 		}
 	}
 
