@@ -28,6 +28,7 @@ public class ExploreAlgo{
 
 		while(true){
 
+
 		}
 		
 
@@ -145,16 +146,16 @@ public class ExploreAlgo{
 		switch (curHeading){
 			case 1:
 				frontGrid = knownMap.getGrid(curRow, curCol+1);
-				return frontGrid.isObstacle() || frontGrid.isVirtualWall();
+				return !frontGrid.isExplored() || frontGrid.isObstacle() || frontGrid.isVirtualWall();
 			case 2:
 				frontGrid = knownMap.getGrid(curRow-1, curCol);
-				return frontGrid.isObstacle() || frontGrid.isVirtualWall();
+				return !frontGrid.isExplored() || frontGrid.isObstacle() || frontGrid.isVirtualWall();
 			case 3:
 				frontGrid = knownMap.getGrid(curRow, curCol-1);
-				return frontGrid.isObstacle() || frontGrid.isVirtualWall();
+				return !frontGrid.isExplored() || frontGrid.isObstacle() || frontGrid.isVirtualWall();
 			case 4:
 				frontGrid = knownMap.getGrid(curRow+1, curCol);
-				return frontGrid.isObstacle() || frontGrid.isVirtualWall();
+				return !frontGrid.isExplored() || frontGrid.isObstacle() || frontGrid.isVirtualWall();
 		}
 	}
 
@@ -167,16 +168,16 @@ public class ExploreAlgo{
 		switch (curHeading){
 			case 1:
 				leftGrid = knownMap.getGrid(curRow+1, curCol);
-				return frontGrid.isObstacle() || frontGrid.isVirtualWall();
+				return !leftGrid.isExplored() || leftGrid.isObstacle() || lefttGrid.isVirtualWall();
 			case 2:
 				leftGrid = knownMap.getGrid(curRow, curCol+1);
-				return frontGrid.isObstacle() || frontGrid.isVirtualWall();
+				return !leftGrid.isExplored() || leftGrid.isObstacle() || leftGrid.isVirtualWall();
 			case 3:
 				leftGrid = knownMap.getGrid(curRow-1, curCol);
-				return frontGrid.isObstacle() || frontGrid.isVirtualWall();
+				return !lefttGrid.isExplored() || leftGrid.isObstacle() || leftGrid.isVirtualWall();
 			case 4:
 				leftGrid = knownMap.getGrid(curRow, curCol-1);
-				return frontGrid.isObstacle() || frontGrid.isVirtualWall();
+				return !leftGrid.isExplored() || lefttGrid.isObstacle() || leftGrid.isVirtualWall();
 		}
 	}
 
@@ -189,16 +190,16 @@ public class ExploreAlgo{
 		switch (curHeading){
 			case 1:
 				rightGrid = knownMap.getGrid(curRow-1, curCol);
-				return frontGrid.isObstacle() || frontGrid.isVirtualWall();
+				return !rightGrid.isExplored() || rightGrid.isObstacle() || rightGrid.isVirtualWall();
 			case 2:
 				rightGrid = knownMap.getGrid(curRow, curCol-1);
-				return frontGrid.isObstacle() || frontGrid.isVirtualWall();
+				return !rightGrid.isExplored() || rightGrid.isObstacle() || rightGrid.isVirtualWall();
 			case 3:
 				rightGrid = knownMap.getGrid(curRow+1, curCol);
-				return frontGrid.isObstacle() || frontGrid.isVirtualWall();
+				return !rightGrid.isExplored() || rightGrid.isObstacle() || rightGrid.isVirtualWall();
 			case 4:
 				rightGrid = knownMap.getGrid(curRow, curCol+1);
-				return frontGrid.isObstacle() || frontGrid.isVirtualWall();
+				return !rightGrid.isExplored() || rightGrid.isObstacle() || rightGrid.isVirtualWall();
 		}
 	}
 
