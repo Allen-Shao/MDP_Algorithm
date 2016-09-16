@@ -16,6 +16,7 @@ import java.util.List;
 import java.awt.GridLayout;
 import javax.swing.JTextArea;
 import java.awt.Font;
+import java.awt.Graphics;
 
 public class main_frame extends JFrame {
 
@@ -155,7 +156,9 @@ public class main_frame extends JFrame {
 		progressBar_sp.setMaximum(PROG_MAX);
 		contentPane.add(progressBar_sp);
 
-		// Grid
+		/**
+		 * Grid Buttons
+		 */
 		JPanel p = new JPanel();
 		p.setBounds(50, 53, 581, 561);
 		contentPane.add(p);
@@ -174,7 +177,6 @@ public class main_frame extends JFrame {
 				main_frame.this.getGridButton(i, j).setBackground(Color.YELLOW);
 			}
 		}
-
 		// Set End Point
 		for (int i = 0; i < 3; i++) {
 			for (int j = 12; j < N; j++) {
@@ -182,6 +184,16 @@ public class main_frame extends JFrame {
 			}
 		}
 
+		/**
+		 * Robot Circle
+		 */
+		JPanel r = new JPanel();
+		contentPane.add(r);
+		// r.paint(null);
+
+		/**
+		 * Text Area indicating Color Representation
+		 */
 		JTextArea txtrExplored = new JTextArea();
 		txtrExplored.setFont(new Font("Britannic Bold", Font.PLAIN, 13));
 		txtrExplored.setForeground(Color.WHITE);
@@ -256,6 +268,12 @@ public class main_frame extends JFrame {
 	}
 
 	public void updateBar_sp(int newValue) {
+
 		progressBar_sp.setValue(newValue);
+	}
+
+	public void paint(Graphics g) {
+		g.setColor(Color.GREEN);
+		g.fillOval(100, 1000, 20, 20);
 	}
 }
