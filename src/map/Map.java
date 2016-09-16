@@ -22,6 +22,10 @@ public class Map{
 		return grids[i][j];
 	}
 
+	public void setGrid(int i, int j, MapGrid newGrid){
+		this.grids[i][j] = newGrid;
+	}
+
 	public void resetMap(){
 		for (int i = 0; i < MapConstants.MAP_ROW; i++){
 			for (int j = 0; j < MapConstants.MAP_COL; j++){

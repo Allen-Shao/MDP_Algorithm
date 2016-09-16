@@ -50,25 +50,25 @@ public class ExploreAlgo{
 					case 1:
 						xtemp = sensorCurPos.getRow();
 						ytemp = sensorCurPos.getCol()+i;
-						knownMap.getGrid(1, 1) = trueMap.getGrid(xtemp, ytemp);
+						knownMap.setGrid(xtemp, ytemp, trueMap.getGrid(xtemp, ytemp));
 						knownMap.getGrid(xtemp, ytemp).setExplored(true);
 						break;
 					case 2:
 						xtemp = sensorCurPos.getRow()-i;
 						ytemp = sensorCurPos.getCol();
-						knownMap.getGrid(xtemp, ytemp) = trueMap.getGrid(xtemp, ytemp);
+						knownMap.setGrid(xtemp, ytemp, trueMap.getGrid(xtemp, ytemp));
 						knownMap.getGrid(xtemp, ytemp).setExplored(true);
 						break;
 					case 3:
 						xtemp = sensorCurPos.getRow();
 						ytemp = sensorCurPos.getCol()-i;
-						knownMap.getGrid(xtemp, ytemp) = trueMap.getGrid(xtemp, ytemp);
+						knownMap.setGrid(xtemp, ytemp, trueMap.getGrid(xtemp, ytemp));
 						knownMap.getGrid(xtemp, ytemp).setExplored(true);
 						break;
 					case 4:
 						xtemp = sensorCurPos.getRow()+i;
 						ytemp = sensorCurPos.getCol();
-						knownMap.getGrid(xtemp, ytemp) = trueMap.getGrid(xtemp, ytemp);
+						knownMap.setGrid(xtemp, ytemp, trueMap.getGrid(xtemp, ytemp));
 						knownMap.getGrid(xtemp, ytemp).setExplored(true);
 						break;
 				}
@@ -98,8 +98,12 @@ public class ExploreAlgo{
 				r = expRobot.getPosition().getRow()+s.getCol();
 				c = expRobot.getPosition().getCol()-s.getRow();
 				break;
+			default:
+				r = expRobot.getPosition().getRow();
+				c = expRobot.getPosition().getCol();
+				break;
 		}
-		return new MapGrid(r,c);
+		return new MapGrid(r ,c);
 	}
 
 
@@ -162,6 +166,7 @@ public class ExploreAlgo{
 				frontGrid = knownMap.getGrid(curRow+1, curCol);
 				return !frontGrid.isExplored() || frontGrid.isObstacle() || frontGrid.isVirtualWall();
 		}
+		return true;
 	}
 
 	private boolean hasObstacleOnLeft(){
@@ -184,6 +189,7 @@ public class ExploreAlgo{
 				leftGrid = knownMap.getGrid(curRow, curCol-1);
 				return !leftGrid.isExplored() || leftGrid.isObstacle() || leftGrid.isVirtualWall();
 		}
+		return true;
 	}
 
 	private boolean hasObstacleOnRight(){
@@ -206,6 +212,7 @@ public class ExploreAlgo{
 				rightGrid = knownMap.getGrid(curRow, curCol+1);
 				return !rightGrid.isExplored() || rightGrid.isObstacle() || rightGrid.isVirtualWall();
 		}
+		return true;
 	}
 
 
