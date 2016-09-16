@@ -1,8 +1,7 @@
-package mdp_algo;
+package simulator;
 
 import java.awt.Color;
 import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -161,37 +160,6 @@ public class main_frame extends JFrame {
 		p.setBounds(50, 53, 581, 561);
 		contentPane.add(p);
 		p.setLayout(new GridLayout(M, N));
-		
-		JTextArea txtrExplored = new JTextArea();
-		txtrExplored.setFont(new Font("Britannic Bold", Font.PLAIN, 13));
-		txtrExplored.setForeground(Color.WHITE);
-		txtrExplored.setBackground(Color.BLUE);
-		txtrExplored.setWrapStyleWord(true);
-		txtrExplored.setText("Explored");
-		txtrExplored.setBounds(756, 95, 67, 24);
-		contentPane.add(txtrExplored);
-		
-		JTextArea txtrObstacles = new JTextArea();
-		txtrObstacles.setFont(new Font("Britannic Bold", Font.PLAIN, 13));
-		txtrObstacles.setForeground(Color.WHITE);
-		txtrObstacles.setBackground(Color.BLACK);
-		txtrObstacles.setText("Obstacles");
-		txtrObstacles.setBounds(756, 130, 67, 24);
-		contentPane.add(txtrObstacles);
-		
-		JTextArea txtrStartGoal = new JTextArea();
-		txtrStartGoal.setFont(new Font("Britannic Bold", Font.PLAIN, 13));
-		txtrStartGoal.setBackground(Color.YELLOW);
-		txtrStartGoal.setText("Start / Goal");
-		txtrStartGoal.setBounds(756, 165, 88, 24);
-		contentPane.add(txtrStartGoal);
-		
-		JTextArea txtrRobot = new JTextArea();
-		txtrRobot.setFont(new Font("Britannic Bold", Font.PLAIN, 13));
-		txtrRobot.setBackground(Color.PINK);
-		txtrRobot.setText("Robot");
-		txtrRobot.setBounds(756, 200, 67, 24);
-		contentPane.add(txtrRobot);
 		for (int i = 0; i < M; i++) {
 			for (int j = 0; j < N; j++) {
 				System.out.println("print" + i + " " + j);
@@ -200,7 +168,6 @@ public class main_frame extends JFrame {
 				p.add(gb);
 			}
 		}
-		
 		// Set Start Point
 		for (int i = 17; i < M; i++) {
 			for (int j = 0; j < 3; j++) {
@@ -214,8 +181,37 @@ public class main_frame extends JFrame {
 				main_frame.this.getGridButton(i, j).setBackground(Color.YELLOW);
 			}
 		}
-		
-		// main_frame.this.getGridButton(1, 3).setText("0");
+
+		JTextArea txtrExplored = new JTextArea();
+		txtrExplored.setFont(new Font("Britannic Bold", Font.PLAIN, 13));
+		txtrExplored.setForeground(Color.WHITE);
+		txtrExplored.setBackground(Color.BLUE);
+		txtrExplored.setWrapStyleWord(true);
+		txtrExplored.setText("Explored");
+		txtrExplored.setBounds(756, 95, 67, 24);
+		contentPane.add(txtrExplored);
+
+		JTextArea txtrObstacles = new JTextArea();
+		txtrObstacles.setFont(new Font("Britannic Bold", Font.PLAIN, 13));
+		txtrObstacles.setForeground(Color.WHITE);
+		txtrObstacles.setBackground(Color.BLACK);
+		txtrObstacles.setText("Obstacles");
+		txtrObstacles.setBounds(756, 130, 67, 24);
+		contentPane.add(txtrObstacles);
+
+		JTextArea txtrStartGoal = new JTextArea();
+		txtrStartGoal.setFont(new Font("Britannic Bold", Font.PLAIN, 13));
+		txtrStartGoal.setBackground(Color.YELLOW);
+		txtrStartGoal.setText("Start / Goal");
+		txtrStartGoal.setBounds(756, 165, 88, 24);
+		contentPane.add(txtrStartGoal);
+
+		JTextArea txtrRobot = new JTextArea();
+		txtrRobot.setFont(new Font("Britannic Bold", Font.PLAIN, 13));
+		txtrRobot.setBackground(Color.PINK);
+		txtrRobot.setText("Robot");
+		txtrRobot.setBounds(756, 200, 67, 24);
+		contentPane.add(txtrRobot);
 
 	}
 
@@ -244,7 +240,7 @@ public class main_frame extends JFrame {
 				if (btn.isEnabled() == true) {
 					btn.setEnabled(false);
 					if (btn.getBackground() == Color.WHITE)
-						btn.setBackground(Color.BLACK);						
+						btn.setBackground(Color.BLACK);
 				} else {
 					btn.setEnabled(true);
 					if (btn.getBackground() == Color.BLACK)
