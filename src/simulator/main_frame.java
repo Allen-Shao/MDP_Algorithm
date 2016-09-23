@@ -5,6 +5,10 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import map.Map;
+import robot.Robot;
+
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -25,9 +29,18 @@ public class main_frame extends JFrame {
 	 */
 	private final int PROG_MIN = 0;
 	private final int PROG_MAX = 0;
+	private static int mapXLength;
+	private static int mapYLength;
 	private final int M = 20;
 	private final int N = 15;
 	private final List<JButton> list = new ArrayList<JButton>();
+	
+	/**
+	 * Instantiate
+	 */
+	private static Robot mdpRobot = null;
+	private static Map stpMap = null;  //shortest path map
+	private static Map trueMap = null;
 
 	/**
 	 * 
@@ -93,12 +106,12 @@ public class main_frame extends JFrame {
 		JButton btnShortestPath = new JButton("Shortest Path");
 		btnShortestPath.setBounds(756, 566, 99, 23);
 		contentPane.add(btnShortestPath);
-		btnShortestPath.setEnabled(false);
+		// btnShortestPath.setEnabled(false);
 
 		btnShortestPath.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				// robot moving
+				// robot moving, call paint function
 
 				// progress bar
 				for (int i = PROG_MIN; i <= PROG_MAX; i++) {
@@ -121,7 +134,7 @@ public class main_frame extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				btnShortestPath.setEnabled(false);
-				// robot start moving
+				// robot start moving, call paint 
 
 				// progress bar
 				for (int i = PROG_MIN; i <= PROG_MAX; i++) {
@@ -187,8 +200,8 @@ public class main_frame extends JFrame {
 		/**
 		 * Robot Circle
 		 */
-		JPanel r = new JPanel();
-		contentPane.add(r);
+		// JPanel r = new JPanel();
+		// contentPane.add(r);
 		// r.paint(null);
 
 		/**
@@ -268,12 +281,13 @@ public class main_frame extends JFrame {
 	}
 
 	public void updateBar_sp(int newValue) {
-
 		progressBar_sp.setValue(newValue);
 	}
 
 	public void paint(Graphics g) {
-		g.setColor(Color.GREEN);
-		g.fillOval(100, 1000, 20, 20);
+	    super.paint(g);
+	    g.setColor(new Color(0, 255,0));
+	    g.fillOval(100, 100, 50, 50);    
+	   
 	}
 }

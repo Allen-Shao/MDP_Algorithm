@@ -31,9 +31,11 @@ public class Circle_test extends JFrame {
 
 		
 	}
-	public void paint(Graphics g){
-		g.setColor(Color.GREEN);
-		g.fillOval(240, 240, 200, 200);
+	public void paint(Graphics g) {
+	    super.paint(g);
+	    g.setColor(new Color(0, 255,0));
+	    g.fillOval(100, 100, 50, 50);    
+	   
 	}
 	
 }
