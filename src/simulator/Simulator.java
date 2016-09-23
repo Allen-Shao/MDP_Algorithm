@@ -67,12 +67,12 @@ public class Simulator {
 		mdpRobot.addSensor(s2);
 		mdpRobot.addSensor(s3);
 
-		stpMap.loadMap("map.txt");
+		trueMap.loadMap("map.txt");
 
 		ExploreAlgo e = new ExploreAlgo(trueMap, mdpRobot);
 						
 		
-
+		e.runExploration();
 
 
 
