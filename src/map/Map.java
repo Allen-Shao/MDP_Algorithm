@@ -77,6 +77,14 @@ public class Map{
 
 	}
 
+	public void removeVirtualWall(){
+		for (int i = 2; i<MapConstants.MAP_ROW-2; i++){
+			for (int j = 2; j<MapConstants.MAP_COL-2; j++){
+				this.grids[i][j].setVirtualWall(false);
+			}
+		}
+	}
+
 	public void addBorder(){
 		for (int i=0;i<MapConstants.MAP_ROW;i++){
 			for (int j=0; j<MapConstants.MAP_COL;j++){

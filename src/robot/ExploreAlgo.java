@@ -35,10 +35,10 @@ public class ExploreAlgo{
 			markCurrentPosition();
 			sensorDetect();
 			//finite state machine (make only one step per loop)
-			if (!hasObstacleOnRight()){
-				robotTurnRight();
-			} else if (!hasObstacleInFront()){
+			if (!hasObstacleInFront()){
 				robotMoveForward();
+			} else if (!hasObstacleOnRight()){
+				robotTurnRight();
 			} else if (!hasObstacleOnLeft()){
 				robotTurnLeft();
 			} else {
