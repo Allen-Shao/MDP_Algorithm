@@ -32,6 +32,7 @@ public class ExploreAlgo{
 
 			
 			knownMap.printExplorationProgress(expRobot);
+			markCurrentPosition();
 			sensorDetect();
 			//finite state machine (make only one step per loop)
 			if (!hasObstacleOnLeft()){
@@ -53,6 +54,15 @@ public class ExploreAlgo{
 		}
 		
 
+	}
+
+	private void markCurrentPosition(){
+		for (int i = -1; i <= 1; i++){
+			for (int j = -1; j <= 1; j++){
+				MapGrid curPos = expRobot.getPosition();
+				knownMap.getGrid(curPos.getRow()+i, curPos.getCol()+j).setExplored(true);
+			}
+		}
 	}
 
 	private void sensorDetect(){
