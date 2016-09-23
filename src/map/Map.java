@@ -77,7 +77,7 @@ public class Map{
 
 	}
 
-	public void removeVirtualWall(){
+	public void removeVirtualWall(){           //exclude border virtual wall
 		for (int i = 2; i<MapConstants.MAP_ROW-2; i++){
 			for (int j = 2; j<MapConstants.MAP_COL-2; j++){
 				this.grids[i][j].setVirtualWall(false);
