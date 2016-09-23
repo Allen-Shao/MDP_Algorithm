@@ -9,7 +9,7 @@ public class Robot {
 	private MapGrid position;
 	private int heading;      //Direction of the robot 1:right, 2:down, 3:left, 4:up
 	
-	private ArrayList<Sensor> sensors = null;
+	private ArrayList<Sensor> sensors = new ArrayList<Sensor>();
 	
 	
 	public Robot(MapGrid pos, int h){

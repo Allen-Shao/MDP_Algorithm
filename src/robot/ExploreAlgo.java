@@ -26,16 +26,43 @@ public class ExploreAlgo{
 
 		ArrayList<Sensor> allSensors = expRobot.getSensors();
 
+
+
 		while(true){
 
+			
+			knownMap.printExplorationProgress(expRobot);
+			markCurrentPosition();
 			sensorDetect();
-			knownMap.printExplorationProgress();
+			//finite state machine (make only one step per loop)
+			if (!hasObstacleOnLeft()){
+				robotTurnLeft();
+			} else if (!hasObstacleInFront()){
+				robotMoveForward();
+			} else if (!hasObstacleOnRight()){
+				robotTurnRight();
+			} else {
+				robotTurnLeft();
+			}
 
+			//for debugging
+			Scanner sc = new Scanner(System.in);
+			System.out.println("Press any key to continue...");
+			sc.nextLine();
 
 
 		}
 		
 
+	}
+
+	private void markCurrentPosition(){
+		for (int i = -1; i <= 1; i++){
+			for (int j = -1; j <= 1; j++){
+				MapGrid curPos = expRobot.getPosition();
+				knownMap.getGrid(curPos.getRow()+i, curPos.getCol()+j).setExplored(true);
+			}
+		}
 	}
 
 	private void sensorDetect(){
@@ -45,31 +72,39 @@ public class ExploreAlgo{
 			int detectDirection = getDetectDirection(s.getDirection(), expRobot.getHeading());
 			int xtemp, ytemp;
 			MapGrid sensorCurPos = getSensorCurrentPosition(s);
-			for (int i=1; i<=s.getRange();i++){
+			for (int i=0; i<=s.getRange();i++){
 				switch (detectDirection){
 					case 1:
 						xtemp = sensorCurPos.getRow();
 						ytemp = sensorCurPos.getCol()+i;
-						knownMap.setGrid(xtemp, ytemp, trueMap.getGrid(xtemp, ytemp));
-						knownMap.getGrid(xtemp, ytemp).setExplored(true);
+						if (withInBoundary(xtemp, ytemp)){
+							knownMap.setGrid(xtemp, ytemp, trueMap.getGrid(xtemp, ytemp));
+							knownMap.getGrid(xtemp, ytemp).setExplored(true);
+						}
 						break;
 					case 2:
 						xtemp = sensorCurPos.getRow()-i;
 						ytemp = sensorCurPos.getCol();
-						knownMap.setGrid(xtemp, ytemp, trueMap.getGrid(xtemp, ytemp));
-						knownMap.getGrid(xtemp, ytemp).setExplored(true);
+						if (withInBoundary(xtemp, ytemp)){
+							knownMap.setGrid(xtemp, ytemp, trueMap.getGrid(xtemp, ytemp));
+							knownMap.getGrid(xtemp, ytemp).setExplored(true);
+						}
 						break;
 					case 3:
 						xtemp = sensorCurPos.getRow();
 						ytemp = sensorCurPos.getCol()-i;
-						knownMap.setGrid(xtemp, ytemp, trueMap.getGrid(xtemp, ytemp));
-						knownMap.getGrid(xtemp, ytemp).setExplored(true);
+						if (withInBoundary(xtemp, ytemp)){
+							knownMap.setGrid(xtemp, ytemp, trueMap.getGrid(xtemp, ytemp));
+							knownMap.getGrid(xtemp, ytemp).setExplored(true);
+						}
 						break;
 					case 4:
 						xtemp = sensorCurPos.getRow()+i;
 						ytemp = sensorCurPos.getCol();
-						knownMap.setGrid(xtemp, ytemp, trueMap.getGrid(xtemp, ytemp));
-						knownMap.getGrid(xtemp, ytemp).setExplored(true);
+						if (withInBoundary(xtemp, ytemp)){
+							knownMap.setGrid(xtemp, ytemp, trueMap.getGrid(xtemp, ytemp));
+							knownMap.getGrid(xtemp, ytemp).setExplored(true);
+						}
 						break;
 				}
 			}
@@ -213,6 +248,10 @@ public class ExploreAlgo{
 				return !rightGrid.isExplored() || rightGrid.isObstacle() || rightGrid.isVirtualWall();
 		}
 		return true;
+	}
+
+	private boolean withInBoundary(int x, int y){
+		return (x>0 && x<MapConstants.MAP_ROW && y>0 && y<MapConstants.MAP_COL);
 	}
 
 
