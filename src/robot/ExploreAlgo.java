@@ -26,11 +26,10 @@ public class ExploreAlgo{
 
 		ArrayList<Sensor> allSensors = expRobot.getSensors();
 
+		boolean endFlag = false;
 
+		while(!endFlag){
 
-		while(true){
-
-			
 			knownMap.printExplorationProgress(expRobot);
 			markCurrentPosition();
 			sensorDetect();
@@ -54,7 +53,18 @@ public class ExploreAlgo{
 			sc.nextLine();
 
 
+			//set for ending condition
+
+			//1. go back to start point
+			if (sameGrid(expRobot.getPosition(), new MapGrid(MapConstants.START_X_CENTER, MapConstants.START_Y_CENTER)))
+				endFlag = true;
+
+			//2. reach cover limit
+
+			//3. reach time limit
 		}
+
+		return knownMap;
 		
 
 	}
@@ -274,6 +284,10 @@ public class ExploreAlgo{
 				return !rightGrid.isExplored() || rightGrid.isObstacle() || rightGrid.isVirtualWall();
 		}
 		return true;
+	}
+
+	private boolean sameGrid(MapGrid a, MapGrid b){
+		return (a.getCol() == b.getCol()) && (a.getRow() == b.getCol());
 	}
 
 	// private boolean withInBoundary(int x, int y){
