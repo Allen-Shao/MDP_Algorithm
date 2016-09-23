@@ -7,7 +7,10 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import map.Map;
+import map.MapGrid;
+import robot.ExploreAlgo;
 import robot.Robot;
+import robot.Sensor;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -67,6 +70,17 @@ public class main_frame extends JFrame {
 				}
 			}
 		});
+
+		trueMap = new Map();
+		mdpRobot = new Robot(new MapGrid(2,2), 1);
+
+		Sensor s1 = new Sensor(3, 1, 0, 1);
+		Sensor s2 = new Sensor(3, 2, -1, 0);
+		Sensor s3 = new Sensor(5, 4, 1, 0);
+
+		mdpRobot.addSensor(s1);
+		mdpRobot.addSensor(s2);
+		mdpRobot.addSensor(s3);
 
 	}
 
@@ -135,7 +149,8 @@ public class main_frame extends JFrame {
 			public void mouseClicked(MouseEvent arg0) {
 				btnShortestPath.setEnabled(false);
 				// robot start moving, call paint 
-
+				ExploreAlgo e = new ExploreAlgo(trueMap, mdpRobot);
+				e.runExploration();
 				// progress bar
 				for (int i = PROG_MIN; i <= PROG_MAX; i++) {
 					// add percent calculated
