@@ -68,7 +68,7 @@ public class Simulator {
 		mdpRobot.addSensor(s3);
 
 		trueMap.loadMap("map.txt");
-		//trueMap.removeVirtualWall();
+		trueMap.removeVirtualWall();
 
 		ExploreAlgo e = new ExploreAlgo(trueMap, mdpRobot);
 						
