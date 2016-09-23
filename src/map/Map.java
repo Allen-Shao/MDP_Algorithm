@@ -162,7 +162,12 @@ public class Map{
 		for (int i=0;i<MapConstants.MAP_ROW;i++){
 			for (int j=0; j<MapConstants.MAP_COL;j++){
 				if (r.getPosition().getRow()== i && r.getPosition().getCol() == j){
-					System.out.print("R");						//print robot position
+					switch(r.getHeading()){    					//print robot position
+						case 1: System.out.print(">");break;
+						case 2: System.out.print("^");break;
+						case 3: System.out.print("<");break;
+						case 4: System.out.print("v");break;
+					}						
 				} else if (!grids[i][j].isExplored() && !isBorder(i, j)){
 					System.out.print("x");						//unexplored area
 				} else if (grids[i][j].isObstacle()){
