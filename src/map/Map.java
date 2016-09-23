@@ -159,14 +159,15 @@ public class Map{
 	}
 
 	public void printExplorationProgress(Robot r){
-		for (int i=0;i<MapConstants.MAP_ROW;i++){
+		for (int i=MapConstants.MAP_ROW-1;i>=0;i--){
 			for (int j=0; j<MapConstants.MAP_COL;j++){
 				if (r.getPosition().getRow()== i && r.getPosition().getCol() == j){
 					switch(r.getHeading()){    					//print robot position
 						case 1: System.out.print(">");break;
-						case 2: System.out.print("^");break;
+						case 2: System.out.print("v");break;
 						case 3: System.out.print("<");break;
-						case 4: System.out.print("v");break;
+						case 4: System.out.print("^");break;
+						default: System.out.printf("%d", r.getHeading());break;
 					}						
 				} else if (!grids[i][j].isExplored() && !isBorder(i, j)){
 					System.out.print("x");						//unexplored area

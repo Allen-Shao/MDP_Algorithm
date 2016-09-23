@@ -35,14 +35,14 @@ public class ExploreAlgo{
 			markCurrentPosition();
 			sensorDetect();
 			//finite state machine (make only one step per loop)
-			if (!hasObstacleOnLeft()){
-				robotTurnLeft();
+			if (!hasObstacleOnRight()){
+				robotTurnRight();
 			} else if (!hasObstacleInFront()){
 				robotMoveForward();
-			} else if (!hasObstacleOnRight()){
-				robotTurnRight();
-			} else {
+			} else if (!hasObstacleOnLeft()){
 				robotTurnLeft();
+			} else {
+				robotTurnRight();
 			}
 
 			//for debugging
@@ -178,6 +178,8 @@ public class ExploreAlgo{
 
 	private void robotTurnRight(){
 		int newHeading = (expRobot.getHeading()+1)%4;
+		if (newHeading == 0)
+			newHeading = 4;
 		expRobot.setHeading(newHeading);		
 	}
 
