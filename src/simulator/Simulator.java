@@ -9,7 +9,7 @@ import map.MapConstants;
 import map.MapGrid;
 import robot.*;
 
-public class Simulator {
+public class Simulator extends JFrame{
 
 	private static JFrame appFrame = null;
 
@@ -31,6 +31,8 @@ public class Simulator {
 
 	private static Map trueMap = null;
 
+	private static Map exploredMap = null;
+
 	private static Robot mdpRobot = null;
 
 	private static int startPosRow = 2;
@@ -38,9 +40,12 @@ public class Simulator {
 
 	private static int startDir = 1;
 
-	//This is non-gui version for testing
+	
 
 	public static void main(String[] args){
+		//This is non-gui version for testing
+		/*Shortest Path Test*/
+
 		// stpMap = new Map();
 
 		// stpMap.loadMap("map.txt");
@@ -55,25 +60,33 @@ public class Simulator {
 
 		// s.printPath(result);
 
-		trueMap = new Map();
+		/*-----------------------------------------------*/
 
-		mdpRobot = new Robot(new MapGrid(2,2), 1);
+		/*Exploration Test*/
 
-		Sensor s1 = new Sensor(3, 1, 0, 1);
-		Sensor s2 = new Sensor(3, 2, -1, 0);
-		Sensor s3 = new Sensor(5, 4, 1, 0);
+		// trueMap = new Map();
 
-		mdpRobot.addSensor(s1);
-		mdpRobot.addSensor(s2);
-		mdpRobot.addSensor(s3);
+		// mdpRobot = new Robot(new MapGrid(2,2), 1);
 
-		trueMap.loadMap("map.txt");
-		trueMap.removeVirtualWall();
+		// Sensor s1 = new Sensor(3, 1, 0, 1);
+		// Sensor s2 = new Sensor(3, 2, -1, 0);
+		// Sensor s3 = new Sensor(5, 4, 1, 0);
 
-		ExploreAlgo e = new ExploreAlgo(trueMap, mdpRobot);
-						
-		
-		e.runExploration();
+		// mdpRobot.addSensor(s1);
+		// mdpRobot.addSensor(s2);
+		// mdpRobot.addSensor(s3);
+
+		// trueMap.loadMap("map.txt");
+		// trueMap.removeVirtualWall();
+
+		// ExploreAlgo e = new ExploreAlgo(trueMap, mdpRobot);
+							
+		// exploredMap = e.runExploration();
+
+		/*----------------------------------------------*/
+
+
+
 
 
 

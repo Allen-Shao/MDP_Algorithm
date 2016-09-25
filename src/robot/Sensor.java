@@ -3,7 +3,7 @@ package robot;
 public class Sensor {
 
 	private int range;
-	private int direction; //same as robot: 1, forward;
+	private int direction; //same as robot: 1, front;
 						  //               2, right;
 						  //               3, back;
 						  //               4, left;
