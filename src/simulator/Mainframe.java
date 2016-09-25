@@ -25,7 +25,7 @@ import javax.swing.JTextArea;
 import java.awt.Font;
 import java.awt.Graphics;
 
-public class main_frame extends JFrame {
+public class Mainframe extends JFrame {
 
 	/**
 	 * Static Variables
@@ -63,7 +63,7 @@ public class main_frame extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					main_frame frame = new main_frame();
+					Mainframe frame = new Mainframe();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -87,7 +87,7 @@ public class main_frame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public main_frame() {
+	public Mainframe() {
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 985, 784);
@@ -202,13 +202,13 @@ public class main_frame extends JFrame {
 		// Set Start Point
 		for (int i = 17; i < M; i++) {
 			for (int j = 0; j < 3; j++) {
-				main_frame.this.getGridButton(i, j).setBackground(Color.YELLOW);
+				Mainframe.this.getGridButton(i, j).setBackground(Color.YELLOW);
 			}
 		}
 		// Set End Point
 		for (int i = 0; i < 3; i++) {
 			for (int j = 12; j < N; j++) {
-				main_frame.this.getGridButton(i, j).setBackground(Color.YELLOW);
+				Mainframe.this.getGridButton(i, j).setBackground(Color.YELLOW);
 			}
 		}
 
@@ -266,7 +266,7 @@ public class main_frame extends JFrame {
 		b.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				JButton gb = main_frame.this.getGridButton(row, col);
+				JButton gb = Mainframe.this.getGridButton(row, col);
 				System.out.println("r" + row + ",c" + col + " " + (b == gb) + " " + (b.equals(gb)));
 			}
 
@@ -276,7 +276,7 @@ public class main_frame extends JFrame {
 
 			public void mouseClicked(MouseEvent arg0) {
 				// when clicked, if true set false, else set true
-				JButton btn = main_frame.this.getGridButton(row, col);
+				JButton btn = Mainframe.this.getGridButton(row, col);
 				if (btn.isEnabled() == true) {
 					btn.setEnabled(false);
 					if (btn.getBackground() == Color.WHITE)
