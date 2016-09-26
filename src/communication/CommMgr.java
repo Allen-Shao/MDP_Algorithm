@@ -17,6 +17,8 @@ public class CommMgr{
 
 	private static BufferedOutputStream bos = null;
 	private static OutputStreamWriter osw = null;
+	private static PrintWriter pw = null;
+	private static BufferedWriter bw = null;
 	private static BufferedReader br = null;
 
 	private CommMgr(){
@@ -38,6 +40,8 @@ public class CommMgr{
 
 			bos = new BufferedOutputStream(conn.getOutputStream());
 			osw = new OutputStreamWriter(bos, "US-ASCII");
+			pw = new PrintWriter(bos, true);
+			bw = new BufferedWriter(osw);
 			br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
 			System.out.println("setConnection() -->"+" Connection established successfully!");
@@ -90,8 +94,14 @@ public class CommMgr{
 			osw.write(outputMsg);
 			osw.flush();
 
+			pw.write(outputMsg, 0, outputMsg.length());
+			pw.flush();
+
+			bw.write(outputMsg);
+			bw.flush();
 
 			return true;
+
 		} catch (IOException e){
 			System.out.println("send message --> IO Exception");
 		} catch (Exception e){

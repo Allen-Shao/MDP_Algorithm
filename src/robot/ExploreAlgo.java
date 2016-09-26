@@ -31,7 +31,7 @@ public class ExploreAlgo{
 		while(!endFlag){
 
 			knownMap.printExplorationProgress(expRobot);
-			
+
 			markCurrentPosition();
 			sensorDetect();
 			//finite state machine (make only one step per loop)
@@ -91,40 +91,32 @@ public class ExploreAlgo{
 					case 1:
 						xtemp = sensorCurPos.getRow();
 						ytemp = sensorCurPos.getCol()+i;
-						// if (withInBoundary(xtemp, ytemp)){
-						// 	knownMap.setGrid(xtemp, ytemp, trueMap.getGrid(xtemp, ytemp));
-						// 	knownMap.getGrid(xtemp, ytemp).setExplored(true);
-						// }
+
+
 						if (detectCurrentGrid(xtemp, ytemp))
 							i = s.getRange()+1;   //break the loop
 						break;
 					case 2:
 						xtemp = sensorCurPos.getRow()-i;
 						ytemp = sensorCurPos.getCol();
-						// if (withInBoundary(xtemp, ytemp)){
-						// 	knownMap.setGrid(xtemp, ytemp, trueMap.getGrid(xtemp, ytemp));
-						// 	knownMap.getGrid(xtemp, ytemp).setExplored(true);
-						// }
+
+
 						if (detectCurrentGrid(xtemp, ytemp))
 							i = s.getRange()+1;   //break the loop
 						break;
 					case 3:
 						xtemp = sensorCurPos.getRow();
 						ytemp = sensorCurPos.getCol()-i;
-						// if (withInBoundary(xtemp, ytemp)){
-						// 	knownMap.setGrid(xtemp, ytemp, trueMap.getGrid(xtemp, ytemp));
-						// 	knownMap.getGrid(xtemp, ytemp).setExplored(true);
-						// }
+
+
 						if (detectCurrentGrid(xtemp, ytemp))
 							i = s.getRange()+1;   //break the loop
 						break;
 					case 4:
 						xtemp = sensorCurPos.getRow()+i;
 						ytemp = sensorCurPos.getCol();
-						// if (withInBoundary(xtemp, ytemp)){
-						// 	knownMap.setGrid(xtemp, ytemp, trueMap.getGrid(xtemp, ytemp));
-						// 	knownMap.getGrid(xtemp, ytemp).setExplored(true);
-						// }
+
+
 						if (detectCurrentGrid(xtemp, ytemp))
 							i = s.getRange()+1;   //break the loop
 						break;
