@@ -31,6 +31,7 @@ public class ExploreAlgo{
 		while(!endFlag){
 
 			knownMap.printExplorationProgress(expRobot);
+			
 			markCurrentPosition();
 			sensorDetect();
 			//finite state machine (make only one step per loop)

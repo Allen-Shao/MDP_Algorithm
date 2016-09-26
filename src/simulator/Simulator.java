@@ -11,21 +11,21 @@ import robot.*;
 
 public class Simulator extends JFrame{
 
-	private static JFrame appFrame = null;
+	// private static JFrame appFrame = null;
 
-	private static JPanel mainCards = null;
-	private static JPanel buttonCards = null;
+	// private static JPanel mainCards = null;
+	// private static JPanel buttonCards = null;
 
-	private static int mapXLength;
-	private static int mapYLength;
+	// private static int mapXLength;
+	// private static int mapYLength;
 
-	private static JPanel robotConfig = null;
+	// private static JPanel robotConfig = null;
 
-	private static JPanel robotMap = null;
+	// private static JPanel robotMap = null;
 
-	private static JPanel mainButtons = null;
+	// private static JPanel mainButtons = null;
 
-	private static JPanel robotMapButtons = null;
+	// private static JPanel robotMapButtons = null;
 
 	private static Map stpMap = null;  //shortest path map
 
@@ -35,10 +35,10 @@ public class Simulator extends JFrame{
 
 	private static Robot mdpRobot = null;
 
-	private static int startPosRow = 2;
-	private static int startPosCol = 2;
+	// private static int startPosRow = 2;
+	// private static int startPosCol = 2;
 
-	private static int startDir = 1;
+	// private static int startDir = 1;
 
 	
 
@@ -64,27 +64,28 @@ public class Simulator extends JFrame{
 
 		/*Exploration Test*/
 
-		// trueMap = new Map();
+		trueMap = new Map();
 
-		// mdpRobot = new Robot(new MapGrid(2,2), 1);
+		mdpRobot = new Robot(new MapGrid(2,2), 1);
 
-		// Sensor s1 = new Sensor(3, 1, 0, 1);
-		// Sensor s2 = new Sensor(3, 2, -1, 0);
-		// Sensor s3 = new Sensor(5, 4, 1, 0);
+		Sensor s1 = new Sensor(3, 1, 0, 1);
+		Sensor s2 = new Sensor(3, 2, -1, 0);
+		Sensor s3 = new Sensor(5, 4, 1, 0);
 
-		// mdpRobot.addSensor(s1);
-		// mdpRobot.addSensor(s2);
-		// mdpRobot.addSensor(s3);
+		mdpRobot.addSensor(s1);
+		mdpRobot.addSensor(s2);
+		mdpRobot.addSensor(s3);
 
-		// trueMap.loadMap("map.txt");
-		// trueMap.removeVirtualWall();
+		trueMap.loadMap("map.txt");
+		trueMap.removeVirtualWall();
 
-		// ExploreAlgo e = new ExploreAlgo(trueMap, mdpRobot);
+		ExploreAlgo e = new ExploreAlgo(trueMap, mdpRobot);
 							
-		// exploredMap = e.runExploration();
+		exploredMap = e.runExploration();
 
 		/*----------------------------------------------*/
 
+		
 
 
 
