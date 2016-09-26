@@ -27,7 +27,7 @@ import java.awt.Graphics;
 
 public class Mainframe extends JFrame {
 
-	/**
+	/*
 	 * Static Variables
 	 */
 	private final int PROG_MIN = 0;
@@ -38,7 +38,7 @@ public class Mainframe extends JFrame {
 	private final int N = 15;
 	private final List<JButton> list = new ArrayList<JButton>();
 	
-	/**
+	/*
 	 * Instantiate
 	 */
 	private static Robot mdpRobot = null;
@@ -87,7 +87,7 @@ public class Mainframe extends JFrame {
 		getContentPane().setLayout(null);
 		setTitle("MDP Simulator");
 
-		/**
+		/*
 		 * Buttons
 		 */
 		// Reset Button
@@ -156,7 +156,7 @@ public class Mainframe extends JFrame {
 		btnExplore.setBounds(756, 412, 99, 23);
 		contentPane.add(btnExplore);
 
-		/**
+		/*
 		 * Progress Bar
 		 */
 		// Explore Progress Bar
@@ -173,7 +173,7 @@ public class Mainframe extends JFrame {
 		progressBar_sp.setMaximum(PROG_MAX);
 		contentPane.add(progressBar_sp);
 
-		/**
+		/*
 		 * Grid Buttons
 		 */
 		JPanel p = new JPanel();
@@ -188,6 +188,8 @@ public class Mainframe extends JFrame {
 				p.add(gb);
 			}
 		}
+		
+		
 		// Set Start Point
 		for (int i = 17; i < M; i++) {
 			for (int j = 0; j < 3; j++) {
@@ -201,14 +203,12 @@ public class Mainframe extends JFrame {
 			}
 		}
 
-		/**
+		/*
 		 * Robot Circle
 		 */
-		// JPanel r = new JPanel();
-		// contentPane.add(r);
 		// r.paint(null);
 
-		/**
+		/*
 		 * Text Area indicating Color Representation
 		 */
 		JTextArea txtrExplored = new JTextArea();
