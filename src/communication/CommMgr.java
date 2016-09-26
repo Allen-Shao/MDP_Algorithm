@@ -1,4 +1,4 @@
-package communication
+package communication;
 
 import java.io.*;
 import java.net.*;
@@ -6,12 +6,12 @@ import java.net.*;
 public class CommMgr{
 	private static CommMgr commMgr = null;
 
-	private static final String HOST = "192.168.2.2"; ///Raspberry Pi ip address
+	private static final String HOST = "192.168.2.2"; //Raspberry Pi ip address
 
-	private static final int PORT = 5201;
+	private static final int PORT = 5201;   //Raspberry Pi port
 
-	public static final String MSG_TYPE_ANDROID = "1,";
-	public static final String MSG_TYPE_ARDUINO = "3,";
+	public static final String MSG_TYPE_ANDROID = "Android, ";
+	public static final String MSG_TYPE_ARDUINO = "Arduino, ";
 
 	private static Socket conn = null;
 
@@ -38,6 +38,7 @@ public class CommMgr{
 
 			bos = new BufferedOutputStream(conn.getOutputStream());
 			osw = new OutputStreamWriter(bos, "US-ASCII");
+			// br = new BufferedReader("c:/test.txt");
 			br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
 			System.out.println("setConnection() -->"+" Connection established successfully!");
@@ -103,7 +104,7 @@ public class CommMgr{
 
 	public String recvMsg(){
 		try{
-			String input = br.readline();
+			String input = br.readLine();
 			if (input != null && input.length() > 0){
 				System.out.println(input);
 				return input;
