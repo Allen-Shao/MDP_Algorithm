@@ -21,6 +21,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 import java.awt.GridLayout;
 import javax.swing.JTextArea;
 import java.awt.Font;
@@ -48,7 +49,7 @@ public class Mainframe extends JFrame {
 	private static Map trueMap = null;
 	private static Map newMap = new Map();
 	private MapGrid grids[][] = new MapGrid[MapConstants.MAP_ROW][MapConstants.MAP_COL];
-	// [MapConstants.MAP_ROW][MapConstants.MAP_COL];;
+	private Stack<MapGrid> stpStack = new Stack();	
 
 	/**
 	 * 
@@ -122,8 +123,13 @@ public class Mainframe extends JFrame {
 
 				ShortestPathAlgo s = new ShortestPathAlgo(stpMap, stpRobot);
 				s.runShortestPath();
-				RobotMoving();
-
+				while(!stpStack.empty()){
+					MapGrid next = stpStack.pop();
+					int r = next.getRow();
+					int c = next.getCol();
+					RobotMoving(r, c);
+				}
+				
 				// progress bar
 				for (int i = PROG_MIN; i <= PROG_MAX; i++) {
 					// add percent calculated
@@ -199,12 +205,14 @@ public class Mainframe extends JFrame {
 		// return grids[r][c];
 	}
 
-	private JButton RobotMoving() {
-		final JButton b = new JButton();
+	private JButton RobotMoving(int r, int c) {
+		final JButton b = new JButton("r" + row + ",c" + col);
 		if (b.getBackground() == Color.BLACK) {
 			System.out.println("Hit Obstacle");
-		} else
+		} else{
 			b.setBackground(Color.BLUE);
+			System.out.println("Robot passed" + " r" + row + ", c" + col );
+		}
 		return b;
 	}
 
