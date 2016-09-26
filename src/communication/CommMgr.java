@@ -38,7 +38,6 @@ public class CommMgr{
 
 			bos = new BufferedOutputStream(conn.getOutputStream());
 			osw = new OutputStreamWriter(bos, "US-ASCII");
-			// br = new BufferedReader("c:/test.txt");
 			br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
 			System.out.println("setConnection() -->"+" Connection established successfully!");
@@ -81,7 +80,7 @@ public class CommMgr{
 		}
 	}
 
-	public boolean sendMsg(String msg, String msgType, boolean ack){
+	public boolean sendMsg(String msg, String msgType){
 		try {
 			String outputMsg = msgType + msg;
 
@@ -94,9 +93,9 @@ public class CommMgr{
 
 			return true;
 		} catch (IOException e){
-			System.out.println("setConnection --> IO Exception");
+			System.out.println("send message --> IO Exception");
 		} catch (Exception e){
-			System.out.println("setConnection --> Exception");
+			System.out.println("send message --> Exception");
 		}
 
 		return false;
@@ -110,9 +109,9 @@ public class CommMgr{
 				return input;
 			}
 		} catch (IOException e){
-			System.out.println("setConnection --> IO Exception");
+			System.out.println("receive message --> IO Exception");
 		} catch (Exception e){
-			System.out.println("setConnection --> Exception");
+			System.out.println("receive message --> Exception");
 		}
 
 		return null;

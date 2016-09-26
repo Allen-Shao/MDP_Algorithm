@@ -8,6 +8,7 @@ import map.Map;
 import map.MapConstants;
 import map.MapGrid;
 import robot.*;
+import communication.*;
 
 public class Simulator extends JFrame{
 
@@ -64,28 +65,32 @@ public class Simulator extends JFrame{
 
 		/*Exploration Test*/
 
-		trueMap = new Map();
+		// trueMap = new Map();
 
-		mdpRobot = new Robot(new MapGrid(2,2), 1);
+		// mdpRobot = new Robot(new MapGrid(2,2), 1);
 
-		Sensor s1 = new Sensor(3, 1, 0, 1);
-		Sensor s2 = new Sensor(3, 2, -1, 0);
-		Sensor s3 = new Sensor(5, 4, 1, 0);
+		// Sensor s1 = new Sensor(3, 1, 0, 1);
+		// Sensor s2 = new Sensor(3, 2, -1, 0);
+		// Sensor s3 = new Sensor(5, 4, 1, 0);
 
-		mdpRobot.addSensor(s1);
-		mdpRobot.addSensor(s2);
-		mdpRobot.addSensor(s3);
+		// mdpRobot.addSensor(s1);
+		// mdpRobot.addSensor(s2);
+		// mdpRobot.addSensor(s3);
 
-		trueMap.loadMap("map.txt");
-		trueMap.removeVirtualWall();
+		// trueMap.loadMap("map.txt");
+		// trueMap.removeVirtualWall();
 
-		ExploreAlgo e = new ExploreAlgo(trueMap, mdpRobot);
+		// ExploreAlgo e = new ExploreAlgo(trueMap, mdpRobot);
 							
-		exploredMap = e.runExploration();
+		// exploredMap = e.runExploration();
 
 		/*----------------------------------------------*/
 
-		
+		CommMgr mgr = CommMgr.getCommMgr();
+
+		mgr.setConnection(1000);
+
+		mgr.sendMsg("test", CommMgr.MSG_TYPE_ANDROID);
 
 
 
