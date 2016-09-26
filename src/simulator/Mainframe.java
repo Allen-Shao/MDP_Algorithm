@@ -32,18 +32,19 @@ public class Mainframe extends JFrame {
 	 */
 	private final int PROG_MIN = 0;
 	private final int PROG_MAX = 0;
-	private static int mapXLength;
-	private static int mapYLength;
 	private final int M = 20;
 	private final int N = 15;
+	private int row;
+	private int col;
 	private final List<JButton> list = new ArrayList<JButton>();
-	
+
 	/*
 	 * Instantiate
 	 */
 	private static Robot mdpRobot = null;
-	private static Map stpMap = null;  //shortest path map
+	private static Map stpMap = null; // shortest path map
 	private static Map trueMap = null;
+	private static Map newMap = new Map();
 
 	/**
 	 * 
@@ -101,7 +102,8 @@ public class Mainframe extends JFrame {
 		contentPane.add(btnReset);
 		btnReset.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				btnShortestPath.setEnabled(true);
+				// btnShortestPath.setEnabled(true);
+				trueMap.resetMap();
 			}
 		});
 
@@ -110,7 +112,6 @@ public class Mainframe extends JFrame {
 		btnShortestPath.setBounds(756, 566, 99, 23);
 		contentPane.add(btnShortestPath);
 		// btnShortestPath.setEnabled(false);
-
 		btnShortestPath.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -137,7 +138,7 @@ public class Mainframe extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				btnShortestPath.setEnabled(false);
-				// robot start moving, call paint 
+				// robot start moving, call paint
 				ExploreAlgo e = new ExploreAlgo(trueMap, mdpRobot);
 				e.runExploration();
 				// progress bar
@@ -176,32 +177,9 @@ public class Mainframe extends JFrame {
 		/*
 		 * Grid Buttons
 		 */
-		JPanel p = new JPanel();
-		p.setBounds(50, 53, 581, 561);
-		contentPane.add(p);
-		p.setLayout(new GridLayout(M, N));
-		for (int i = 0; i < M; i++) {
-			for (int j = 0; j < N; j++) {
-				System.out.println("print" + i + " " + j);
-				JButton gb = createGridButton(i, j);
-				list.add(gb);
-				p.add(gb);
-			}
-		}
-		
-		
-		// Set Start Point
-		for (int i = 17; i < M; i++) {
-			for (int j = 0; j < 3; j++) {
-				Mainframe.this.getGridButton(i, j).setBackground(Color.YELLOW);
-			}
-		}
-		// Set End Point
-		for (int i = 0; i < 3; i++) {
-			for (int j = 12; j < N; j++) {
-				Mainframe.this.getGridButton(i, j).setBackground(Color.YELLOW);
-			}
-		}
+		createGridButtons();
+		setStartPoint();
+		setEndPoint();
 
 		/*
 		 * Robot Circle
@@ -211,6 +189,97 @@ public class Mainframe extends JFrame {
 		/*
 		 * Text Area indicating Color Representation
 		 */
+		createText();
+
+	}
+
+	JButton getGridButton(int r, int c) {
+		int index = r * N + c;
+		return list.get(index);
+	}
+
+	private JButton createGridButton(final int row, final int col) {
+		final JButton b = new JButton("r" + row + ",c" + col);
+		b.setBackground(Color.WHITE);
+		b.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				JButton gb = Mainframe.this.getGridButton(row, col);
+				System.out.println("r" + row + ",c" + col + " " + (b == gb) + " " + (b.equals(gb)));
+			}
+
+		});
+
+		b.addMouseListener(new MouseAdapter() {
+
+			public void mouseClicked(MouseEvent arg0) {
+				// when clicked, if true set false, else set true
+				JButton btn = Mainframe.this.getGridButton(row, col);
+				if (btn.isEnabled() == true) {
+					btn.setEnabled(false);
+					if (btn.getBackground() == Color.WHITE) {
+						btn.setBackground(Color.BLACK);
+						newMap.addObstacle(row, col);
+					}
+				} else {
+					btn.setEnabled(true);
+					if (btn.getBackground() == Color.BLACK) {
+						btn.setBackground(Color.WHITE);
+						// to add a remove obstacle method
+					}
+				}
+			}
+		});
+		return b;
+	}
+
+	public void updateBar_exp(int newValue) {
+		progressBar_exp.setValue(newValue);
+	}
+
+	public void updateBar_sp(int newValue) {
+		progressBar_sp.setValue(newValue);
+	}
+
+	public void paint(Graphics g) {
+		super.paint(g);
+		g.setColor(new Color(0, 255, 0));
+		g.fillOval(100, 100, 50, 50);
+	}
+
+	public void setStartPoint() {
+		for (int i = 17; i < M; i++) {
+			for (int j = 0; j < 3; j++) {
+				Mainframe.this.getGridButton(i, j).setBackground(Color.YELLOW);
+			}
+		}
+	}
+
+	public void setEndPoint() {
+		for (int i = 0; i < 3; i++) {
+			for (int j = 12; j < N; j++) {
+				Mainframe.this.getGridButton(i, j).setBackground(Color.YELLOW);
+			}
+		}
+	}
+
+	public void createGridButtons() {
+		JPanel p = new JPanel();
+		p.setBounds(50, 53, 581, 561);
+		contentPane.add(p);
+		p.setLayout(new GridLayout(M, N));
+		for (row = 0; row < M; row++) {
+			for (col = 0; col < N; col++) {
+				System.out.println("print" + row + " " + col);
+				JButton gb = createGridButton(row, col);
+				list.add(gb);
+				p.add(gb);
+			}
+		}
+
+	}
+
+	public void createText() {
 		JTextArea txtrExplored = new JTextArea();
 		txtrExplored.setFont(new Font("Britannic Bold", Font.PLAIN, 13));
 		txtrExplored.setForeground(Color.WHITE);
@@ -242,56 +311,5 @@ public class Mainframe extends JFrame {
 		txtrRobot.setBounds(756, 200, 67, 24);
 		contentPane.add(txtrRobot);
 
-	}
-
-	JButton getGridButton(int r, int c) {
-		int index = r * N + c;
-		return list.get(index);
-	}
-
-	private JButton createGridButton(final int row, final int col) {
-		final JButton b = new JButton("r" + row + ",c" + col);
-		b.setBackground(Color.WHITE);
-		b.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				JButton gb = Mainframe.this.getGridButton(row, col);
-				System.out.println("r" + row + ",c" + col + " " + (b == gb) + " " + (b.equals(gb)));
-			}
-
-		});
-
-		b.addMouseListener(new MouseAdapter() {
-
-			public void mouseClicked(MouseEvent arg0) {
-				// when clicked, if true set false, else set true
-				JButton btn = Mainframe.this.getGridButton(row, col);
-				if (btn.isEnabled() == true) {
-					btn.setEnabled(false);
-					if (btn.getBackground() == Color.WHITE)
-						btn.setBackground(Color.BLACK);
-				} else {
-					btn.setEnabled(true);
-					if (btn.getBackground() == Color.BLACK)
-						btn.setBackground(Color.WHITE);
-				}
-			}
-		});
-		return b;
-	}
-
-	public void updateBar_exp(int newValue) {
-		progressBar_exp.setValue(newValue);
-	}
-
-	public void updateBar_sp(int newValue) {
-		progressBar_sp.setValue(newValue);
-	}
-
-	public void paint(Graphics g) {
-	    super.paint(g);
-	    g.setColor(new Color(0, 255,0));
-	    g.fillOval(100, 100, 50, 50);    
-	   
 	}
 }
