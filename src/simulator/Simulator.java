@@ -86,21 +86,18 @@ public class Simulator extends JFrame{
 
 		/*----------------------------------------------*/
 
-		CommMgr mgr = CommMgr.getCommMgr();
+		CommMgr.getCommMgr().setConnection(10000);
 
-		mgr.setConnection(1000);
+		CommMgr.getCommMgr().sendMsg("test", CommMgr.MSG_TYPE_ANDROID);
 
-
-
-		while (true){
+		// while (true){
 			
-
-			//CommMgr.getCommMgr().sendMsg("test", CommMgr.MSG_TYPE_ANDROID);
-
-			String test = CommMgr.getCommMgr().recvMsg();
 			
+		// 	String test = CommMgr.getCommMgr().recvMsg();
 
-		}
+
+		// }
+		System.out.println(CommMgr.getCommMgr().isConnected());
 
 
 
