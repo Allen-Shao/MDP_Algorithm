@@ -71,17 +71,6 @@ public class Mainframe extends JFrame {
 			}
 		});
 
-		trueMap = new Map();
-		mdpRobot = new Robot(new MapGrid(2,2), 1);
-
-		Sensor s1 = new Sensor(3, 1, 0, 1);
-		Sensor s2 = new Sensor(3, 2, -1, 0);
-		Sensor s3 = new Sensor(5, 4, 1, 0);
-
-		mdpRobot.addSensor(s1);
-		mdpRobot.addSensor(s2);
-		mdpRobot.addSensor(s3);
-
 	}
 
 	/**
