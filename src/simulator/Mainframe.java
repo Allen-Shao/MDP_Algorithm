@@ -27,7 +27,7 @@ import java.awt.Graphics;
 
 public class Mainframe extends JFrame {
 
-	/**
+	/*
 	 * Static Variables
 	 */
 	private final int PROG_MIN = 0;
@@ -38,7 +38,7 @@ public class Mainframe extends JFrame {
 	private final int N = 15;
 	private final List<JButton> list = new ArrayList<JButton>();
 	
-	/**
+	/*
 	 * Instantiate
 	 */
 	private static Robot mdpRobot = null;
@@ -71,17 +71,6 @@ public class Mainframe extends JFrame {
 			}
 		});
 
-		trueMap = new Map();
-		mdpRobot = new Robot(new MapGrid(2,2), 1);
-
-		Sensor s1 = new Sensor(3, 1, 0, 1);
-		Sensor s2 = new Sensor(3, 2, -1, 0);
-		Sensor s3 = new Sensor(5, 4, 1, 0);
-
-		mdpRobot.addSensor(s1);
-		mdpRobot.addSensor(s2);
-		mdpRobot.addSensor(s3);
-
 	}
 
 	/**
@@ -98,7 +87,7 @@ public class Mainframe extends JFrame {
 		getContentPane().setLayout(null);
 		setTitle("MDP Simulator");
 
-		/**
+		/*
 		 * Buttons
 		 */
 		// Reset Button
@@ -167,7 +156,7 @@ public class Mainframe extends JFrame {
 		btnExplore.setBounds(756, 412, 99, 23);
 		contentPane.add(btnExplore);
 
-		/**
+		/*
 		 * Progress Bar
 		 */
 		// Explore Progress Bar
@@ -184,7 +173,7 @@ public class Mainframe extends JFrame {
 		progressBar_sp.setMaximum(PROG_MAX);
 		contentPane.add(progressBar_sp);
 
-		/**
+		/*
 		 * Grid Buttons
 		 */
 		JPanel p = new JPanel();
@@ -199,6 +188,8 @@ public class Mainframe extends JFrame {
 				p.add(gb);
 			}
 		}
+		
+		
 		// Set Start Point
 		for (int i = 17; i < M; i++) {
 			for (int j = 0; j < 3; j++) {
@@ -212,14 +203,12 @@ public class Mainframe extends JFrame {
 			}
 		}
 
-		/**
+		/*
 		 * Robot Circle
 		 */
-		// JPanel r = new JPanel();
-		// contentPane.add(r);
 		// r.paint(null);
 
-		/**
+		/*
 		 * Text Area indicating Color Representation
 		 */
 		JTextArea txtrExplored = new JTextArea();
