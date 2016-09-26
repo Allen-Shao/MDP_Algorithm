@@ -11,7 +11,6 @@ public class ShortestPathAlgo{
 	private Map stpMap;     //shortest path map
 	private Robot stpRobot;
 
-
 	private MapGrid start;
 	private MapGrid goal;
 
@@ -27,8 +26,6 @@ public class ShortestPathAlgo{
 
 		this.start = stpMap.getGrid(MapConstants.START_X_CENTER, MapConstants.START_Y_CENTER);
 		this.goal = stpMap.getGrid(MapConstants.GOAL_X_CENTER, MapConstants.GOAL_Y_CENTER);
-
-
 	}
 
 	public Stack<MapGrid> runShortestPath(){

@@ -5,12 +5,13 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
 import map.Map;
+import map.MapConstants;
 import map.MapGrid;
 import robot.ExploreAlgo;
 import robot.Robot;
 import robot.Sensor;
+import robot.ShortestPathAlgo;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -42,9 +43,12 @@ public class Mainframe extends JFrame {
 	 * Instantiate
 	 */
 	private static Robot mdpRobot = null;
+	private static Robot stpRobot = null;
 	private static Map stpMap = null; // shortest path map
 	private static Map trueMap = null;
 	private static Map newMap = new Map();
+	private MapGrid grids[][] = new MapGrid[MapConstants.MAP_ROW][MapConstants.MAP_COL];
+	// [MapConstants.MAP_ROW][MapConstants.MAP_COL];;
 
 	/**
 	 * 
@@ -71,7 +75,6 @@ public class Mainframe extends JFrame {
 				}
 			}
 		});
-
 	}
 
 	/**
@@ -117,6 +120,10 @@ public class Mainframe extends JFrame {
 			public void mouseClicked(MouseEvent arg0) {
 				// robot moving, call paint function
 
+				ShortestPathAlgo s = new ShortestPathAlgo(stpMap, stpRobot);
+				s.runShortestPath();
+				RobotMoving();
+
 				// progress bar
 				for (int i = PROG_MIN; i <= PROG_MAX; i++) {
 					// add percent calculated
@@ -126,12 +133,14 @@ public class Mainframe extends JFrame {
 			}
 		});
 		btnShortestPath.addActionListener(new ActionListener() {
+
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
 
 		// Explore Button
 		JButton btnExplore = new JButton("Explore");
+
 		getRootPane().setDefaultButton(btnExplore);
 		btnExplore.requestFocus();
 		btnExplore.addMouseListener(new MouseAdapter() {
@@ -141,6 +150,9 @@ public class Mainframe extends JFrame {
 				// robot start moving, call paint
 				ExploreAlgo e = new ExploreAlgo(trueMap, mdpRobot);
 				e.runExploration();
+				// save to grid
+				// set button to explored(blue)
+				// set map with obstacles
 				// progress bar
 				for (int i = PROG_MIN; i <= PROG_MAX; i++) {
 					// add percent calculated
@@ -160,19 +172,7 @@ public class Mainframe extends JFrame {
 		/*
 		 * Progress Bar
 		 */
-		// Explore Progress Bar
-		JProgressBar progressBar_exp = new JProgressBar();
-		progressBar_exp.setBounds(756, 446, 146, 14);
-		progressBar_exp.setMinimum(PROG_MIN);
-		progressBar_exp.setMaximum(PROG_MAX);
-		contentPane.add(progressBar_exp);
-
-		// Shortest Progress Bar
-		JProgressBar progressBar_sp = new JProgressBar();
-		progressBar_sp.setBounds(756, 600, 146, 14);
-		progressBar_sp.setMinimum(PROG_MIN);
-		progressBar_sp.setMaximum(PROG_MAX);
-		contentPane.add(progressBar_sp);
+		createProgressBar();
 
 		/*
 		 * Grid Buttons
@@ -196,6 +196,16 @@ public class Mainframe extends JFrame {
 	JButton getGridButton(int r, int c) {
 		int index = r * N + c;
 		return list.get(index);
+		// return grids[r][c];
+	}
+
+	private JButton RobotMoving() {
+		final JButton b = new JButton();
+		if (b.getBackground() == Color.BLACK) {
+			System.out.println("Hit Obstacle");
+		} else
+			b.setBackground(Color.BLUE);
+		return b;
 	}
 
 	private JButton createGridButton(final int row, final int col) {
@@ -204,8 +214,10 @@ public class Mainframe extends JFrame {
 		b.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
+				// MapGrid gb = Mainframe.this.getGridButton(row, col);
 				JButton gb = Mainframe.this.getGridButton(row, col);
-				System.out.println("r" + row + ",c" + col + " " + (b == gb) + " " + (b.equals(gb)));
+				System.out.println("r" + row + ", c" + col + " " + (b == gb) + " " + (b.equals(gb)));
+
 			}
 
 		});
@@ -220,12 +232,14 @@ public class Mainframe extends JFrame {
 					if (btn.getBackground() == Color.WHITE) {
 						btn.setBackground(Color.BLACK);
 						newMap.addObstacle(row, col);
+						System.out.println("r" + row + ", c" + col + " set false");
 					}
 				} else {
 					btn.setEnabled(true);
 					if (btn.getBackground() == Color.BLACK) {
 						btn.setBackground(Color.WHITE);
 						// to add a remove obstacle method
+						System.out.println("r" + row + ", c" + col + " set true");
 					}
 				}
 			}
@@ -273,10 +287,26 @@ public class Mainframe extends JFrame {
 				System.out.println("print" + row + " " + col);
 				JButton gb = createGridButton(row, col);
 				list.add(gb);
+				// grids[row][col] = new MapGrid(row, col);
 				p.add(gb);
 			}
 		}
+	}
 
+	public void createProgressBar() {
+		// Explore Progress Bar
+		JProgressBar progressBar_exp = new JProgressBar();
+		progressBar_exp.setBounds(756, 446, 146, 14);
+		progressBar_exp.setMinimum(PROG_MIN);
+		progressBar_exp.setMaximum(PROG_MAX);
+		contentPane.add(progressBar_exp);
+
+		// Shortest Progress Bar
+		JProgressBar progressBar_sp = new JProgressBar();
+		progressBar_sp.setBounds(756, 600, 146, 14);
+		progressBar_sp.setMinimum(PROG_MIN);
+		progressBar_sp.setMaximum(PROG_MAX);
+		contentPane.add(progressBar_sp);
 	}
 
 	public void createText() {
