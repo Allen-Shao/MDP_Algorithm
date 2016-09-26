@@ -36,10 +36,10 @@ public class CommMgr{
 		try{
 			conn = new Socket();
 			conn.connect(new InetSocketAddress(HOST, PORT), timeoutInMs);
-			conn.setSoTimeout(timeoutInMs);
+			//conn.setSoTimeout(timeoutInMs);
 
 			bos = new BufferedOutputStream(conn.getOutputStream());
-			osw = new OutputStreamWriter(bos, "US-ASCII");
+			osw = new OutputStreamWriter(bos);
 			pw = new PrintWriter(bos, true);
 			bw = new BufferedWriter(osw);
 			br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -86,16 +86,16 @@ public class CommMgr{
 
 	public boolean sendMsg(String msg, String msgType){
 		try {
-			String outputMsg = msgType + msg;
+			String outputMsg = msgType + msg + "\n";
 
-			outputMsg = String.format("%-128s", outputMsg);
+			//outputMsg = String.format("%-128s", outputMsg);
 			System.out.println("Sending out message: " + outputMsg);
 
-			osw.write(outputMsg);
-			osw.flush();
+			// osw.write(outputMsg);
+			// osw.flush();
 
-			pw.write(outputMsg, 0, outputMsg.length());
-			pw.flush();
+			// pw.print(outputMsg);
+			// pw.flush();
 
 			bw.write(outputMsg);
 			bw.flush();
