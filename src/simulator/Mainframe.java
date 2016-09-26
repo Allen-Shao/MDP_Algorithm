@@ -32,18 +32,19 @@ public class Mainframe extends JFrame {
 	 */
 	private final int PROG_MIN = 0;
 	private final int PROG_MAX = 0;
-	private static int mapXLength;
-	private static int mapYLength;
 	private final int M = 20;
 	private final int N = 15;
+	private int row;
+	private int col;
 	private final List<JButton> list = new ArrayList<JButton>();
-	
+
 	/*
 	 * Instantiate
 	 */
 	private static Robot mdpRobot = null;
-	private static Map stpMap = null;  //shortest path map
+	private static Map stpMap = null; // shortest path map
 	private static Map trueMap = null;
+	private static Map newMap = new Map();
 
 	/**
 	 * 
@@ -101,7 +102,7 @@ public class Mainframe extends JFrame {
 		contentPane.add(btnReset);
 		btnReset.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				btnShortestPath.setEnabled(true);
+				// btnShortestPath.setEnabled(true);
 			}
 		});
 
@@ -110,7 +111,6 @@ public class Mainframe extends JFrame {
 		btnShortestPath.setBounds(756, 566, 99, 23);
 		contentPane.add(btnShortestPath);
 		// btnShortestPath.setEnabled(false);
-
 		btnShortestPath.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
@@ -137,7 +137,7 @@ public class Mainframe extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				btnShortestPath.setEnabled(false);
-				// robot start moving, call paint 
+				// robot start moving, call paint
 				ExploreAlgo e = new ExploreAlgo(trueMap, mdpRobot);
 				e.runExploration();
 				// progress bar
@@ -180,16 +180,21 @@ public class Mainframe extends JFrame {
 		p.setBounds(50, 53, 581, 561);
 		contentPane.add(p);
 		p.setLayout(new GridLayout(M, N));
-		for (int i = 0; i < M; i++) {
-			for (int j = 0; j < N; j++) {
-				System.out.println("print" + i + " " + j);
-				JButton gb = createGridButton(i, j);
+		for (row = 0; row < M; row++) {
+			for (col = 0; col < N; col++) {
+				System.out.println("print" + row + " " + col);
+				JButton gb = createGridButton(row, col);
 				list.add(gb);
 				p.add(gb);
+				gb.addMouseListener(new MouseAdapter() {
+					@Override // Manually add obstacles
+					public void mouseClicked(MouseEvent arg0) {
+						newMap.addObstacle(row, col);
+					}
+				});
 			}
 		}
-		
-		
+
 		// Set Start Point
 		for (int i = 17; i < M; i++) {
 			for (int j = 0; j < 3; j++) {
@@ -289,9 +294,9 @@ public class Mainframe extends JFrame {
 	}
 
 	public void paint(Graphics g) {
-	    super.paint(g);
-	    g.setColor(new Color(0, 255,0));
-	    g.fillOval(100, 100, 50, 50);    
-	   
+		super.paint(g);
+		g.setColor(new Color(0, 255, 0));
+		g.fillOval(100, 100, 50, 50);
+
 	}
 }
