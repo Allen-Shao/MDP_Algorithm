@@ -140,7 +140,7 @@ public class ExploreAlgo{
 	}
 
 
-	//This is bad. This is really bad. Unbearably ugly implementation.
+	//Bad implementation
 	private MapGrid getSensorCurrentPosition(Sensor s){
 		int r, c; //row, col
 		switch (expRobot.getHeading()){
