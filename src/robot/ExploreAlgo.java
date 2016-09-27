@@ -66,7 +66,7 @@ public class ExploreAlgo{
 				if (!hasObstacleInFront()){ //forward checking
 					robotMoveForward();
 					try{
-						TimeUnit.MILLISECONDS.sleep(200);
+						TimeUnit.MILLISECONDS.sleep(1000/expRobot.getSpeed());
 					} catch(InterruptedException e){
 						System.out.println("InterruptedException");
 					}
@@ -82,7 +82,7 @@ public class ExploreAlgo{
 
 
 			try{
-				TimeUnit.MILLISECONDS.sleep(200);
+				TimeUnit.MILLISECONDS.sleep(1000/expRobot.getSpeed());
 			} catch(InterruptedException e){
 				System.out.println("InterruptedException");
 			}
@@ -109,7 +109,7 @@ public class ExploreAlgo{
 
 		}
 
-		trueMap.printMap();
+		//trueMap.printMap();
 
 		//return knownMap;
 		

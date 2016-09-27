@@ -306,7 +306,7 @@ public class ShortestPathAlgo{
 			}
 
 			try{
-				TimeUnit.MILLISECONDS.sleep(200);
+				TimeUnit.MILLISECONDS.sleep(1000/stpRobot.getSpeed());
 			} catch(InterruptedException e){
 				System.out.println("InterruptedException");
 			}

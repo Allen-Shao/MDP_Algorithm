@@ -217,6 +217,8 @@ public class Simulator extends JFrame{
 				mdpRobot.setPosition(new MapGrid(2, 2));
 				mdpRobot.setHeading(1);
 
+				exploredMap.setUnExplored();
+
 				CardLayout cl = ((CardLayout) mainCards.getLayout());
 				cl.show(mainCards, "EXPLO");
 				exploredMap.repaint();
@@ -244,6 +246,7 @@ public class Simulator extends JFrame{
 			protected Integer doInBackground() throws Exception
 			{
 				mdpRobot.setPosition(new MapGrid(2, 2));
+				mdpRobot.setHeading(4);
 				stpMap.repaint();
 				ShortestPathAlgo s = new ShortestPathAlgo(stpMap, mdpRobot);
 				Stack<MapGrid> result = s.runShortestPath();
@@ -283,7 +286,8 @@ public class Simulator extends JFrame{
 				speedSaveButton.addMouseListener(new MouseAdapter() {
 				public void mousePressed(MouseEvent e) {
 						mdpRobot.setSpeed(Integer.parseInt(speedTF.getText()));
-						// System.out.println("botSpeed: " + botSpeed);
+						System.out.println("set robot speed= " + mdpRobot.getSpeed());
+						d1.setVisible(false);
 					}
 				});
 

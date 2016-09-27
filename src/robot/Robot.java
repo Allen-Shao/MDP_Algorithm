@@ -17,7 +17,7 @@ public class Robot {
 	public Robot(MapGrid pos, int h){
 		this.position = pos;
 		this.heading = h;
-		this.speed = 3;
+		this.speed = 5;
 	}
 
 	public MapGrid getPosition(){

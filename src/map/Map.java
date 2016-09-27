@@ -94,6 +94,14 @@ public class Map extends JPanel{
 		}
 	}
 
+	public void setUnExplored(){
+		for (int i = 1; i<MapConstants.MAP_ROW-1; i++){
+			for (int j = 1; j<MapConstants.MAP_COL-1; j++){
+				this.grids[i][j].setExplored(false);
+			}
+		}
+	}
+
 	public void removeVirtualWall(){           //exclude border virtual wall
 		for (int i = 2; i<MapConstants.MAP_ROW-2; i++){
 			for (int j = 2; j<MapConstants.MAP_COL-2; j++){
