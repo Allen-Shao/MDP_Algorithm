@@ -14,13 +14,31 @@ public class ExploreAlgo{
 	private Map knownMap;
 	private Robot expRobot;
 
+	private double coverLimit;
+	private int timeLimitInSecond;
+
 	public ExploreAlgo(Map tMp, Robot r){
 		this.trueMap = tMp;
 		this.expRobot = r;
 
 		this.knownMap = new Map();
 		knownMap.addBorder();
+
+		this.coverLimit = 1;
+		this.timeLimitInSecond = 1000000; //no time limit
 	}
+
+	public ExploreAlgo(Map tMp, Robot r, double cL, int tL){
+		this.trueMap = tMp;
+		this.expRobot = r;
+
+		this.knownMap = new Map();
+		knownMap.addBorder();
+
+		this.coverLimit = cL;
+		this.timeLimitInSecond = tL;
+	}
+
 
 	public Map runExploration(){
 
@@ -61,6 +79,8 @@ public class ExploreAlgo{
 				endFlag = true;
 
 			//2. reach cover limit
+			//mark all the unexplored area as non-obstacle.
+			//use shortest path to go back to the start point
 
 			//3. reach time limit
 		}
