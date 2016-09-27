@@ -268,6 +268,34 @@ public class Simulator extends JFrame{
 		});
 		mainButtons.add(btnShortestPath);
 
+		// Set speed of robot (speed of X steps per second ) button
+		JButton btnSpeed = new JButton("Robot Speed");
+		btnSpeed.setFont(new Font("Arial", Font.BOLD, 13));
+		btnSpeed.setFocusPainted(false);
+		btnSpeed.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				JDialog d1=new JDialog(appFrame,"Change Robot Speed",true);
+				d1.setSize(400,400);
+				d1.setLayout(new FlowLayout());
+				JTextField speedTF = new JTextField(5);
+				JButton speedSaveButton = new JButton("Save");
+				
+				speedSaveButton.addMouseListener(new MouseAdapter() {
+				public void mousePressed(MouseEvent e) {
+						mdpRobot.setSpeed(Integer.parseInt(speedTF.getText()));
+						// System.out.println("botSpeed: " + botSpeed);
+					}
+				});
+
+		        d1.add(new JLabel("Enter Speed (X steps per second): "));
+		        d1.add(speedTF);
+		        d1.add(speedSaveButton);
+
+		        d1.setVisible(true);
+			}
+		});
+		mainButtons.add(btnSpeed);
+
 
 
 
