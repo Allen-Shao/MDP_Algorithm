@@ -34,8 +34,8 @@ public class CommMgr{
 
 	public boolean setConnection(int timeoutInMs){
 		try{
-			conn = new Socket();
-			conn.connect(new InetSocketAddress(HOST, PORT), timeoutInMs);
+			conn = new Socket(HOST, PORT);
+			//conn.connect(new InetSocketAddress(HOST, PORT), timeoutInMs);
 			//conn.setSoTimeout(timeoutInMs);
 
 			bos = new BufferedOutputStream(conn.getOutputStream());

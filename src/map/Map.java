@@ -4,7 +4,11 @@ import java.util.*;
 import java.io.*;
 import robot.Robot;
 
-public class Map{
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class Map extends JPanel{
 
 	protected MapGrid [][] grids = null;
 
@@ -124,6 +128,10 @@ public class Map{
 
 		//add border
 		addBorder();
+	}
+
+	public void paintComponent(Graphics g){
+																																									
 	}
 
 

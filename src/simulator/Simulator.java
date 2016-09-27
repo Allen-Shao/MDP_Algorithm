@@ -164,9 +164,9 @@ public class Simulator extends JFrame{
 		
 		// Initialize the Map for simulation
 		mainCards.add(stpMap, "MAIN");
-		mainCards.add(exploredMap,"EXPLO");
-		mainCards.add(exploredMap,"TIMEEXPLO");
-		mainCards.add(exploredMap,"COVERAGEEXPLO");
+		mainCards.add(exploredMap, "EXPLO");
+		mainCards.add(exploredMap, "TIMEEXPLO");
+		mainCards.add(exploredMap, "COVERAGEEXPLO");
 		
 		CardLayout cl = ((CardLayout) mainCards.getLayout());
 	    cl.show(mainCards, "MAIN");		
