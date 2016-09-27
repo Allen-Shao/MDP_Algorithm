@@ -318,7 +318,7 @@ public class ExploreAlgo{
 				}
 			}
 		}
-		return exploredNumber/(MapConstants.MAP_ROW-2, MapConstants.MAP_COL-2);
+		return exploredNumber/(MapConstants.MAP_ROW-2 * MapConstants.MAP_COL-2);
 	}
 
 	private boolean sameGrid(MapGrid a, MapGrid b){
