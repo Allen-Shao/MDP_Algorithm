@@ -42,6 +42,7 @@ public class Mainframe extends JFrame {
 	private final int N = 15;
 	private int row;
 	private int col;
+	private int speed = 0;
 	private final List<JButton> list = new ArrayList<JButton>();
 
 	/*
@@ -97,15 +98,15 @@ public class Mainframe extends JFrame {
 		getContentPane().setLayout(null);
 		setTitle("MDP Simulator");
 		getContentPane().setBackground(Color.white);
-		createGridButtons(); //create gird buttons
+		createGridButtons(); // create gird buttons
 		setStartPoint(); // set the start and end point
 		setEndPoint();
-		
+
 		/*
 		 * JLabel indicating Color Representation
 		 */
 		createText();
-		
+
 		/*
 		 * Buttons
 		 */
@@ -134,6 +135,8 @@ public class Mainframe extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				// robot moving, call paint function
+				selectSpeed();
+				// pass the result from selectSpeed() 
 				ShortestPathAlgo s = new ShortestPathAlgo(stpMap, stpRobot);
 				s.runShortestPath();
 				int original_s_size = stpStack.size();
@@ -148,9 +151,9 @@ public class Mainframe extends JFrame {
 							c++;
 						}
 					}
-					percentage = stpStack.size()/original_s_size;
+					percentage = stpStack.size() / original_s_size;
 					updateBar_sp(percentage);
-				}				
+				}
 			}
 		});
 		btnShortestPath.addActionListener(new ActionListener() {
@@ -167,6 +170,8 @@ public class Mainframe extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				// btnShortestPath.setEnabled(false);
+				selectSpeed();
+				// pass the result from selectSpeed() 
 				// robot start moving, call paint
 				ExploreAlgo e = new ExploreAlgo(trueMap, mdpRobot);
 				e.runExploration();
@@ -188,22 +193,7 @@ public class Mainframe extends JFrame {
 		});
 		btnExplore.setBounds(756, 412, 99, 23);
 		contentPane.add(btnExplore);
-		
-		// Spinner
-		speedLabel = new JLabel("Speed: ", JLabel.CENTER);    
-		speedLabel.setLocation(228, 658);
-		speedLabel.setSize(99, 67);
-		contentPane.add(speedLabel);
-		SpinnerModel spinnerModel = new SpinnerNumberModel(1, 1, 5, 1);
-		JSpinner spinner = new JSpinner(spinnerModel);
-		spinner.setBounds(337, 665, 67, 47);
-		spinner.addChangeListener(new ChangeListener(){
-			public void stateChanged(ChangeEvent e){
-				speedLabel.setText("Speed: " + ((JSpinner)e.getSource()).getValue());
-			}
-		});
-		contentPane.add(spinner);
-		
+
 		/*
 		 * Robot Circle
 		 */
@@ -275,7 +265,7 @@ public class Mainframe extends JFrame {
 	public void paint(Graphics g) {
 		super.paint(g);
 		g.setColor(new Color(0, 255, 0));
-		g.fillOval(90, 570 , 50, 50);
+		g.fillOval(90, 570, 50, 50);
 	}
 
 	public void setStartPoint() {
@@ -295,7 +285,7 @@ public class Mainframe extends JFrame {
 	}
 
 	public void createGridButtons() {
-		
+
 		JPanel p = new JPanel();
 		p.setBounds(50, 53, 581, 561);
 		contentPane.add(p);
@@ -312,7 +302,7 @@ public class Mainframe extends JFrame {
 	}
 
 	public void createProgressBar() {
-		
+
 		// Explore Progress Bar
 		JProgressBar progressBar_exp = new JProgressBar();
 		progressBar_exp.setBounds(756, 446, 146, 14);
@@ -329,7 +319,7 @@ public class Mainframe extends JFrame {
 	}
 
 	public void createText() {
-		
+
 		JLabel txtrExplored = new JLabel("Explored", JLabel.CENTER);
 		txtrExplored.setFont(new Font("Britannic Bold", Font.PLAIN, 13));
 		txtrExplored.setForeground(Color.WHITE);
@@ -364,5 +354,23 @@ public class Mainframe extends JFrame {
 		txtrRobot.setBounds(756, 200, 67, 24);
 		contentPane.add(txtrRobot);
 
+	}
+
+	public void selectSpeed() {
+		// Spinner
+		speedLabel = new JLabel("Speed: ", JLabel.CENTER);
+		speedLabel.setLocation(228, 658);
+		speedLabel.setSize(99, 67);
+		contentPane.add(speedLabel);
+		SpinnerModel spinnerModel = new SpinnerNumberModel(1, 1, 5, 1);
+		JSpinner spinner = new JSpinner(spinnerModel);
+		spinner.setBounds(337, 665, 67, 47);
+		spinner.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				speed = (Integer) spinner.getValue();
+				speedLabel.setText("Speed: " + speed);
+			}
+		});
+		contentPane.add(spinner);
 	}
 }
