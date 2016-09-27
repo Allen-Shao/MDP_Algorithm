@@ -121,7 +121,7 @@ public class ShortestPathAlgo{
 					
 			}
 		}
-		// System.out.println("Path NOT Found!");
+		System.out.println("Path NOT Found!");
 		// for (int i = 0; i < MapConstants.MAP_ROW;i++){
 		// 	for (int j = 0; j < MapConstants.MAP_COL;j++){
 		// 		System.out.printf("%6.1f ", gscore[i][j]);
