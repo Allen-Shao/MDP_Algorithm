@@ -34,8 +34,8 @@ public class CommMgr{
 
 	public boolean setConnection(int timeoutInMs){
 		try{
-			conn = new Socket();
-			conn.connect(new InetSocketAddress(HOST, PORT), timeoutInMs);
+			conn = new Socket(HOST, PORT);
+			//conn.connect(new InetSocketAddress(HOST, PORT), timeoutInMs);
 			//conn.setSoTimeout(timeoutInMs);
 
 			bos = new BufferedOutputStream(conn.getOutputStream());
@@ -89,7 +89,7 @@ public class CommMgr{
 			String outputMsg = msgType + msg + "\n";
 
 			//outputMsg = String.format("%-128s", outputMsg);
-			System.out.println("Sending out message: " + outputMsg);
+			System.out.print("Sending out message: " + outputMsg);
 
 			// osw.write(outputMsg);
 			// osw.flush();

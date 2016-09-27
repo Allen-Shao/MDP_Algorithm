@@ -4,12 +4,22 @@ import java.util.*;
 import java.io.*;
 import robot.Robot;
 
-public class Map{
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class Map extends JPanel{
 
 	protected MapGrid [][] grids = null;
 
-	public Map(){
+	private GUIGrid [][] guiGrids = null;
+
+	private Robot mapRobot = null;
+
+	public Map(Robot r){
 		grids = new MapGrid [MapConstants.MAP_ROW][MapConstants.MAP_COL];
+
+		mapRobot = r;
 
 		for (int i = 0; i < MapConstants.MAP_ROW; i++){
 			for (int j = 0; j < MapConstants.MAP_COL; j++){
@@ -43,16 +53,16 @@ public class Map{
 	}
 
 	public boolean isStartZone(int x, int y){
-		if ((x >= MapConstants.START_X_MIN) || (x <= MapConstants.START_X_MAX) 
-			|| (y >= MapConstants.START_Y_MIN) || (y <= MapConstants.START_Y_MAX))
+		if ((x >= MapConstants.START_X_MIN) && (x <= MapConstants.START_X_MAX) 
+			&& (y >= MapConstants.START_Y_MIN) && (y <= MapConstants.START_Y_MAX))
 			return true;
 		else 
 			return false;
 	}
 
 	public boolean isGoalZone(int x, int y){
-		if ((x >= MapConstants.GOAL_X_MIN) || (x <= MapConstants.GOAL_X_MAX) 
-			|| (y >= MapConstants.GOAL_Y_MIN) || (y <= MapConstants.GOAL_Y_MAX))
+		if ((x >= MapConstants.GOAL_X_MIN) && (x <= MapConstants.GOAL_X_MAX) 
+			&& (y >= MapConstants.GOAL_Y_MIN) && (y <= MapConstants.GOAL_Y_MAX))
 			return true;
 		else 
 			return false;
@@ -126,11 +136,112 @@ public class Map{
 		addBorder();
 	}
 
+	// @Override
+	// public void repaint(){
+	// 	super.repaint();
+	// 	System.out.println("running repaint");
+	// }
+
+	public void paintComponent(Graphics g){
+		System.out.println("GUI paint");
+		// Calculate the map grids for rendering
+		guiGrids = new GUIGrid[MapConstants.MAP_ROW][MapConstants.MAP_COL];
+		for (int mapRow = 1; mapRow < MapConstants.MAP_ROW-1; mapRow++) {
+			for (int mapCol = 1; mapCol < MapConstants.MAP_COL-1; mapCol++) {
+				guiGrids[mapRow][mapCol] = new GUIGrid(mapCol
+						* MapConstants.GRID_SIZE, mapRow
+						* MapConstants.GRID_SIZE, MapConstants.GRID_SIZE);
+			}
+		}
+
+        // Paint the grids
+        for (int mapRow = 1; mapRow < MapConstants.MAP_ROW-1; mapRow++)
+		{
+			for (int mapCol = 1; mapCol < MapConstants.MAP_COL-1; mapCol++)
+			{
+				
+				Color gridColor = null;
+				
+				// Determine what color to fill grid
+				
+				if(isStartZone(mapRow, mapCol))
+					gridColor = MapConstants.C_START;
+				else if(isGoalZone(mapRow, mapCol))
+					gridColor = MapConstants.C_GOAL;
+				else
+				{	
+					//if unexplored
+					if (!grids[mapRow][mapCol].isExplored()){
+						gridColor = MapConstants.C_UNEXPLORED;
+					}
+					else if(grids[mapRow][mapCol].isObstacle())
+						gridColor = MapConstants.C_OBSTACLE;
+					else
+						gridColor = MapConstants.C_FREE;
+				}
+				
+				g.setColor(gridColor);
+				g.fillRect(guiGrids[mapRow][mapCol].gridX,
+						guiGrids[mapRow][mapCol].gridY,
+						guiGrids[mapRow][mapCol].gridSize,
+						guiGrids[mapRow][mapCol].gridSize);
+				
+			}
+		} // End outer for loop	
+
+		//paint robot
+		g.setColor(MapConstants.C_ROBOT);
+		int r = mapRobot.getPosition().getRow();
+		int c = mapRobot.getPosition().getCol();
+		g.fillOval((c-1) * MapConstants.GRID_SIZE + 22,798 - (r * MapConstants.GRID_SIZE + 18),76,76);
+
+
+		//paint direction
+		g.setColor(MapConstants.C_ROBOT_DIR);
+		int d = mapRobot.getHeading();
+		switch (d) {
+			case 4: 
+				g.fillOval(c * MapConstants.GRID_SIZE + 12,798 -r * MapConstants.GRID_SIZE - 22,18,18);
+				break;
+			case 3:
+				g.fillOval(c * MapConstants.GRID_SIZE - 22,798 - r * MapConstants.GRID_SIZE + 8 ,18,18);
+				break;
+			case 2:
+				g.fillOval(c * MapConstants.GRID_SIZE + 12,798 - r * MapConstants.GRID_SIZE + 42,18,18);
+				break;
+			case 1:
+				g.fillOval(c * MapConstants.GRID_SIZE + 42,798 - r * MapConstants.GRID_SIZE + 8,18,18);
+				break;
+		}
+	}
+
+	private class GUIGrid {
+		public int borderX;
+		public int borderY;
+		public int borderSize;
+		
+		public int gridX;
+		public int gridY;
+		public int gridSize;
+		
+		public GUIGrid(int borderX, int borderY, int borderSize) {
+			this.borderX = borderX;
+			this.borderY = borderY;
+			this.borderSize = borderSize;
+			
+			this.gridX = borderX + MapConstants.GRID_LINE_WEIGHT;
+			this.gridY = 798 - (borderY - MapConstants.GRID_LINE_WEIGHT);
+			this.gridSize = borderSize - (MapConstants.GRID_LINE_WEIGHT * 2);
+		}
+	}	
+
+
+
 
 
 	//Print for debugging
 	public void printMapWithVirtualWall(){
-		for (int i=0;i<MapConstants.MAP_ROW;i++){
+		for (int i=MapConstants.MAP_ROW-1;i>=0;i--){
 			for (int j=0; j<MapConstants.MAP_COL;j++){
 				if (grids[i][j].isVirtualWall()){
 					System.out.print("2");
@@ -150,7 +261,7 @@ public class Map{
 
 	public void printMap(){
 
-		for (int i=0;i<MapConstants.MAP_ROW;i++){
+		for (int i=MapConstants.MAP_ROW-1;i>=0;i--){
 			for (int j=0; j<MapConstants.MAP_COL;j++){
 				if (grids[i][j].isObstacle()){
 					System.out.print("1");
@@ -166,16 +277,16 @@ public class Map{
 
 	}
 
-	public void printExplorationProgress(Robot r){
+	public void printExplorationProgress(){
 		for (int i=MapConstants.MAP_ROW-1;i>=0;i--){
 			for (int j=0; j<MapConstants.MAP_COL;j++){
-				if (r.getPosition().getRow()== i && r.getPosition().getCol() == j){
-					switch(r.getHeading()){    					//print robot position
+				if (mapRobot.getPosition().getRow()== i && mapRobot.getPosition().getCol() == j){
+					switch(mapRobot.getHeading()){    					//print robot position
 						case 1: System.out.print(">");break;
 						case 2: System.out.print("v");break;
 						case 3: System.out.print("<");break;
 						case 4: System.out.print("^");break;
-						default: System.out.printf("%d", r.getHeading());break;
+						default: System.out.printf("%d", mapRobot.getHeading());break;
 					}						
 				} else if (!grids[i][j].isExplored() && !isBorder(i, j)){
 					System.out.print("x");						//unexplored area

@@ -3,16 +3,17 @@ package simulator;
 import java.awt.Color;
 import java.awt.EventQueue;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import map.Map;
 import map.MapConstants;
 import map.MapGrid;
 import robot.ExploreAlgo;
 import robot.Robot;
-import robot.Sensor;
 import robot.ShortestPathAlgo;
-
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -23,9 +24,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 import java.awt.GridLayout;
-import javax.swing.JTextArea;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
 import java.awt.Font;
 import java.awt.Graphics;
+import javax.swing.JSpinner;
 
 public class Mainframe extends JFrame {
 
@@ -33,11 +36,13 @@ public class Mainframe extends JFrame {
 	 * Static Variables
 	 */
 	private final int PROG_MIN = 0;
-	private final int PROG_MAX = 0;
+	private final int PROG_MAX = 100;
+	private int percentage = 0;
 	private final int M = 20;
 	private final int N = 15;
 	private int row;
 	private int col;
+	private int speed = 0;
 	private final List<JButton> list = new ArrayList<JButton>();
 
 	/*
@@ -49,7 +54,7 @@ public class Mainframe extends JFrame {
 	private static Map trueMap = null;
 	private static Map newMap = new Map();
 	private MapGrid grids[][] = new MapGrid[MapConstants.MAP_ROW][MapConstants.MAP_COL];
-	private Stack<MapGrid> stpStack = new Stack();	
+	private Stack<MapGrid> stpStack = new Stack<MapGrid>();
 
 	/**
 	 * 
@@ -61,6 +66,7 @@ public class Mainframe extends JFrame {
 	JButton btnShortestPath;
 	JProgressBar progressBar_exp;
 	JProgressBar progressBar_sp;
+	JLabel speedLabel;
 
 	/**
 	 * Launch the application.
@@ -91,6 +97,15 @@ public class Mainframe extends JFrame {
 		contentPane.setLayout(null);
 		getContentPane().setLayout(null);
 		setTitle("MDP Simulator");
+		getContentPane().setBackground(Color.white);
+		createGridButtons(); // create gird buttons
+		setStartPoint(); // set the start and end point
+		setEndPoint();
+
+		/*
+		 * JLabel indicating Color Representation
+		 */
+		createText();
 
 		/*
 		 * Buttons
@@ -120,21 +135,24 @@ public class Mainframe extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				// robot moving, call paint function
-
+				selectSpeed();
+				// pass the result from selectSpeed() 
 				ShortestPathAlgo s = new ShortestPathAlgo(stpMap, stpRobot);
 				s.runShortestPath();
-				while(!stpStack.empty()){
+				int original_s_size = stpStack.size();
+				while (!stpStack.empty()) {
 					MapGrid next = stpStack.pop();
-					int r = next.getRow();
-					int c = next.getCol();
-					RobotMoving(r, c);
-				}
-				
-				// progress bar
-				for (int i = PROG_MIN; i <= PROG_MAX; i++) {
-					// add percent calculated
-					updateBar_sp(i);
-
+					int r = next.getRow() - 1;
+					int c = next.getCol() - 1;
+					for (int i = -1; i < 2; i++) {
+						for (int j = -1; j < 2; j++) {
+							RobotMoving(r, c);
+							r++;
+							c++;
+						}
+					}
+					percentage = stpStack.size() / original_s_size;
+					updateBar_sp(percentage);
 				}
 			}
 		});
@@ -146,13 +164,14 @@ public class Mainframe extends JFrame {
 
 		// Explore Button
 		JButton btnExplore = new JButton("Explore");
-
 		getRootPane().setDefaultButton(btnExplore);
 		btnExplore.requestFocus();
 		btnExplore.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				btnShortestPath.setEnabled(false);
+				// btnShortestPath.setEnabled(false);
+				selectSpeed();
+				// pass the result from selectSpeed() 
 				// robot start moving, call paint
 				ExploreAlgo e = new ExploreAlgo(trueMap, mdpRobot);
 				e.runExploration();
@@ -176,27 +195,9 @@ public class Mainframe extends JFrame {
 		contentPane.add(btnExplore);
 
 		/*
-		 * Progress Bar
-		 */
-		createProgressBar();
-
-		/*
-		 * Grid Buttons
-		 */
-		createGridButtons();
-		setStartPoint();
-		setEndPoint();
-
-		/*
 		 * Robot Circle
 		 */
 		// r.paint(null);
-
-		/*
-		 * Text Area indicating Color Representation
-		 */
-		createText();
-
 	}
 
 	JButton getGridButton(int r, int c) {
@@ -209,9 +210,9 @@ public class Mainframe extends JFrame {
 		final JButton b = new JButton("r" + row + ",c" + col);
 		if (b.getBackground() == Color.BLACK) {
 			System.out.println("Hit Obstacle");
-		} else{
+		} else {
 			b.setBackground(Color.BLUE);
-			System.out.println("Robot passed" + " r" + row + ", c" + col );
+			System.out.println("Robot passed" + " r" + row + ", c" + col);
 		}
 		return b;
 	}
@@ -225,13 +226,10 @@ public class Mainframe extends JFrame {
 				// MapGrid gb = Mainframe.this.getGridButton(row, col);
 				JButton gb = Mainframe.this.getGridButton(row, col);
 				System.out.println("r" + row + ", c" + col + " " + (b == gb) + " " + (b.equals(gb)));
-
 			}
-
 		});
 
 		b.addMouseListener(new MouseAdapter() {
-
 			public void mouseClicked(MouseEvent arg0) {
 				// when clicked, if true set false, else set true
 				JButton btn = Mainframe.this.getGridButton(row, col);
@@ -263,10 +261,11 @@ public class Mainframe extends JFrame {
 		progressBar_sp.setValue(newValue);
 	}
 
+	// need to change according to x y coordinate?
 	public void paint(Graphics g) {
 		super.paint(g);
 		g.setColor(new Color(0, 255, 0));
-		g.fillOval(100, 100, 50, 50);
+		g.fillOval(90, 570, 50, 50);
 	}
 
 	public void setStartPoint() {
@@ -286,6 +285,7 @@ public class Mainframe extends JFrame {
 	}
 
 	public void createGridButtons() {
+
 		JPanel p = new JPanel();
 		p.setBounds(50, 53, 581, 561);
 		contentPane.add(p);
@@ -302,6 +302,7 @@ public class Mainframe extends JFrame {
 	}
 
 	public void createProgressBar() {
+
 		// Explore Progress Bar
 		JProgressBar progressBar_exp = new JProgressBar();
 		progressBar_exp.setBounds(756, 446, 146, 14);
@@ -318,36 +319,58 @@ public class Mainframe extends JFrame {
 	}
 
 	public void createText() {
-		JTextArea txtrExplored = new JTextArea();
+
+		JLabel txtrExplored = new JLabel("Explored", JLabel.CENTER);
 		txtrExplored.setFont(new Font("Britannic Bold", Font.PLAIN, 13));
 		txtrExplored.setForeground(Color.WHITE);
+		txtrExplored.setOpaque(true);
 		txtrExplored.setBackground(Color.BLUE);
-		txtrExplored.setWrapStyleWord(true);
 		txtrExplored.setText("Explored");
 		txtrExplored.setBounds(756, 95, 67, 24);
 		contentPane.add(txtrExplored);
 
-		JTextArea txtrObstacles = new JTextArea();
+		JLabel txtrObstacles = new JLabel("Obstacles", JLabel.CENTER);
 		txtrObstacles.setFont(new Font("Britannic Bold", Font.PLAIN, 13));
 		txtrObstacles.setForeground(Color.WHITE);
+		txtrObstacles.setOpaque(true);
 		txtrObstacles.setBackground(Color.BLACK);
 		txtrObstacles.setText("Obstacles");
 		txtrObstacles.setBounds(756, 130, 67, 24);
 		contentPane.add(txtrObstacles);
 
-		JTextArea txtrStartGoal = new JTextArea();
+		JLabel txtrStartGoal = new JLabel("Start/Goal", JLabel.CENTER);
 		txtrStartGoal.setFont(new Font("Britannic Bold", Font.PLAIN, 13));
 		txtrStartGoal.setBackground(Color.YELLOW);
+		txtrStartGoal.setOpaque(true);
 		txtrStartGoal.setText("Start / Goal");
 		txtrStartGoal.setBounds(756, 165, 88, 24);
 		contentPane.add(txtrStartGoal);
 
-		JTextArea txtrRobot = new JTextArea();
+		JLabel txtrRobot = new JLabel("Robot", JLabel.CENTER);
 		txtrRobot.setFont(new Font("Britannic Bold", Font.PLAIN, 13));
 		txtrRobot.setBackground(Color.PINK);
+		txtrRobot.setOpaque(true);
 		txtrRobot.setText("Robot");
 		txtrRobot.setBounds(756, 200, 67, 24);
 		contentPane.add(txtrRobot);
 
+	}
+
+	public void selectSpeed() {
+		// Spinner
+		speedLabel = new JLabel("Speed: ", JLabel.CENTER);
+		speedLabel.setLocation(228, 658);
+		speedLabel.setSize(99, 67);
+		contentPane.add(speedLabel);
+		SpinnerModel spinnerModel = new SpinnerNumberModel(1, 1, 5, 1);
+		JSpinner spinner = new JSpinner(spinnerModel);
+		spinner.setBounds(337, 665, 67, 47);
+		spinner.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				speed = (Integer) spinner.getValue();
+				speedLabel.setText("Speed: " + speed);
+			}
+		});
+		contentPane.add(spinner);
 	}
 }

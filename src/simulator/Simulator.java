@@ -1,32 +1,32 @@
 package simulator;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
 
 import java.util.*;
 import java.io.*;
 import map.Map;
 import map.MapConstants;
 import map.MapGrid;
-import robot.*;
+import robot.Robot;
+import robot.Sensor;
+import robot.RobotConstants;
+import robot.ExploreAlgo;
+import robot.ShortestPathAlgo;
 import communication.*;
 
 public class Simulator extends JFrame{
 
-	// private static JFrame appFrame = null;
+	private static JFrame appFrame = null;
 
-	// private static JPanel mainCards = null;
-	// private static JPanel buttonCards = null;
+	private static JPanel mainCards = null;
+	private static JPanel buttonsCards = null;
 
-	// private static int mapXLength;
-	// private static int mapYLength;
+	private static JPanel mainButtons = null;
 
-	// private static JPanel robotConfig = null;
 
-	// private static JPanel robotMap = null;
-
-	// private static JPanel mainButtons = null;
-
-	// private static JPanel robotMapButtons = null;
 
 	private static Map stpMap = null;  //shortest path map
 
@@ -36,10 +36,6 @@ public class Simulator extends JFrame{
 
 	private static Robot mdpRobot = null;
 
-	// private static int startPosRow = 2;
-	// private static int startPosCol = 2;
-
-	// private static int startDir = 1;
 
 	
 
@@ -86,21 +82,140 @@ public class Simulator extends JFrame{
 
 		/*----------------------------------------------*/
 
-		CommMgr.getCommMgr().setConnection(10000);
+		// CommMgr.getCommMgr().setConnection(10000);
 
-		CommMgr.getCommMgr().sendMsg("test", CommMgr.MSG_TYPE_ANDROID);
+		// CommMgr.getCommMgr().sendMsg("test", CommMgr.MSG_TYPE_ANDROID);
 
-		// while (true){
+		// // while (true){
 			
 			
-		// 	String test = CommMgr.getCommMgr().recvMsg();
+		// // 	String test = CommMgr.getCommMgr().recvMsg();
 
 
-		// }
-		System.out.println(CommMgr.getCommMgr().isConnected());
+		// // }
+		// System.out.println(CommMgr.getCommMgr().isConnected());
+
+		/*-----------------------------------------------*/
+
+		//initialize robot and map
+		mdpRobot = new Robot(new MapGrid(2,2), 1);
+		Sensor s1 = new Sensor(3, 1, 0, 1);
+		Sensor s2 = new Sensor(3, 2, -1, 0);
+		Sensor s3 = new Sensor(5, 4, 1, 0);
+		Sensor s4 = new Sensor(3, 1, -1, 1);
+		Sensor s5 = new Sensor(3, 1, 1, 1);
+
+		mdpRobot.addSensor(s1);
+		mdpRobot.addSensor(s2);
+		mdpRobot.addSensor(s3);
+		mdpRobot.addSensor(s4);
+		mdpRobot.addSensor(s5);
+
+
+		stpMap = new Map(mdpRobot);
+		stpMap.loadMap("map.txt");
+
+		trueMap = new Map(mdpRobot);
+		trueMap.loadMap("map.txt");
+		trueMap.removeVirtualWall();
+
+		exploredMap = new Map(mdpRobot);
 
 
 
+
+		displayEverythings();
+
+		// ExploreAlgo e = new ExploreAlgo(trueMap, exploredMap, mdpRobot);
+		// e.runExploration();
+
+	}
+
+
+	private static void displayEverythings(){
+		// Main frame for displaying everything
+		appFrame = new JFrame();
+		appFrame.setTitle("MDP Group 2 Simulator");
+		appFrame.setSize(new Dimension(800, 870));
+		appFrame.setResizable(false);
+		
+		// Center the app frame
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		appFrame.setLocation(dim.width/2 - appFrame.getSize().width/2, dim.height/2 - appFrame.getSize().height/2);
+		
+		// Create the CardLayouts for storing the different views
+		mainCards = new JPanel(new CardLayout());
+		buttonsCards = new JPanel(new CardLayout());
+		
+		// Initialize the main CardLayout
+		initMainLayout();
+		
+
+		// Initialize the buttons CardLayout
+		initButtonsLayout();
+		
+		// Add CardLayouts to content pane
+		Container contentPane = appFrame.getContentPane();
+		contentPane.add(mainCards, BorderLayout.CENTER);
+		contentPane.add(buttonsCards, BorderLayout.SOUTH);
+		
+		// Display the application
+		appFrame.setVisible(true);
+		appFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+
+	private static void initMainLayout() {
+		
+		// Initialize the Map for simulation
+		mainCards.add(stpMap, "MAIN");
+		mainCards.add(exploredMap, "EXPLO");
+		// mainCards.add(exploredMap, "TIMEEXPLO");
+		// mainCards.add(exploredMap, "COVERAGEEXPLO");
+		
+		CardLayout cl = ((CardLayout) mainCards.getLayout());
+	    cl.show(mainCards, "MAIN");		
+	}
+
+	private static void initButtonsLayout() {		
+		// Initialize the buttons used in main menu
+		mainButtons = new JPanel();
+
+		addMainMenuButtons();
+
+		buttonsCards.add(mainButtons, "MAIN_BUTTONS");
+		
+		// Show the real map (main menu) buttons by default
+		CardLayout cl = ((CardLayout) buttonsCards.getLayout());
+		cl.show(buttonsCards, "MAIN_BUTTONS");
+	}
+
+	private static void addMainMenuButtons(){
+
+		class Exploration extends SwingWorker<Integer, String>{
+			protected Integer doInBackground() throws Exception{
+				
+				CardLayout cl = ((CardLayout) mainCards.getLayout());
+				cl.show(mainCards, "EXPLO");
+				exploredMap.repaint();
+				ExploreAlgo e = new ExploreAlgo(trueMap, exploredMap, mdpRobot);
+				e.runExploration();
+
+				return 1;
+
+			}
+		}
+
+		JButton btnExploration = new JButton("Exploration");
+		btnExploration.setFont(new Font("Arial", Font.BOLD, 13));
+		btnExploration.setFocusPainted(false);
+		btnExploration.addMouseListener(new MouseAdapter(){
+			public void mousePressed(MouseEvent e){
+				CardLayout cl = ((CardLayout) mainCards.getLayout());
+				cl.show(mainCards, "EXPLO");
+				new Exploration().execute();
+			}
+		});
+		mainButtons.add(btnExploration);
 
 
 

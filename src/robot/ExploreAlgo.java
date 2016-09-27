@@ -7,6 +7,7 @@ import robot.Robot;
 import robot.Sensor;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class ExploreAlgo{
 
@@ -14,31 +15,62 @@ public class ExploreAlgo{
 	private Map knownMap;
 	private Robot expRobot;
 
-	public ExploreAlgo(Map tMp, Robot r){
+	private double coverLimit;
+	private int timeLimitInSecond;
+	private int stepPerSecond;
+
+	public ExploreAlgo(Map tMp, Map kMp, Robot r){
 		this.trueMap = tMp;
 		this.expRobot = r;
 
-		this.knownMap = new Map();
+		this.knownMap = kMp;
 		knownMap.addBorder();
+
+		this.coverLimit = 1;
+		this.timeLimitInSecond = 1000000; //no time limit
+		this.stepPerSecond = 1000000; //set to infinity
 	}
 
-	public Map runExploration(){
+	public ExploreAlgo(Map tMp, Map kMp, Robot r, double cL, int tL, int sPs){
+		this.trueMap = tMp;
+		this.expRobot = r;
+
+		this.knownMap = kMp;
+		knownMap.addBorder();
+
+		this.coverLimit = cL;
+		this.timeLimitInSecond = tL;
+		this.stepPerSecond = sPs;
+	}
+
+
+	public void runExploration(){
 
 		ArrayList<Sensor> allSensors = expRobot.getSensors();
 
 		boolean endFlag = false;
 
+		int step = 0;
+		// knownMap.repaint();
 		while(!endFlag){
 
-			knownMap.printExplorationProgress(expRobot);
+			knownMap.printExplorationProgress();
+			knownMap.repaint();
+
 
 			markCurrentPosition();
 			sensorDetect();
 			//finite state machine (make only one step per loop)
 			if (!hasObstacleOnRight()){
 				robotTurnRight();
-				if (!hasObstacleInFront()){
+				if (!hasObstacleInFront()){ //forward checking
 					robotMoveForward();
+					try{
+						TimeUnit.MILLISECONDS.sleep(200);
+					} catch(InterruptedException e){
+						System.out.println("InterruptedException");
+					}
+					step++; //count one more step
 				}
 			} else if (!hasObstacleInFront()){
 				robotMoveForward();
@@ -48,10 +80,18 @@ public class ExploreAlgo{
 				robotTurnRight();
 			}
 
+
+			try{
+				TimeUnit.MILLISECONDS.sleep(200);
+			} catch(InterruptedException e){
+				System.out.println("InterruptedException");
+			}
+			step++; //count the step
+
 			//for debugging
-			Scanner sc = new Scanner(System.in);
-			System.out.println("Press any key to continue...");
-			sc.nextLine();
+			// Scanner sc = new Scanner(System.in);
+			// System.out.println("Press any key to continue...");
+			// sc.nextLine();
 
 
 			//set for ending condition
@@ -61,11 +101,17 @@ public class ExploreAlgo{
 				endFlag = true;
 
 			//2. reach cover limit
+			//mark all the unexplored area as non-obstacle.
+			//use shortest path to go back to the start point
+
 
 			//3. reach time limit
+
 		}
 
-		return knownMap;
+		trueMap.printMap();
+
+		//return knownMap;
 		
 
 	}
@@ -86,6 +132,7 @@ public class ExploreAlgo{
 			int detectDirection = getDetectDirection(s.getDirection(), expRobot.getHeading());
 			int xtemp, ytemp;
 			MapGrid sensorCurPos = getSensorCurrentPosition(s);
+			//System.out.println(detectDirection);
 			for (int i=0; i<=s.getRange();i++){
 				switch (detectDirection){
 					case 1:
@@ -130,6 +177,7 @@ public class ExploreAlgo{
 	private boolean detectCurrentGrid(int x, int y){  //return whether the grid is a obstacle
 		MapGrid trueGrid = trueMap.getGrid(x, y);
 		knownMap.getGrid(x, y).setExplored(true);
+		//System.out.println(trueGrid.isObstacle());
 		if (trueGrid.isObstacle()){
 			knownMap.addObstacle(x, y);
 			return true;
@@ -277,6 +325,18 @@ public class ExploreAlgo{
 				return !rightGrid.isExplored() || rightGrid.isObstacle() || rightGrid.isVirtualWall();
 		}
 		return true;
+	}
+
+	private double calculateCoverRate(){
+		int exploredNumber = 0;
+		for (int i = 1; i < MapConstants.MAP_ROW-1; i++){
+			for (int j = 1; j < MapConstants.MAP_COL-1; j++){
+				if (knownMap.getGrid(i, j).isExplored()){
+					exploredNumber++;
+				}
+			}
+		}
+		return exploredNumber/(MapConstants.MAP_ROW-2 * MapConstants.MAP_COL-2);
 	}
 
 	private boolean sameGrid(MapGrid a, MapGrid b){
