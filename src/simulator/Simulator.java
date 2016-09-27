@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+
 import java.util.*;
 import java.io.*;
 import map.Map;
@@ -25,14 +26,7 @@ public class Simulator extends JFrame{
 
 	private static JPanel mainButtons = null;
 
-	// private static int mapXLength;
-	// private static int mapYLength;
 
-	// private static JPanel robotConfig = null;
-
-	// private static JPanel robotMap = null;
-
-	// private static JPanel robotMapButtons = null;
 
 	private static Map stpMap = null;  //shortest path map
 
@@ -42,10 +36,6 @@ public class Simulator extends JFrame{
 
 	private static Robot mdpRobot = null;
 
-	// private static int startPosRow = 2;
-	// private static int startPosCol = 2;
-
-	// private static int startDir = 1;
 
 	
 
@@ -112,6 +102,15 @@ public class Simulator extends JFrame{
 		Sensor s1 = new Sensor(3, 1, 0, 1);
 		Sensor s2 = new Sensor(3, 2, -1, 0);
 		Sensor s3 = new Sensor(5, 4, 1, 0);
+		Sensor s4 = new Sensor(3, 1, -1, 1);
+		Sensor s5 = new Sensor(3, 1, 1, 1);
+
+		mdpRobot.addSensor(s1);
+		mdpRobot.addSensor(s2);
+		mdpRobot.addSensor(s3);
+		mdpRobot.addSensor(s4);
+		mdpRobot.addSensor(s5);
+
 
 		stpMap = new Map(mdpRobot);
 		stpMap.loadMap("map.txt");
@@ -123,7 +122,12 @@ public class Simulator extends JFrame{
 		exploredMap = new Map(mdpRobot);
 
 
+
+
 		displayEverythings();
+
+		// ExploreAlgo e = new ExploreAlgo(trueMap, exploredMap, mdpRobot);
+		// e.runExploration();
 
 	}
 
@@ -165,8 +169,8 @@ public class Simulator extends JFrame{
 		// Initialize the Map for simulation
 		mainCards.add(stpMap, "MAIN");
 		mainCards.add(exploredMap, "EXPLO");
-		mainCards.add(exploredMap, "TIMEEXPLO");
-		mainCards.add(exploredMap, "COVERAGEEXPLO");
+		// mainCards.add(exploredMap, "TIMEEXPLO");
+		// mainCards.add(exploredMap, "COVERAGEEXPLO");
 		
 		CardLayout cl = ((CardLayout) mainCards.getLayout());
 	    cl.show(mainCards, "MAIN");		
@@ -186,6 +190,34 @@ public class Simulator extends JFrame{
 	}
 
 	private static void addMainMenuButtons(){
+
+		class Exploration extends SwingWorker<Integer, String>{
+			protected Integer doInBackground() throws Exception{
+				
+				CardLayout cl = ((CardLayout) mainCards.getLayout());
+				cl.show(mainCards, "EXPLO");
+				exploredMap.repaint();
+				ExploreAlgo e = new ExploreAlgo(trueMap, exploredMap, mdpRobot);
+				e.runExploration();
+
+				return 1;
+
+			}
+		}
+
+		JButton btnExploration = new JButton("Exploration");
+		btnExploration.setFont(new Font("Arial", Font.BOLD, 13));
+		btnExploration.setFocusPainted(false);
+		btnExploration.addMouseListener(new MouseAdapter(){
+			public void mousePressed(MouseEvent e){
+				CardLayout cl = ((CardLayout) mainCards.getLayout());
+				cl.show(mainCards, "EXPLO");
+				new Exploration().execute();
+			}
+		});
+		mainButtons.add(btnExploration);
+
+
 
 	}
 

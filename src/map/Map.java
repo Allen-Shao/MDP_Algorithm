@@ -53,16 +53,16 @@ public class Map extends JPanel{
 	}
 
 	public boolean isStartZone(int x, int y){
-		if ((x >= MapConstants.START_X_MIN) || (x <= MapConstants.START_X_MAX) 
-			|| (y >= MapConstants.START_Y_MIN) || (y <= MapConstants.START_Y_MAX))
+		if ((x >= MapConstants.START_X_MIN) && (x <= MapConstants.START_X_MAX) 
+			&& (y >= MapConstants.START_Y_MIN) && (y <= MapConstants.START_Y_MAX))
 			return true;
 		else 
 			return false;
 	}
 
 	public boolean isGoalZone(int x, int y){
-		if ((x >= MapConstants.GOAL_X_MIN) || (x <= MapConstants.GOAL_X_MAX) 
-			|| (y >= MapConstants.GOAL_Y_MIN) || (y <= MapConstants.GOAL_Y_MAX))
+		if ((x >= MapConstants.GOAL_X_MIN) && (x <= MapConstants.GOAL_X_MAX) 
+			&& (y >= MapConstants.GOAL_Y_MIN) && (y <= MapConstants.GOAL_Y_MAX))
 			return true;
 		else 
 			return false;
@@ -136,12 +136,18 @@ public class Map extends JPanel{
 		addBorder();
 	}
 
-	public void paintComponent(Graphics g){
+	// @Override
+	// public void repaint(){
+	// 	super.repaint();
+	// 	System.out.println("running repaint");
+	// }
 
+	public void paintComponent(Graphics g){
+		System.out.println("GUI paint");
 		// Calculate the map grids for rendering
 		guiGrids = new GUIGrid[MapConstants.MAP_ROW][MapConstants.MAP_COL];
-		for (int mapRow = 0; mapRow < MapConstants.MAP_ROW; mapRow++) {
-			for (int mapCol = 0; mapCol < MapConstants.MAP_COL; mapCol++) {
+		for (int mapRow = 1; mapRow < MapConstants.MAP_ROW-1; mapRow++) {
+			for (int mapCol = 1; mapCol < MapConstants.MAP_COL-1; mapCol++) {
 				guiGrids[mapRow][mapCol] = new GUIGrid(mapCol
 						* MapConstants.GRID_SIZE, mapRow
 						* MapConstants.GRID_SIZE, MapConstants.GRID_SIZE);
@@ -149,9 +155,9 @@ public class Map extends JPanel{
 		}
 
         // Paint the grids
-        for (int mapRow = 0; mapRow < MapConstants.MAP_ROW; mapRow++)
+        for (int mapRow = 1; mapRow < MapConstants.MAP_ROW-1; mapRow++)
 		{
-			for (int mapCol = 0; mapCol < MapConstants.MAP_COL; mapCol++)
+			for (int mapCol = 1; mapCol < MapConstants.MAP_COL-1; mapCol++)
 			{
 				
 				Color gridColor = null;
@@ -185,9 +191,9 @@ public class Map extends JPanel{
 
 		//paint robot
 		g.setColor(MapConstants.C_ROBOT);
-		int r = mapRobot.getPosition().getRow()-1;
-		int c = mapRobot.getPosition().getCol()-1;
-		g.fillOval((c-1) * MapConstants.GRID_SIZE + 22,758 - (r * MapConstants.GRID_SIZE + 18),76,76);
+		int r = mapRobot.getPosition().getRow();
+		int c = mapRobot.getPosition().getCol();
+		g.fillOval((c-1) * MapConstants.GRID_SIZE + 22,798 - (r * MapConstants.GRID_SIZE + 18),76,76);
 
 
 		//paint direction
@@ -195,16 +201,16 @@ public class Map extends JPanel{
 		int d = mapRobot.getHeading();
 		switch (d) {
 			case 4: 
-				g.fillOval(c * MapConstants.GRID_SIZE + 12,758 -r * MapConstants.GRID_SIZE - 22,18,18);
+				g.fillOval(c * MapConstants.GRID_SIZE + 12,798 -r * MapConstants.GRID_SIZE - 22,18,18);
 				break;
 			case 3:
-				g.fillOval(c * MapConstants.GRID_SIZE - 22,758 - r * MapConstants.GRID_SIZE + 8 ,18,18);
+				g.fillOval(c * MapConstants.GRID_SIZE - 22,798 - r * MapConstants.GRID_SIZE + 8 ,18,18);
 				break;
 			case 2:
-				g.fillOval(c * MapConstants.GRID_SIZE + 12,758 - r * MapConstants.GRID_SIZE + 42,18,18);
+				g.fillOval(c * MapConstants.GRID_SIZE + 12,798 - r * MapConstants.GRID_SIZE + 42,18,18);
 				break;
 			case 1:
-				g.fillOval(c * MapConstants.GRID_SIZE + 42,758 - r * MapConstants.GRID_SIZE + 8,18,18);
+				g.fillOval(c * MapConstants.GRID_SIZE + 42,798 - r * MapConstants.GRID_SIZE + 8,18,18);
 				break;
 		}
 	}
@@ -224,7 +230,7 @@ public class Map extends JPanel{
 			this.borderSize = borderSize;
 			
 			this.gridX = borderX + MapConstants.GRID_LINE_WEIGHT;
-			this.gridY = 758 - (borderY - MapConstants.GRID_LINE_WEIGHT);
+			this.gridY = 798 - (borderY - MapConstants.GRID_LINE_WEIGHT);
 			this.gridSize = borderSize - (MapConstants.GRID_LINE_WEIGHT * 2);
 		}
 	}	
@@ -235,7 +241,7 @@ public class Map extends JPanel{
 
 	//Print for debugging
 	public void printMapWithVirtualWall(){
-		for (int i=0;i<MapConstants.MAP_ROW;i++){
+		for (int i=MapConstants.MAP_ROW-1;i>=0;i--){
 			for (int j=0; j<MapConstants.MAP_COL;j++){
 				if (grids[i][j].isVirtualWall()){
 					System.out.print("2");
@@ -255,7 +261,7 @@ public class Map extends JPanel{
 
 	public void printMap(){
 
-		for (int i=0;i<MapConstants.MAP_ROW;i++){
+		for (int i=MapConstants.MAP_ROW-1;i>=0;i--){
 			for (int j=0; j<MapConstants.MAP_COL;j++){
 				if (grids[i][j].isObstacle()){
 					System.out.print("1");
@@ -271,16 +277,16 @@ public class Map extends JPanel{
 
 	}
 
-	public void printExplorationProgress(Robot r){
+	public void printExplorationProgress(){
 		for (int i=MapConstants.MAP_ROW-1;i>=0;i--){
 			for (int j=0; j<MapConstants.MAP_COL;j++){
-				if (r.getPosition().getRow()== i && r.getPosition().getCol() == j){
-					switch(r.getHeading()){    					//print robot position
+				if (mapRobot.getPosition().getRow()== i && mapRobot.getPosition().getCol() == j){
+					switch(mapRobot.getHeading()){    					//print robot position
 						case 1: System.out.print(">");break;
 						case 2: System.out.print("v");break;
 						case 3: System.out.print("<");break;
 						case 4: System.out.print("^");break;
-						default: System.out.printf("%d", r.getHeading());break;
+						default: System.out.printf("%d", mapRobot.getHeading());break;
 					}						
 				} else if (!grids[i][j].isExplored() && !isBorder(i, j)){
 					System.out.print("x");						//unexplored area
