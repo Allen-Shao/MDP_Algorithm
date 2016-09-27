@@ -36,6 +36,10 @@ public class Simulator extends JFrame{
 
 	private static Robot mdpRobot = null;
 
+	private static Map exploredCoverLimitMap = null;
+
+	private static Map exploredTimeLimitMap = null;
+
 
 	
 
@@ -121,6 +125,7 @@ public class Simulator extends JFrame{
 
 		stpMap = new Map(mdpRobot);
 		stpMap.loadMap("map.txt");
+		stpMap.setAllExplored();
 
 		trueMap = new Map(mdpRobot);
 		trueMap.loadMap("map.txt");
@@ -133,12 +138,17 @@ public class Simulator extends JFrame{
 		exploredTimeLimitMap = new Map(mdpRobot);
 
 
-
-
 		displayEverythings();
 
 		// ExploreAlgo e = new ExploreAlgo(trueMap, exploredMap, mdpRobot);
 		// e.runExploration();
+
+		//To do list
+		//1. load map
+		//2. cover limit
+		//3. set speed
+		//4. time limit
+		//5. map descriptor
 
 	}
 
@@ -204,7 +214,9 @@ public class Simulator extends JFrame{
 
 		class Exploration extends SwingWorker<Integer, String>{
 			protected Integer doInBackground() throws Exception{
-				
+				mdpRobot.setPosition(new MapGrid(2, 2));
+				mdpRobot.setHeading(1);
+
 				CardLayout cl = ((CardLayout) mainCards.getLayout());
 				cl.show(mainCards, "EXPLO");
 				exploredMap.repaint();
@@ -237,6 +249,7 @@ public class Simulator extends JFrame{
 				Stack<MapGrid> result = s.runShortestPath();
 				s.printPath(result);
 
+				stpMap.printMap();
 
 				return 1;
 			}
@@ -249,11 +262,11 @@ public class Simulator extends JFrame{
 		btnShortestPath.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 				CardLayout cl = ((CardLayout) mainCards.getLayout());
-			    cl.show(_mainCards, "MAIN");
+			    cl.show(mainCards, "MAIN");
 			    new ShortestPath().execute();
 			}
 		});
-		mainButtons.add(btn_ShortestPath);
+		mainButtons.add(btnShortestPath);
 
 
 

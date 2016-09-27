@@ -6,6 +6,7 @@ import map.MapConstants;
 import robot.Robot;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class ShortestPathAlgo{
 	private Map stpMap;     //shortest path map
@@ -89,6 +90,8 @@ public class ShortestPathAlgo{
 				// 	System.out.println();
 				// }				
 				path = generatePath(goal);
+
+				moveRobot();
 
 				return generatePath(goal);  //get the path towards goal
 			}
@@ -248,18 +251,22 @@ public class ShortestPathAlgo{
 	}
 
 	private void moveRobot(){
-		Stack<MapGrid> movePath;
+		Stack<MapGrid> movePath = path;
+		stpRobot.setPosition(start);
 		while (!movePath.isEmpty()){
+			System.out.println(stpRobot.getPosition().toString());
 			stpMap.repaint();
-			nextMove = movePath.pop();
+			MapGrid nextMove = movePath.pop();
 			switch(stpRobot.getHeading()){
 				case 1:
 					if (nextMove.getCol() == stpRobot.getPosition().getCol()+1){
 						robotMoveForward();
 					} else if (nextMove.getRow() == stpRobot.getPosition().getRow()+1){
 						robotTurnLeft();
+						robotMoveForward();
 					} else if (nextMove.getRow() == stpRobot.getPosition().getRow()-1){
 						robotTurnRight();
+						robotMoveForward();
 					}
 					break;
 				case 2:
@@ -267,8 +274,10 @@ public class ShortestPathAlgo{
 						robotMoveForward();
 					} else if (nextMove.getCol() == stpRobot.getPosition().getCol()-1){
 						robotTurnLeft();
+						robotMoveForward();
 					} else if (nextMove.getCol() == stpRobot.getPosition().getCol()+1){
 						robotTurnRight();
+						robotMoveForward();
 					}
 					break;
 				case 3:
@@ -276,20 +285,30 @@ public class ShortestPathAlgo{
 						robotMoveForward();
 					} else if (nextMove.getRow() == stpRobot.getPosition().getRow()-1){
 						robotTurnLeft();
+						robotMoveForward();
 					} else if (nextMove.getRow() == stpRobot.getPosition().getRow()+1){
 						robotTurnRight();
+						robotMoveForward();
 					}
 					break;
 				case 4:
 					if (nextMove.getRow() == stpRobot.getPosition().getRow()+1){
 						robotMoveForward();
-					} else if (nextMove.getCol() == stpRobot.getPosition().getCol()+1){
-						robotTurnLeft();
 					} else if (nextMove.getCol() == stpRobot.getPosition().getCol()-1){
+						robotTurnLeft();
+						robotMoveForward();
+					} else if (nextMove.getCol() == stpRobot.getPosition().getCol()+1){
 						robotTurnRight();
+						robotMoveForward();
 					}
 					break;
 				default: break;
+			}
+
+			try{
+				TimeUnit.MILLISECONDS.sleep(200);
+			} catch(InterruptedException e){
+				System.out.println("InterruptedException");
 			}
 
 		}
