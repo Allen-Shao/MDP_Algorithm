@@ -33,7 +33,8 @@ public class Mainframe extends JFrame {
 	 * Static Variables
 	 */
 	private final int PROG_MIN = 0;
-	private final int PROG_MAX = 0;
+	private final int PROG_MAX = 100;
+	private int percentage = 0;
 	private final int M = 20;
 	private final int N = 15;
 	private int row;
@@ -49,7 +50,7 @@ public class Mainframe extends JFrame {
 	private static Map trueMap = null;
 	private static Map newMap = new Map();
 	private MapGrid grids[][] = new MapGrid[MapConstants.MAP_ROW][MapConstants.MAP_COL];
-	private Stack<MapGrid> stpStack = new Stack();	
+	private Stack<MapGrid> stpStack = new Stack();
 
 	/**
 	 * 
@@ -123,19 +124,21 @@ public class Mainframe extends JFrame {
 
 				ShortestPathAlgo s = new ShortestPathAlgo(stpMap, stpRobot);
 				s.runShortestPath();
-				while(!stpStack.empty()){
+				int original_s_size = stpStack.size();
+				while (!stpStack.empty()) {
 					MapGrid next = stpStack.pop();
-					int r = next.getRow();
-					int c = next.getCol();
-					RobotMoving(r, c);
-				}
-				
-				// progress bar
-				for (int i = PROG_MIN; i <= PROG_MAX; i++) {
-					// add percent calculated
-					updateBar_sp(i);
-
-				}
+					int r = next.getRow() - 1;
+					int c = next.getCol() - 1;
+					for (int i = -1; i < 2; i++) {
+						for (int j = -1; j < 2; j++) {
+							RobotMoving(r, c);
+							r++;
+							c++;
+						}
+					}
+					percentage = stpStack.size()/original_s_size;
+					updateBar_sp(percentage);
+				}				
 			}
 		});
 		btnShortestPath.addActionListener(new ActionListener() {
@@ -209,9 +212,9 @@ public class Mainframe extends JFrame {
 		final JButton b = new JButton("r" + row + ",c" + col);
 		if (b.getBackground() == Color.BLACK) {
 			System.out.println("Hit Obstacle");
-		} else{
+		} else {
 			b.setBackground(Color.BLUE);
-			System.out.println("Robot passed" + " r" + row + ", c" + col );
+			System.out.println("Robot passed" + " r" + row + ", c" + col);
 		}
 		return b;
 	}
