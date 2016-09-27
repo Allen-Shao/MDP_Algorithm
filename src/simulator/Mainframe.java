@@ -1,7 +1,6 @@
 package simulator;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -9,15 +8,12 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
 import map.Map;
 import map.MapConstants;
 import map.MapGrid;
 import robot.ExploreAlgo;
 import robot.Robot;
-import robot.Sensor;
 import robot.ShortestPathAlgo;
-
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -28,13 +24,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 import java.awt.GridLayout;
-import javax.swing.JTextArea;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
-
 import java.awt.Font;
 import java.awt.Graphics;
-import javax.swing.JComboBox;
 import javax.swing.JSpinner;
 
 public class Mainframe extends JFrame {
@@ -106,8 +99,9 @@ public class Mainframe extends JFrame {
 		createGridButtons(); //create gird buttons
 		setStartPoint(); // set the start and end point
 		setEndPoint();
+		
 		/*
-		 * Text Area indicating Color Representation
+		 * JLabel indicating Color Representation
 		 */
 		createText();
 		
