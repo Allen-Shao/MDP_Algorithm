@@ -299,6 +299,19 @@ public class ExploreAlgo{
 		return true;
 	}
 
+	private double calculateCoverRate(){
+		int exploredNumber = 0;
+		for (int i = 1; i < MapConstants.MAP_ROW-1; i++){
+			for (int j = 1; j < MapConstants.MAP_COL-1; j++){
+				if (knownMap.getGrid(i, j).isExplored()){
+					exploredNumber++;
+				}
+			}
+		}
+		return exploredNumber/(MapConstants.MAP_ROW-2, MapConstants.MAP_COL-2);
+
+	}
+
 	private boolean sameGrid(MapGrid a, MapGrid b){
 		return (a.getCol() == b.getCol()) && (a.getRow() == b.getCol());
 	}
