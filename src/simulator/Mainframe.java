@@ -133,7 +133,6 @@ public class Mainframe extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
 				// robot moving, call paint function
-
 				ShortestPathAlgo s = new ShortestPathAlgo(stpMap, stpRobot);
 				s.runShortestPath();
 				int original_s_size = stpStack.size();
@@ -166,7 +165,7 @@ public class Mainframe extends JFrame {
 		btnExplore.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				btnShortestPath.setEnabled(false);
+				// btnShortestPath.setEnabled(false);
 				// robot start moving, call paint
 				ExploreAlgo e = new ExploreAlgo(trueMap, mdpRobot);
 				e.runExploration();
