@@ -22,7 +22,7 @@ public class ExploreAlgo{
 		this.trueMap = tMp;
 		this.expRobot = r;
 
-		this.knownMap = new Map();
+		this.knownMap = new Map(this.expRobot);
 		knownMap.addBorder();
 
 		this.coverLimit = 1;
@@ -34,7 +34,7 @@ public class ExploreAlgo{
 		this.trueMap = tMp;
 		this.expRobot = r;
 
-		this.knownMap = new Map();
+		this.knownMap = new Map(this.expRobot);
 		knownMap.addBorder();
 
 		this.coverLimit = cL;

@@ -113,14 +113,14 @@ public class Simulator extends JFrame{
 		Sensor s2 = new Sensor(3, 2, -1, 0);
 		Sensor s3 = new Sensor(5, 4, 1, 0);
 
-		stpMap = new Map();
+		stpMap = new Map(mdpRobot);
 		stpMap.loadMap("map.txt");
 
-		trueMap = new Map();
+		trueMap = new Map(mdpRobot);
 		trueMap.loadMap("map.txt");
 		trueMap.removeVirtualWall();
 
-		exploredMap = new Map();
+		exploredMap = new Map(mdpRobot);
 
 
 		displayEverythings();
