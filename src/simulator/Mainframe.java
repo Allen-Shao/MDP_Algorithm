@@ -96,6 +96,7 @@ public class Mainframe extends JFrame {
 		contentPane.setLayout(null);
 		getContentPane().setLayout(null);
 		setTitle("MDP Simulator");
+		getContentPane().setBackground(Color.white);
 		createGridButtons(); //create gird buttons
 		setStartPoint(); // set the start and end point
 		setEndPoint();
@@ -273,7 +274,7 @@ public class Mainframe extends JFrame {
 	public void paint(Graphics g) {
 		super.paint(g);
 		g.setColor(new Color(0, 255, 0));
-		g.fillOval(100, 100, 50, 50);
+		g.fillOval(90, 570 , 50, 50);
 	}
 
 	public void setStartPoint() {
