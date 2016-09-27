@@ -16,6 +16,7 @@ public class ExploreAlgo{
 
 	private double coverLimit;
 	private int timeLimitInSecond;
+	private int stepPerSecond;
 
 	public ExploreAlgo(Map tMp, Robot r){
 		this.trueMap = tMp;
@@ -26,9 +27,10 @@ public class ExploreAlgo{
 
 		this.coverLimit = 1;
 		this.timeLimitInSecond = 1000000; //no time limit
+		this.stepPerSecond = 1000000; //set to infinity
 	}
 
-	public ExploreAlgo(Map tMp, Robot r, double cL, int tL){
+	public ExploreAlgo(Map tMp, Robot r, double cL, int tL, int sPs){
 		this.trueMap = tMp;
 		this.expRobot = r;
 
@@ -37,6 +39,7 @@ public class ExploreAlgo{
 
 		this.coverLimit = cL;
 		this.timeLimitInSecond = tL;
+		this.stepPerSecond = sPs;
 	}
 
 
@@ -45,6 +48,8 @@ public class ExploreAlgo{
 		ArrayList<Sensor> allSensors = expRobot.getSensors();
 
 		boolean endFlag = false;
+
+		int step = 0;
 
 		while(!endFlag){
 
@@ -57,6 +62,7 @@ public class ExploreAlgo{
 				robotTurnRight();
 				if (!hasObstacleInFront()){
 					robotMoveForward();
+					step++; //count one more step
 				}
 			} else if (!hasObstacleInFront()){
 				robotMoveForward();
@@ -65,6 +71,8 @@ public class ExploreAlgo{
 			} else {
 				robotTurnRight();
 			}
+
+			step++; //count the step
 
 			//for debugging
 			Scanner sc = new Scanner(System.in);
@@ -82,7 +90,9 @@ public class ExploreAlgo{
 			//mark all the unexplored area as non-obstacle.
 			//use shortest path to go back to the start point
 
+
 			//3. reach time limit
+
 		}
 
 		return knownMap;
@@ -309,7 +319,6 @@ public class ExploreAlgo{
 			}
 		}
 		return exploredNumber/(MapConstants.MAP_ROW-2, MapConstants.MAP_COL-2);
-
 	}
 
 	private boolean sameGrid(MapGrid a, MapGrid b){
