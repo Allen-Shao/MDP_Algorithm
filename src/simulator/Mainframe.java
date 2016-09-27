@@ -271,6 +271,7 @@ public class Mainframe extends JFrame {
 		progressBar_sp.setValue(newValue);
 	}
 
+	// need to change according to x y coordinate?
 	public void paint(Graphics g) {
 		super.paint(g);
 		g.setColor(new Color(0, 255, 0));
