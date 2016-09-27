@@ -142,9 +142,9 @@ public class Simulator extends JFrame{
 		// e.runExploration();
 
 		//To do list
-		//1. load map
+		//1. load map (select file, input dialog)
 		//2. cover limit
-		//3. set speed
+		//3. set speed (done)
 		//4. time limit
 		//5. map descriptor
 
@@ -210,6 +210,23 @@ public class Simulator extends JFrame{
 
 	private static void addMainMenuButtons(){
 
+		// Load Map button
+		JButton btnLoadMap = new JButton("Load Map");
+		btnLoadMap.setFont(new Font("Arial", Font.BOLD, 13));
+		btnLoadMap.setFocusPainted(false);
+		btnLoadMap.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				stpMap.loadMap("map.txt");
+				stpMap.setAllExplored();
+				trueMap.loadMap("map.txt");
+				trueMap.removeVirtualWall();
+				CardLayout cl = ((CardLayout) mainCards.getLayout());
+	   			cl.show(mainCards, "MAIN");
+				stpMap.repaint();
+			}
+		});
+		mainButtons.add(btnLoadMap);
+
 		class Exploration extends SwingWorker<Integer, String>{
 			protected Integer doInBackground() throws Exception{
 				mdpRobot.setPosition(new MapGrid(2, 2));
@@ -269,22 +286,7 @@ public class Simulator extends JFrame{
 		});
 		mainButtons.add(btnShortestPath);
 
-		// Load Map button
-		JButton btnLoadMap = new JButton("Load Map");
-		btnLoadMap.setFont(new Font("Arial", Font.BOLD, 13));
-		btnLoadMap.setFocusPainted(false);
-		btnLoadMap.addMouseListener(new MouseAdapter() {
-			public void mousePressed(MouseEvent e) {
-				stpMap.loadMap("map.txt");
-				stpMap.setAllExplored();
-				trueMap.loadMap("map.txt");
-				trueMap.removeVirtualWall();
-				CardLayout cl = ((CardLayout) mainCards.getLayout());
-	   			cl.show(mainCards, "MAIN");
-				stpMap.repaint();
-			}
-		});
-		mainButtons.add(btnLoadMap);
+		
 
 		// Set speed of robot (speed of X steps per second ) button
 		JButton btnSpeed = new JButton("Robot Speed");
