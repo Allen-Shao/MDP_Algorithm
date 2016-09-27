@@ -124,12 +124,10 @@ public class Simulator extends JFrame{
 
 
 		stpMap = new Map(mdpRobot);
-		stpMap.loadMap("map.txt");
-		stpMap.setAllExplored();
+		
 
 		trueMap = new Map(mdpRobot);
-		trueMap.loadMap("map.txt");
-		trueMap.removeVirtualWall();
+		
 
 		exploredMap = new Map(mdpRobot);
 
@@ -270,6 +268,20 @@ public class Simulator extends JFrame{
 			}
 		});
 		mainButtons.add(btnShortestPath);
+
+		// Load Map button
+		JButton btnLoadMap = new JButton("Load Map");
+		btnLoadMap.setFont(new Font("Arial", Font.BOLD, 13));
+		btnLoadMap.setFocusPainted(false);
+		btnLoadMap.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				stpMap.loadMap("map.txt");
+				stpMap.setAllExplored();
+				trueMap.loadMap("map.txt");
+				trueMap.removeVirtualWall();
+			}
+		});
+		mainButtons.add(btnLoadMap);
 
 		// Set speed of robot (speed of X steps per second ) button
 		JButton btnSpeed = new JButton("Robot Speed");
