@@ -263,9 +263,21 @@ public class ShortestPathAlgo{
 						robotMoveForward();
 					} else if (nextMove.getRow() == stpRobot.getPosition().getRow()+1){
 						robotTurnLeft();
+						try{
+							TimeUnit.MILLISECONDS.sleep(1000/stpRobot.getSpeed());
+						} catch(InterruptedException e){
+							System.out.println("InterruptedException");
+						}
+						stpMap.repaint();
 						robotMoveForward();
 					} else if (nextMove.getRow() == stpRobot.getPosition().getRow()-1){
 						robotTurnRight();
+						try{
+							TimeUnit.MILLISECONDS.sleep(1000/stpRobot.getSpeed());
+						} catch(InterruptedException e){
+							System.out.println("InterruptedException");
+						}
+						stpMap.repaint();
 						robotMoveForward();
 					}
 					break;
@@ -274,9 +286,21 @@ public class ShortestPathAlgo{
 						robotMoveForward();
 					} else if (nextMove.getCol() == stpRobot.getPosition().getCol()-1){
 						robotTurnLeft();
+						try{
+							TimeUnit.MILLISECONDS.sleep(1000/stpRobot.getSpeed());
+						} catch(InterruptedException e){
+							System.out.println("InterruptedException");
+						}
+						stpMap.repaint();
 						robotMoveForward();
 					} else if (nextMove.getCol() == stpRobot.getPosition().getCol()+1){
 						robotTurnRight();
+						try{
+							TimeUnit.MILLISECONDS.sleep(1000/stpRobot.getSpeed());
+						} catch(InterruptedException e){
+							System.out.println("InterruptedException");
+						}
+						stpMap.repaint();
 						robotMoveForward();
 					}
 					break;
@@ -285,9 +309,21 @@ public class ShortestPathAlgo{
 						robotMoveForward();
 					} else if (nextMove.getRow() == stpRobot.getPosition().getRow()-1){
 						robotTurnLeft();
+						try{
+							TimeUnit.MILLISECONDS.sleep(1000/stpRobot.getSpeed());
+						} catch(InterruptedException e){
+							System.out.println("InterruptedException");
+						}
+						stpMap.repaint();
 						robotMoveForward();
 					} else if (nextMove.getRow() == stpRobot.getPosition().getRow()+1){
 						robotTurnRight();
+						try{
+							TimeUnit.MILLISECONDS.sleep(1000/stpRobot.getSpeed());
+						} catch(InterruptedException e){
+							System.out.println("InterruptedException");
+						}
+						stpMap.repaint();
 						robotMoveForward();
 					}
 					break;
@@ -296,9 +332,21 @@ public class ShortestPathAlgo{
 						robotMoveForward();
 					} else if (nextMove.getCol() == stpRobot.getPosition().getCol()-1){
 						robotTurnLeft();
+						try{
+							TimeUnit.MILLISECONDS.sleep(1000/stpRobot.getSpeed());
+						} catch(InterruptedException e){
+							System.out.println("InterruptedException");
+						}
+						stpMap.repaint();
 						robotMoveForward();
 					} else if (nextMove.getCol() == stpRobot.getPosition().getCol()+1){
 						robotTurnRight();
+						try{
+							TimeUnit.MILLISECONDS.sleep(1000/stpRobot.getSpeed());
+						} catch(InterruptedException e){
+							System.out.println("InterruptedException");
+						}
+						stpMap.repaint();
 						robotMoveForward();
 					}
 					break;
