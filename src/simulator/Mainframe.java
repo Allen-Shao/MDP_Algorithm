@@ -72,7 +72,7 @@ public class Mainframe extends JFrame {
 	JButton btnShortestPath;
 	JProgressBar progressBar_exp;
 	JProgressBar progressBar_sp;
-	JLabel statusLabel;
+	JLabel speedLabel;
 
 	/**
 	 * Launch the application.
@@ -196,16 +196,16 @@ public class Mainframe extends JFrame {
 		contentPane.add(btnExplore);
 		
 		// Spinner
-		statusLabel = new JLabel("", JLabel.CENTER);    
-		statusLabel.setLocation(228, 658);
-		statusLabel.setSize(99, 67);
-		contentPane.add(statusLabel);
+		speedLabel = new JLabel("Speed: ", JLabel.CENTER);    
+		speedLabel.setLocation(228, 658);
+		speedLabel.setSize(99, 67);
+		contentPane.add(speedLabel);
 		SpinnerModel spinnerModel = new SpinnerNumberModel(1, 1, 5, 1);
 		JSpinner spinner = new JSpinner(spinnerModel);
 		spinner.setBounds(337, 665, 67, 47);
 		spinner.addChangeListener(new ChangeListener(){
 			public void stateChanged(ChangeEvent e){
-				statusLabel.setText("Speed : " + ((JSpinner)e.getSource()).getValue());
+				speedLabel.setText("Speed: " + ((JSpinner)e.getSource()).getValue());
 			}
 		});
 		contentPane.add(spinner);
@@ -333,37 +333,36 @@ public class Mainframe extends JFrame {
 	}
 
 	public void createText() {
-		JTextArea txtrExplored = new JTextArea();
-		txtrExplored.setAlignmentX(Component.CENTER_ALIGNMENT);
+		JLabel txtrExplored = new JLabel("Explored", JLabel.CENTER);
 		txtrExplored.setFont(new Font("Britannic Bold", Font.PLAIN, 13));
 		txtrExplored.setForeground(Color.WHITE);
+		txtrExplored.setOpaque(true);
 		txtrExplored.setBackground(Color.BLUE);
-		txtrExplored.setWrapStyleWord(true);
 		txtrExplored.setText("Explored");
 		txtrExplored.setBounds(756, 95, 67, 24);
 		contentPane.add(txtrExplored);
 
-		JTextArea txtrObstacles = new JTextArea();
-		txtrObstacles.setAlignmentX(Component.CENTER_ALIGNMENT);
+		JLabel txtrObstacles = new JLabel("Obstacles", JLabel.CENTER);
 		txtrObstacles.setFont(new Font("Britannic Bold", Font.PLAIN, 13));
 		txtrObstacles.setForeground(Color.WHITE);
+		txtrObstacles.setOpaque(true);
 		txtrObstacles.setBackground(Color.BLACK);
 		txtrObstacles.setText("Obstacles");
 		txtrObstacles.setBounds(756, 130, 67, 24);
 		contentPane.add(txtrObstacles);
 
-		JTextArea txtrStartGoal = new JTextArea();
-		txtrStartGoal.setAlignmentX(Component.CENTER_ALIGNMENT);
+		JLabel txtrStartGoal = new JLabel("Start/Goal", JLabel.CENTER);
 		txtrStartGoal.setFont(new Font("Britannic Bold", Font.PLAIN, 13));
 		txtrStartGoal.setBackground(Color.YELLOW);
+		txtrStartGoal.setOpaque(true);
 		txtrStartGoal.setText("Start / Goal");
 		txtrStartGoal.setBounds(756, 165, 88, 24);
 		contentPane.add(txtrStartGoal);
 
-		JTextArea txtrRobot = new JTextArea();
-		txtrRobot.setAlignmentX(Component.CENTER_ALIGNMENT);
+		JLabel txtrRobot = new JLabel("Robot", JLabel.CENTER);
 		txtrRobot.setFont(new Font("Britannic Bold", Font.PLAIN, 13));
 		txtrRobot.setBackground(Color.PINK);
+		txtrRobot.setOpaque(true);
 		txtrRobot.setText("Robot");
 		txtrRobot.setBounds(756, 200, 67, 24);
 		contentPane.add(txtrRobot);
