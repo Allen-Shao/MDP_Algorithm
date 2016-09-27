@@ -53,7 +53,7 @@ public class Mainframe extends JFrame {
 	private static Map trueMap = null;
 	private static Map newMap = new Map();
 	private MapGrid grids[][] = new MapGrid[MapConstants.MAP_ROW][MapConstants.MAP_COL];
-	private Stack<MapGrid> stpStack = new Stack();
+	private Stack<MapGrid> stpStack = new Stack<MapGrid>();
 
 	/**
 	 * 
@@ -240,7 +240,6 @@ public class Mainframe extends JFrame {
 		});
 
 		b.addMouseListener(new MouseAdapter() {
-
 			public void mouseClicked(MouseEvent arg0) {
 				// when clicked, if true set false, else set true
 				JButton btn = Mainframe.this.getGridButton(row, col);
@@ -295,6 +294,7 @@ public class Mainframe extends JFrame {
 	}
 
 	public void createGridButtons() {
+		
 		JPanel p = new JPanel();
 		p.setBounds(50, 53, 581, 561);
 		contentPane.add(p);
@@ -311,6 +311,7 @@ public class Mainframe extends JFrame {
 	}
 
 	public void createProgressBar() {
+		
 		// Explore Progress Bar
 		JProgressBar progressBar_exp = new JProgressBar();
 		progressBar_exp.setBounds(756, 446, 146, 14);
@@ -327,6 +328,7 @@ public class Mainframe extends JFrame {
 	}
 
 	public void createText() {
+		
 		JLabel txtrExplored = new JLabel("Explored", JLabel.CENTER);
 		txtrExplored.setFont(new Font("Britannic Bold", Font.PLAIN, 13));
 		txtrExplored.setForeground(Color.WHITE);
