@@ -323,8 +323,10 @@ public class Simulator extends JFrame{
 		//Coverlimit Exploration
 
 		//Timelimit Exploration
+	}
 
-
+	private static generateMapDescriptor(){
+		
 	}
 
 }
