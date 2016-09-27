@@ -279,6 +279,9 @@ public class Simulator extends JFrame{
 				stpMap.setAllExplored();
 				trueMap.loadMap("map.txt");
 				trueMap.removeVirtualWall();
+				CardLayout cl = ((CardLayout) mainCards.getLayout());
+	   			cl.show(mainCards, "MAIN");
+				stpMap.repaint();
 			}
 		});
 		mainButtons.add(btnLoadMap);
