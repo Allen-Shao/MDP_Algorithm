@@ -210,7 +210,7 @@ public class Simulator extends JFrame{
 
 	private static void addMainMenuButtons(){
 
-		// Load Map button
+		// Load Map
 		JButton btnLoadMap = new JButton("Load Map");
 		btnLoadMap.setFont(new Font("Arial", Font.BOLD, 13));
 		btnLoadMap.setFocusPainted(false);
@@ -227,6 +227,8 @@ public class Simulator extends JFrame{
 		});
 		mainButtons.add(btnLoadMap);
 
+
+		//Exploration
 		class Exploration extends SwingWorker<Integer, String>{
 			protected Integer doInBackground() throws Exception{
 				mdpRobot.setPosition(new MapGrid(2, 2));
@@ -257,6 +259,8 @@ public class Simulator extends JFrame{
 		});
 		mainButtons.add(btnExploration);
 
+
+		//Shortest Path
 		class ShortestPath extends SwingWorker<Integer, String>{
 			protected Integer doInBackground() throws Exception
 			{
@@ -273,7 +277,6 @@ public class Simulator extends JFrame{
 			}
 		}
 
-		//Shortest Path button
 		JButton btnShortestPath = new JButton("Fastest Path");
 		btnShortestPath.setFont(new Font("Arial", Font.BOLD, 13));
 		btnShortestPath.setFocusPainted(false);
@@ -288,7 +291,7 @@ public class Simulator extends JFrame{
 
 		
 
-		// Set speed of robot (speed of X steps per second ) button
+		// Set robot speed (X steps per second)
 		JButton btnSpeed = new JButton("Robot Speed");
 		btnSpeed.setFont(new Font("Arial", Font.BOLD, 13));
 		btnSpeed.setFocusPainted(false);
@@ -317,48 +320,95 @@ public class Simulator extends JFrame{
 		});
 		mainButtons.add(btnSpeed);
 
+		//Coverlimit Exploration
 
-
+		//Timelimit Exploration
 
 
 	}
 
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-	// public static void main(String[] args) {
-		
-
-		
-	// 	// Initialize robot
-	// 	if(smartRobot == null) {
-	// 		smartRobot = new Robot();  //!! parameters to be added
+	// 	class timeExploration extends SwingWorker<Integer, String>{
+	// 	    protected Integer doInBackground() throws Exception{
+	// 			bot.setRobotPos(1,1);
+	// 			CardLayout cl = ((CardLayout) _mainCards.getLayout());
+	// 		    cl.show(_mainCards, "TIMEEXPLO");
+	// 			simTimeExMap.repaint();
+	// 			ExplorationAlgo timeExpo = new ExplorationAlgo(simTimeExMap, simShortestPathMap, bot);
+	// 			timeExpo.runExploration(timeLimited);
+	// 			return 333;
+	// 		}
 	// 	}
-		
-	// 	// --------------------------------------------------------------------
-	// 	// Everything below is just for the layout
-		
-	// 	// Calculate map width & height based on grid size
-	// 	mapXLength = MapConstants.MAP_COL * MapConstants.GRID_SIZE;
-	// 	mapYLength = MapConstants.MAP_ROW * MapConstants.GRID_SIZE;
-		
-	// 	// Main frame for displaying everything
-	// 	appFrame = new JFrame();
-	// 	appFrame.setTitle("MDP Simulator");
-	// 	appFrame.setSize(new Dimension(886, 771));
-	// 	appFrame.setResizable(false);
+	// 	// Time-limited Exploration button
+	// 	JButton btn_TimeExploration = new JButton("Time-limited");
+	// 	btn_TimeExploration.setFont(new Font("Arial", Font.BOLD, 13));
+	// 	btn_TimeExploration.setFocusPainted(false);
+	// 	btn_TimeExploration.addMouseListener(new MouseAdapter() {
+	// 		public void mousePressed(MouseEvent e) {
+	// 			JDialog d2=new JDialog(_appFrame,"Time Limit Exploration",true);
+	// 			d2.setSize(400,400);
+	// 			d2.setLayout(new FlowLayout());
+	// 			JTextField timeTF = new JTextField(5);
+	// 			JButton timeSaveButton = new JButton("Save");
+				
+	// 			timeSaveButton.addMouseListener(new MouseAdapter() {
+	// 			public void mousePressed(MouseEvent e) {
+	// 					timeLimited = (Integer.parseInt(timeTF.getText()));
+	// 					CardLayout cl = ((CardLayout) _mainCards.getLayout());
+	// 				    cl.show(_mainCards, "TIMEEXPLO");
+	// 				    new timeExploration().execute();
+	// 				}
+	// 			});
 
-	// 	mainCards = new JPanel(new CardLayout());
-	// 	buttonsCards = new JPanel(new CardLayout());
+	// 	        d2.add(new JLabel("Enter time for exploration (in Second): "));
+	// 	        d2.add(timeTF);
+	// 	        d2.add(timeSaveButton);
+
+	// 	        d2.setVisible(true);
+		        
+	// 		}
+	// 	});
+	// 	_mainButtons.add(btn_TimeExploration);
+
+	// 	// for multithreading
+	// 	class coverageExploration extends SwingWorker<Integer, String>{
+	// 	    protected Integer doInBackground() throws Exception{
+	// 			bot.setRobotPos(1,1);
+	// 			CardLayout cl = ((CardLayout) _mainCards.getLayout());
+	// 		    cl.show(_mainCards, "COVERAGEEXPLO");
+	// 			simCoverageExMap.repaint();
+
+	// 			ExplorationAlgo coverageExpo = new ExplorationAlgo(simCoverageExMap, simShortestPathMap, bot);
+	// 			coverageExpo.runExploration(coverageLimited);
+	// 			return 444;
+	// 		}
+	// 	}
+	// 	// Coverage-limited Exploration button
+	// 	JButton btn_CoverageExploration = new JButton("Coverage-limited");
+	// 	btn_CoverageExploration.setFont(new Font("Arial", Font.BOLD, 13));
+	// 	btn_CoverageExploration.setFocusPainted(false);
+	// 	btn_CoverageExploration.addMouseListener(new MouseAdapter() {
+	// 		public void mousePressed(MouseEvent e) {
+	// 			JDialog d3=new JDialog(_appFrame,"Coverage Limit Exploration",true);
+	// 			d3.setSize(400,400);
+	// 			d3.setLayout(new FlowLayout());
+	// 			JTextField coverageTF = new JTextField(5);
+	// 			JButton coverageSaveButton = new JButton("Save");
+				
+	// 			coverageSaveButton.addMouseListener(new MouseAdapter() {
+	// 			public void mousePressed(MouseEvent e) {
+	// 					coverageLimited = (Integer.parseInt(coverageTF.getText()));
+	// 					new coverageExploration().execute();
+	// 				}
+	// 			});
+	// 	        d3.add(new JLabel("Enter coverage for exploration ( % of the maze squares): "));
+	// 	        d3.add(coverageTF);
+	// 	        d3.add(coverageSaveButton);
+	// 	        d3.setVisible(true);
+	// 		}
+	// 	});
+	// 	_mainButtons.add(btn_CoverageExploration);
+	// }
+
+
