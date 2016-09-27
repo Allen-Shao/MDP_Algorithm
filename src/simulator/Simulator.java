@@ -99,11 +99,18 @@ public class Simulator extends JFrame{
 
 		//initialize robot and map
 		mdpRobot = new Robot(new MapGrid(2,2), 1);
+		//front sensor
 		Sensor s1 = new Sensor(3, 1, 0, 1);
-		Sensor s2 = new Sensor(3, 2, -1, 0);
-		Sensor s3 = new Sensor(5, 4, 1, 0);
 		Sensor s4 = new Sensor(3, 1, -1, 1);
 		Sensor s5 = new Sensor(3, 1, 1, 1);
+
+
+		//left sensor
+		Sensor s2 = new Sensor(3, 2, -1, 1);
+
+		//right sensor
+		Sensor s3 = new Sensor(5, 4, 1, 1);
+
 
 		mdpRobot.addSensor(s1);
 		mdpRobot.addSensor(s2);
@@ -120,6 +127,10 @@ public class Simulator extends JFrame{
 		trueMap.removeVirtualWall();
 
 		exploredMap = new Map(mdpRobot);
+
+		exploredCoverLimitMap = new Map(mdpRobot);
+
+		exploredTimeLimitMap = new Map(mdpRobot);
 
 
 
@@ -169,8 +180,8 @@ public class Simulator extends JFrame{
 		// Initialize the Map for simulation
 		mainCards.add(stpMap, "MAIN");
 		mainCards.add(exploredMap, "EXPLO");
-		// mainCards.add(exploredMap, "TIMEEXPLO");
-		// mainCards.add(exploredMap, "COVERAGEEXPLO");
+		mainCards.add(exploredCoverLimitMap, "TIMEEXPLO");
+		mainCards.add(exploredTimeLimitMap, "COVERAGEEXPLO");
 		
 		CardLayout cl = ((CardLayout) mainCards.getLayout());
 	    cl.show(mainCards, "MAIN");		
@@ -216,6 +227,35 @@ public class Simulator extends JFrame{
 			}
 		});
 		mainButtons.add(btnExploration);
+
+		class ShortestPath extends SwingWorker<Integer, String>{
+			protected Integer doInBackground() throws Exception
+			{
+				mdpRobot.setPosition(new MapGrid(2, 2));
+				stpMap.repaint();
+				ShortestPathAlgo s = new ShortestPathAlgo(stpMap, mdpRobot);
+				Stack<MapGrid> result = s.runShortestPath();
+				s.printPath(result);
+
+
+				return 1;
+			}
+		}
+
+		//Shortest Path button
+		JButton btnShortestPath = new JButton("Fastest Path");
+		btnShortestPath.setFont(new Font("Arial", Font.BOLD, 13));
+		btnShortestPath.setFocusPainted(false);
+		btnShortestPath.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				CardLayout cl = ((CardLayout) mainCards.getLayout());
+			    cl.show(_mainCards, "MAIN");
+			    new ShortestPath().execute();
+			}
+		});
+		mainButtons.add(btn_ShortestPath);
+
+
 
 
 

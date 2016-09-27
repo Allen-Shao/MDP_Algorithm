@@ -20,6 +20,8 @@ public class ShortestPathAlgo{
 
 	private double[][] gscore = new double[MapConstants.MAP_ROW][MapConstants.MAP_COL];
 
+	private Stack<MapGrid> path;
+
 	public ShortestPathAlgo(Map m, Robot r){
 		this.stpMap = m;
 		this.stpRobot = r;
@@ -86,6 +88,7 @@ public class ShortestPathAlgo{
 				// 	}
 				// 	System.out.println();
 				// }				
+				path = generatePath(goal);
 
 				return generatePath(goal);  //get the path towards goal
 			}
@@ -244,6 +247,86 @@ public class ShortestPathAlgo{
 		return path;
 	}
 
+	private void moveRobot(){
+		Stack<MapGrid> movePath;
+		while (!movePath.isEmpty()){
+			stpMap.repaint();
+			nextMove = movePath.pop();
+			switch(stpRobot.getHeading()){
+				case 1:
+					if (nextMove.getCol() == stpRobot.getPosition().getCol()+1){
+						robotMoveForward();
+					} else if (nextMove.getRow() == stpRobot.getPosition().getRow()+1){
+						robotTurnLeft();
+					} else if (nextMove.getRow() == stpRobot.getPosition().getRow()-1){
+						robotTurnRight();
+					}
+					break;
+				case 2:
+					if (nextMove.getRow() == stpRobot.getPosition().getRow()-1){
+						robotMoveForward();
+					} else if (nextMove.getCol() == stpRobot.getPosition().getCol()-1){
+						robotTurnLeft();
+					} else if (nextMove.getCol() == stpRobot.getPosition().getCol()+1){
+						robotTurnRight();
+					}
+					break;
+				case 3:
+					if (nextMove.getCol() == stpRobot.getPosition().getCol()-1){
+						robotMoveForward();
+					} else if (nextMove.getRow() == stpRobot.getPosition().getRow()-1){
+						robotTurnLeft();
+					} else if (nextMove.getRow() == stpRobot.getPosition().getRow()+1){
+						robotTurnRight();
+					}
+					break;
+				case 4:
+					if (nextMove.getRow() == stpRobot.getPosition().getRow()+1){
+						robotMoveForward();
+					} else if (nextMove.getCol() == stpRobot.getPosition().getCol()+1){
+						robotTurnLeft();
+					} else if (nextMove.getCol() == stpRobot.getPosition().getCol()-1){
+						robotTurnRight();
+					}
+					break;
+				default: break;
+			}
+
+		}
+	}
+
+	private void robotMoveForward(){
+		MapGrid curPos = stpRobot.getPosition();
+		switch (stpRobot.getHeading()){
+			case 1:
+				stpRobot.setPosition(stpMap.getGrid(curPos.getRow(), curPos.getCol()+1));
+				break;
+			case 2:
+				stpRobot.setPosition(stpMap.getGrid(curPos.getRow()-1, curPos.getCol()));
+				break;
+			case 3:
+				stpRobot.setPosition(stpMap.getGrid(curPos.getRow(), curPos.getCol()-1));
+				break;
+			case 4:
+				stpRobot.setPosition(stpMap.getGrid(curPos.getRow()+1, curPos.getCol()));
+				break;
+		}
+	}
+
+	private void robotTurnLeft(){
+		int newHeading = stpRobot.getHeading()-1;
+		if (newHeading == 0)
+			newHeading = 4;
+		stpRobot.setHeading(newHeading);		
+	}
+
+	private void robotTurnRight(){
+		int newHeading = (stpRobot.getHeading()+1)%4;
+		if (newHeading == 0)
+			newHeading = 4;
+		stpRobot.setHeading(newHeading);		
+	}
+
 
 	private ArrayList<MapGrid> findNeighbour(MapGrid cur){
 		ArrayList<MapGrid> neighbours = new ArrayList<MapGrid>();
@@ -277,8 +360,9 @@ public class ShortestPathAlgo{
 
 	public void printPath(Stack<MapGrid> path){
 		while (!path.isEmpty()){
-			System.out.println(path.pop().toString());
+			System.out.print(path.pop().toString() + " ");
 		}
+		System.out.println();
 	}
 
 }
