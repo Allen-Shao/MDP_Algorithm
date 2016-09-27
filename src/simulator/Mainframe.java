@@ -1,10 +1,15 @@
 package simulator;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.EventQueue;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 import map.Map;
 import map.MapConstants;
 import map.MapGrid;
@@ -24,8 +29,13 @@ import java.util.List;
 import java.util.Stack;
 import java.awt.GridLayout;
 import javax.swing.JTextArea;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
+
 import java.awt.Font;
 import java.awt.Graphics;
+import javax.swing.JComboBox;
+import javax.swing.JSpinner;
 
 public class Mainframe extends JFrame {
 
@@ -62,6 +72,7 @@ public class Mainframe extends JFrame {
 	JButton btnShortestPath;
 	JProgressBar progressBar_exp;
 	JProgressBar progressBar_sp;
+	JLabel statusLabel;
 
 	/**
 	 * Launch the application.
@@ -92,7 +103,14 @@ public class Mainframe extends JFrame {
 		contentPane.setLayout(null);
 		getContentPane().setLayout(null);
 		setTitle("MDP Simulator");
-
+		createGridButtons(); //create gird buttons
+		setStartPoint(); // set the start and end point
+		setEndPoint();
+		/*
+		 * Text Area indicating Color Representation
+		 */
+		createText();
+		
 		/*
 		 * Buttons
 		 */
@@ -149,7 +167,6 @@ public class Mainframe extends JFrame {
 
 		// Explore Button
 		JButton btnExplore = new JButton("Explore");
-
 		getRootPane().setDefaultButton(btnExplore);
 		btnExplore.requestFocus();
 		btnExplore.addMouseListener(new MouseAdapter() {
@@ -177,29 +194,26 @@ public class Mainframe extends JFrame {
 		});
 		btnExplore.setBounds(756, 412, 99, 23);
 		contentPane.add(btnExplore);
-
-		/*
-		 * Progress Bar
-		 */
-		createProgressBar();
-
-		/*
-		 * Grid Buttons
-		 */
-		createGridButtons();
-		setStartPoint();
-		setEndPoint();
-
+		
+		// Spinner
+		statusLabel = new JLabel("", JLabel.CENTER);    
+		statusLabel.setLocation(228, 658);
+		statusLabel.setSize(99, 67);
+		contentPane.add(statusLabel);
+		SpinnerModel spinnerModel = new SpinnerNumberModel(1, 1, 5, 1);
+		JSpinner spinner = new JSpinner(spinnerModel);
+		spinner.setBounds(337, 665, 67, 47);
+		spinner.addChangeListener(new ChangeListener(){
+			public void stateChanged(ChangeEvent e){
+				statusLabel.setText("Speed : " + ((JSpinner)e.getSource()).getValue());
+			}
+		});
+		contentPane.add(spinner);
+		
 		/*
 		 * Robot Circle
 		 */
 		// r.paint(null);
-
-		/*
-		 * Text Area indicating Color Representation
-		 */
-		createText();
-
 	}
 
 	JButton getGridButton(int r, int c) {
@@ -228,9 +242,7 @@ public class Mainframe extends JFrame {
 				// MapGrid gb = Mainframe.this.getGridButton(row, col);
 				JButton gb = Mainframe.this.getGridButton(row, col);
 				System.out.println("r" + row + ", c" + col + " " + (b == gb) + " " + (b.equals(gb)));
-
 			}
-
 		});
 
 		b.addMouseListener(new MouseAdapter() {
@@ -322,6 +334,7 @@ public class Mainframe extends JFrame {
 
 	public void createText() {
 		JTextArea txtrExplored = new JTextArea();
+		txtrExplored.setAlignmentX(Component.CENTER_ALIGNMENT);
 		txtrExplored.setFont(new Font("Britannic Bold", Font.PLAIN, 13));
 		txtrExplored.setForeground(Color.WHITE);
 		txtrExplored.setBackground(Color.BLUE);
@@ -331,6 +344,7 @@ public class Mainframe extends JFrame {
 		contentPane.add(txtrExplored);
 
 		JTextArea txtrObstacles = new JTextArea();
+		txtrObstacles.setAlignmentX(Component.CENTER_ALIGNMENT);
 		txtrObstacles.setFont(new Font("Britannic Bold", Font.PLAIN, 13));
 		txtrObstacles.setForeground(Color.WHITE);
 		txtrObstacles.setBackground(Color.BLACK);
@@ -339,6 +353,7 @@ public class Mainframe extends JFrame {
 		contentPane.add(txtrObstacles);
 
 		JTextArea txtrStartGoal = new JTextArea();
+		txtrStartGoal.setAlignmentX(Component.CENTER_ALIGNMENT);
 		txtrStartGoal.setFont(new Font("Britannic Bold", Font.PLAIN, 13));
 		txtrStartGoal.setBackground(Color.YELLOW);
 		txtrStartGoal.setText("Start / Goal");
@@ -346,6 +361,7 @@ public class Mainframe extends JFrame {
 		contentPane.add(txtrStartGoal);
 
 		JTextArea txtrRobot = new JTextArea();
+		txtrRobot.setAlignmentX(Component.CENTER_ALIGNMENT);
 		txtrRobot.setFont(new Font("Britannic Bold", Font.PLAIN, 13));
 		txtrRobot.setBackground(Color.PINK);
 		txtrRobot.setText("Robot");
