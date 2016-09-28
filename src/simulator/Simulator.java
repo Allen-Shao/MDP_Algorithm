@@ -311,7 +311,7 @@ public class Simulator extends JFrame{
 		btnSpeed.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
 				JDialog d1=new JDialog(appFrame,"Change Robot Speed",true);
-				d1.setSize(400,400);
+				d1.setSize(400,100);
 				d1.setLayout(new FlowLayout());
 				JTextField speedTF = new JTextField(5);
 				JButton speedSaveButton = new JButton("Save");
@@ -344,12 +344,9 @@ public class Simulator extends JFrame{
 				CardLayout cl = ((CardLayout) mainCards.getLayout());
 				cl.show(mainCards, "COVERAGEEXPLO");
 				exploredCoverLimitMap.repaint();
-				ExploreAlgo e = new ExploreAlgo(trueMap, exploredCoverLimitMap, mdpRobot, 0.5, 1000000);
+				ExploreAlgo e = new ExploreAlgo(trueMap, exploredCoverLimitMap, mdpRobot, coverLimit, 1000000);
 				e.runExploration();
 
-				//String mapDescriptor = generateMapDescriptor();
-
-				//System.out.println(mapDescriptor);
 
 				return 1;
 
@@ -361,9 +358,25 @@ public class Simulator extends JFrame{
 		btnCoverLimitedExploration.setFocusPainted(false);
 		btnCoverLimitedExploration.addMouseListener(new MouseAdapter(){
 			public void mousePressed(MouseEvent e){
-				CardLayout cl = ((CardLayout) mainCards.getLayout());
-				cl.show(mainCards, "COVERAGEEXPLO");
-				new CoverLimitedExploration().execute();
+				// CardLayout cl = ((CardLayout) mainCards.getLayout());
+				// cl.show(mainCards, "COVERAGEEXPLO");
+				JDialog d3=new JDialog(appFrame,"Coverage Limit Exploration",true);
+				d3.setSize(400,100);
+				d3.setLayout(new FlowLayout());
+				JTextField coverageTF = new JTextField(5);
+				JButton coverageSaveButton = new JButton("Save");
+
+				coverageSaveButton.addMouseListener(new MouseAdapter() {
+				public void mousePressed(MouseEvent e) {
+						coverLimit = (Double.parseDouble(coverageTF.getText()));
+						new CoverLimitedExploration().execute();
+					}
+				});
+		        d3.add(new JLabel("Enter coverage for exploration ( % of the maze squares): "));
+		        d3.add(coverageTF);
+		        d3.add(coverageSaveButton);
+		        d3.setVisible(true);
+				
 			}
 		});
 		mainButtons.add(btnCoverLimitedExploration);
