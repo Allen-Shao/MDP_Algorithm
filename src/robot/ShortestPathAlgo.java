@@ -48,6 +48,8 @@ public class ShortestPathAlgo{
 			return null;
 		}
 
+		stpMap.printMapWithVirtualWall();
+		System.out.printf("%d %d", goal.getRow(), goal.getCol());
 		//initialize gscore
 		for (int i = 0; i < MapConstants.MAP_ROW;i++){
 			for (int j = 0; j < MapConstants.MAP_COL;j++){
@@ -73,7 +75,7 @@ public class ShortestPathAlgo{
 		opened.add(this.start);
 
 		//start A* search algorithm
-		while (!opened.isEmpty()){
+		do {
 
 			//evaluate the grid in the opened set with lowest cost;
 			MapGrid current = findMinimumCost(opened, gscore, goal);
@@ -126,6 +128,16 @@ public class ShortestPathAlgo{
 				}
 					
 			}
+		} while(!opened.isEmpty());
+		if (closed.contains(stpMap.getGrid(goal.getRow(), goal.getCol()))){
+				System.out.println("Shortest Path found.");
+							
+				path = generatePath(goal);
+				//printPath(path);
+				moveRobot();
+
+
+				return generatePath(goal);  //get the path towards goal
 		}
 		System.out.println("Path NOT Found!");
 		// for (int i = 0; i < MapConstants.MAP_ROW;i++){
@@ -134,6 +146,9 @@ public class ShortestPathAlgo{
 		// 	}
 		// 	System.out.println();
 		// }
+		//printPath(generatePath(goal));
+		//System.out.println(closed.toString());
+		//System.out.println(closed.contains(stpMap.getGrid(goal.getRow(), goal.getCol())));
 		return null;
 	}
 
@@ -284,7 +299,7 @@ public class ShortestPathAlgo{
 				case 2:
 					if (nextMove.getRow() == stpRobot.getPosition().getRow()-1){
 						robotMoveForward();
-					} else if (nextMove.getCol() == stpRobot.getPosition().getCol()-1){
+					} else if (nextMove.getCol() == stpRobot.getPosition().getCol()+1){
 						robotTurnLeft();
 						try{
 							TimeUnit.MILLISECONDS.sleep(1000/stpRobot.getSpeed());
@@ -293,7 +308,7 @@ public class ShortestPathAlgo{
 						}
 						stpMap.repaint();
 						robotMoveForward();
-					} else if (nextMove.getCol() == stpRobot.getPosition().getCol()+1){
+					} else if (nextMove.getCol() == stpRobot.getPosition().getCol()-1){
 						robotTurnRight();
 						try{
 							TimeUnit.MILLISECONDS.sleep(1000/stpRobot.getSpeed());
@@ -422,7 +437,7 @@ public class ShortestPathAlgo{
 	}
 
 	private boolean sameGrid(MapGrid a, MapGrid b){
-		return (a.getCol() == b.getCol()) && (a.getRow() == b.getCol());
+		return (a.getCol() == b.getCol()) && (a.getRow() == b.getRow());
 	}
 
 	public void printPath(Stack<MapGrid> path){

@@ -5,6 +5,7 @@ import map.MapGrid;
 import map.MapConstants;
 import robot.Robot;
 import robot.Sensor;
+import robot.ShortestPathAlgo;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -46,6 +47,7 @@ public class ExploreAlgo{
 		ArrayList<Sensor> allSensors = expRobot.getSensors();
 
 		boolean endFlag = false;
+		boolean limitReached = false;
 
 		int step = 0;
 		// knownMap.repaint();
@@ -100,11 +102,30 @@ public class ExploreAlgo{
 				endFlag = true;
 
 			//2. reach cover limit
-			//mark all the unexplored area as obstacle.
-			//use shortest path to go back to the start point
 
+			//System.out.println(calculateCoverRate());
+			if (calculateCoverRate() >= coverLimit){
+				endFlag = true;
+				limitReached = true;
+			}
 
 			//3. reach time limit
+
+		}
+
+		if (limitReached){
+			//mark all the unexplored area as obstacle.
+			//use shortest path to go back to the start point
+			for (int i = 1; i < MapConstants.MAP_ROW-1; i++){
+				for (int j = 1; j < MapConstants.MAP_COL-1; j++){
+					if (!knownMap.getGrid(i, j).isExplored()){
+						knownMap.addObstacle(i, j);
+					}
+				}
+			}
+
+			ShortestPathAlgo s = new ShortestPathAlgo(knownMap, expRobot, expRobot.getPosition(), new MapGrid(MapConstants.START_X_CENTER, MapConstants.START_Y_CENTER));
+			s.runShortestPath();
 
 		}
 
@@ -329,7 +350,7 @@ public class ExploreAlgo{
 	}
 
 	private double calculateCoverRate(){
-		int exploredNumber = 0;
+		double exploredNumber = 0.0;
 		for (int i = 1; i < MapConstants.MAP_ROW-1; i++){
 			for (int j = 1; j < MapConstants.MAP_COL-1; j++){
 				if (knownMap.getGrid(i, j).isExplored()){
@@ -337,7 +358,7 @@ public class ExploreAlgo{
 				}
 			}
 		}
-		return exploredNumber/(MapConstants.MAP_ROW-2 * MapConstants.MAP_COL-2);
+		return exploredNumber/((MapConstants.MAP_ROW-2) * (MapConstants.MAP_COL-2));
 	}
 
 	private boolean sameGrid(MapGrid a, MapGrid b){

@@ -344,7 +344,7 @@ public class Simulator extends JFrame{
 				CardLayout cl = ((CardLayout) mainCards.getLayout());
 				cl.show(mainCards, "COVERAGEEXPLO");
 				exploredCoverLimitMap.repaint();
-				ExploreAlgo e = new ExploreAlgo(trueMap, exploredCoverLimitMap, mdpRobot);
+				ExploreAlgo e = new ExploreAlgo(trueMap, exploredCoverLimitMap, mdpRobot, 0.5, 1000000);
 				e.runExploration();
 
 				//String mapDescriptor = generateMapDescriptor();
