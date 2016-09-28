@@ -17,7 +17,6 @@ public class ExploreAlgo{
 
 	private double coverLimit;
 	private int timeLimitInSecond;
-	private int stepPerSecond;
 
 	public ExploreAlgo(Map tMp, Map kMp, Robot r){
 		this.trueMap = tMp;
@@ -28,10 +27,9 @@ public class ExploreAlgo{
 
 		this.coverLimit = 1;
 		this.timeLimitInSecond = 1000000; //no time limit
-		this.stepPerSecond = 1000000; //set to infinity
 	}
 
-	public ExploreAlgo(Map tMp, Map kMp, Robot r, double cL, int tL, int sPs){
+	public ExploreAlgo(Map tMp, Map kMp, Robot r, double cL, int tL){
 		this.trueMap = tMp;
 		this.expRobot = r;
 
@@ -40,7 +38,6 @@ public class ExploreAlgo{
 
 		this.coverLimit = cL;
 		this.timeLimitInSecond = tL;
-		this.stepPerSecond = sPs;
 	}
 
 
@@ -54,6 +51,7 @@ public class ExploreAlgo{
 		// knownMap.repaint();
 		while(!endFlag){
 
+
 			knownMap.printExplorationProgress();
 			knownMap.repaint();
 
@@ -61,6 +59,7 @@ public class ExploreAlgo{
 			markCurrentPosition();
 			sensorDetect();
 			//finite state machine (make only one step per loop)
+
 			if (!hasObstacleOnRight()){
 				robotTurnRight();
 				if (!hasObstacleInFront()){ //forward checking
@@ -101,13 +100,15 @@ public class ExploreAlgo{
 				endFlag = true;
 
 			//2. reach cover limit
-			//mark all the unexplored area as non-obstacle.
+			//mark all the unexplored area as obstacle.
 			//use shortest path to go back to the start point
 
 
 			//3. reach time limit
 
 		}
+
+		//System.out.println("Exploration Ends.");
 
 		//trueMap.printMap();
 

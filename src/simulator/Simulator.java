@@ -40,6 +40,10 @@ public class Simulator extends JFrame{
 
 	private static Map exploredTimeLimitMap = null;
 
+	private static double coverLimit = 0.0;
+
+	private static int timeLimit = 0;
+
 
 	
 
@@ -141,12 +145,17 @@ public class Simulator extends JFrame{
 		// ExploreAlgo e = new ExploreAlgo(trueMap, exploredMap, mdpRobot);
 		// e.runExploration();
 
+		// trueMap.loadMap("map1.txt");
+
+		// ExploreAlgo e = new ExploreAlgo(trueMap, exploredCoverLimitMap, mdpRobot);
+		// e.runExploration();
+
 		//To do list
 		//1. load map (select file, input dialog)
 		//2. cover limit
 		//3. set speed (done)
 		//4. time limit
-		//5. map descriptor
+		//5. map descriptor (done)
 
 	}
 
@@ -188,8 +197,8 @@ public class Simulator extends JFrame{
 		// Initialize the Map for simulation
 		mainCards.add(stpMap, "MAIN");
 		mainCards.add(exploredMap, "EXPLO");
-		mainCards.add(exploredCoverLimitMap, "TIMEEXPLO");
-		mainCards.add(exploredTimeLimitMap, "COVERAGEEXPLO");
+		mainCards.add(exploredCoverLimitMap, "COVERAGEEXPLO");
+		mainCards.add(exploredTimeLimitMap, "TIMEEXPLO");
 		
 		CardLayout cl = ((CardLayout) mainCards.getLayout());
 	    cl.show(mainCards, "MAIN");		
@@ -315,7 +324,7 @@ public class Simulator extends JFrame{
 					}
 				});
 
-		        d1.add(new JLabel("Enter Speed (X steps per second): "));
+		        d1.add(new JLabel("Enter Speed (steps per second): "));
 		        d1.add(speedTF);
 		        d1.add(speedSaveButton);
 
@@ -325,6 +334,39 @@ public class Simulator extends JFrame{
 		mainButtons.add(btnSpeed);
 
 		//Coverlimit Exploration
+		class CoverLimitedExploration extends SwingWorker<Integer, String>{
+			protected Integer doInBackground() throws Exception{
+				mdpRobot.setPosition(new MapGrid(2, 2));
+				mdpRobot.setHeading(1);
+
+				exploredCoverLimitMap.setUnExplored();
+
+				CardLayout cl = ((CardLayout) mainCards.getLayout());
+				cl.show(mainCards, "COVERAGEEXPLO");
+				exploredCoverLimitMap.repaint();
+				ExploreAlgo e = new ExploreAlgo(trueMap, exploredCoverLimitMap, mdpRobot);
+				e.runExploration();
+
+				//String mapDescriptor = generateMapDescriptor();
+
+				//System.out.println(mapDescriptor);
+
+				return 1;
+
+			}
+		}
+
+		JButton btnCoverLimitedExploration = new JButton("Coverage Limited");
+		btnCoverLimitedExploration.setFont(new Font("Arial", Font.BOLD, 13));
+		btnCoverLimitedExploration.setFocusPainted(false);
+		btnCoverLimitedExploration.addMouseListener(new MouseAdapter(){
+			public void mousePressed(MouseEvent e){
+				CardLayout cl = ((CardLayout) mainCards.getLayout());
+				cl.show(mainCards, "COVERAGEEXPLO");
+				new CoverLimitedExploration().execute();
+			}
+		});
+		mainButtons.add(btnCoverLimitedExploration);
 
 		//Timelimit Exploration
 	}
