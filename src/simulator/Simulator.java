@@ -284,7 +284,7 @@ public class Simulator extends JFrame{
 				Stack<MapGrid> result = s.runShortestPath();
 				s.printPath(result);
 
-				stpMap.printMap();
+				//stpMap.printMap();
 
 				return 1;
 			}
