@@ -216,9 +216,9 @@ public class Simulator extends JFrame{
 		btnLoadMap.setFocusPainted(false);
 		btnLoadMap.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
-				stpMap.loadMap("map.txt");
+				stpMap.loadMap("map1.txt");
 				stpMap.setAllExplored();
-				trueMap.loadMap("map.txt");
+				trueMap.loadMap("map1.txt");
 				trueMap.removeVirtualWall();
 				CardLayout cl = ((CardLayout) mainCards.getLayout());
 	   			cl.show(mainCards, "MAIN");
@@ -241,6 +241,10 @@ public class Simulator extends JFrame{
 				exploredMap.repaint();
 				ExploreAlgo e = new ExploreAlgo(trueMap, exploredMap, mdpRobot);
 				e.runExploration();
+
+				String mapDescriptor = generateMapDescriptor();
+
+				System.out.println(mapDescriptor);
 
 				return 1;
 
@@ -325,8 +329,97 @@ public class Simulator extends JFrame{
 		//Timelimit Exploration
 	}
 
-	private static generateMapDescriptor(){
-		
+	private static String generateMapDescriptor(){
+		String mapDescriptor = "";
+
+		//part1
+		mapDescriptor += "11\n";
+		for (int i=1;i<MapConstants.MAP_ROW-1;i++){
+			for (int j=1; j<MapConstants.MAP_COL-1;j++){
+				if (exploredMap.getGrid(i, j).isExplored()){
+					mapDescriptor += "1";
+				}
+				else {
+					mapDescriptor += "0";
+				}
+			}
+			mapDescriptor += "\n"; 
+		}
+		mapDescriptor += "11\n";
+		//part2
+		for (int i=1;i<MapConstants.MAP_ROW-1;i++){
+			for (int j=1; j<MapConstants.MAP_COL-1;j++){
+				if (exploredMap.getGrid(i, j).isExplored()){
+					if (exploredMap.getGrid(i, j).isObstacle()){
+						mapDescriptor += "1";
+					}
+					else {
+						mapDescriptor += "0";
+					}
+				}
+			}
+			mapDescriptor += "\n"; 
+		}
+
+		System.out.println("Map mapDescriptor:");
+		System.out.println(mapDescriptor);
+
+		//converto hexadecimal
+		String mapDescriptorHex = "";
+		int digitCount = 0;
+		int sum = 0;
+		String tempDigit = "";
+		for (int i = mapDescriptor.length()-1; i>=0; i--){
+			if (mapDescriptor.charAt(i) != '\n'){
+				digitCount++;
+				tempDigit = mapDescriptor.charAt(i) + tempDigit;
+				if (mapDescriptor.charAt(i) == '1'){
+					int temp = 1;
+					for (int k = 0; k < digitCount-1; k++){
+						temp *= 2;
+					}
+					sum += temp;
+				}
+
+			}
+
+			if (digitCount == 4){
+
+				if (sum < 10){
+					mapDescriptorHex = Integer.toString(sum) + mapDescriptorHex;
+				}
+				else {
+					switch (sum){
+						case 10:
+							mapDescriptorHex = "A" + mapDescriptorHex;
+							break;
+						case 11:
+							mapDescriptorHex = "B" + mapDescriptorHex;
+							break;
+						case 12:
+							mapDescriptorHex = "C" + mapDescriptorHex;
+							break;
+						case 13:
+							mapDescriptorHex = "D" + mapDescriptorHex;
+							break;
+						case 14:
+							mapDescriptorHex = "E" + mapDescriptorHex;
+							break;
+						case 15:
+							mapDescriptorHex = "F" + mapDescriptorHex;
+							break;
+					}
+				}
+				digitCount = 0;
+				sum = 0;
+				tempDigit = "";
+			}
+		}
+
+
+
+		return mapDescriptorHex;
+
 	}
 
 }
