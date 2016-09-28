@@ -139,7 +139,7 @@ public class Map extends JPanel{
 			brStream = new BufferedReader(frStream);
 
 			int input;
-			int i = MapConstants.MAP_ROW-1, j = 1;
+			int i = MapConstants.MAP_ROW-2, j = 1;
 			while (i >= 1){
 				while ((input = brStream.read()) != 10 && (input != -1)){
 					if (input == 49){

@@ -223,9 +223,9 @@ public class Simulator extends JFrame{
 		btnLoadMap.setFocusPainted(false);
 		btnLoadMap.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
-				stpMap.loadMap("map.txt");
+				stpMap.loadMap("map1.txt");
 				stpMap.setAllExplored();
-				trueMap.loadMap("map.txt");
+				trueMap.loadMap("map1.txt");
 				trueMap.removeVirtualWall();
 				CardLayout cl = ((CardLayout) mainCards.getLayout());
 	   			cl.show(mainCards, "MAIN");
@@ -251,7 +251,7 @@ public class Simulator extends JFrame{
 
 				String mapDescriptor = generateMapDescriptor();
 
-				System.out.println(mapDescriptor);
+				//System.out.println(mapDescriptor);
 
 				return 1;
 
@@ -452,7 +452,18 @@ public class Simulator extends JFrame{
 			mapDescriptor += "\n"; 
 		}
 		mapDescriptor += "11\n";
+
+		String part1Hex = stringBinaryToHex(mapDescriptor);
+
+		System.out.println();
+		System.out.println("Map mapDescriptor:");
+		System.out.println("Part 1");
+		System.out.println(part1Hex);
+
+		System.out.println(mapDescriptor);
+
 		//part2
+		mapDescriptor = "";
 		for (int i=1;i<MapConstants.MAP_ROW-1;i++){
 			for (int j=1; j<MapConstants.MAP_COL-1;j++){
 				if (exploredMap.getGrid(i, j).isExplored()){
@@ -467,19 +478,35 @@ public class Simulator extends JFrame{
 			mapDescriptor += "\n"; 
 		}
 
-		System.out.println("Map mapDescriptor:");
+		String part2Hex = stringBinaryToHex(mapDescriptor);
+		System.out.println();
+		System.out.println("Part 2");
+		System.out.println(part2Hex);
 		System.out.println(mapDescriptor);
 
-		//converto hexadecimal
-		String mapDescriptorHex = "";
+		return part1Hex+part2Hex;
+		
+	}
+
+	private static String stringBinaryToHex(String binString){
+		String hexString = "";
 		int digitCount = 0;
 		int sum = 0;
 		String tempDigit = "";
-		for (int i = mapDescriptor.length()-1; i>=0; i--){
-			if (mapDescriptor.charAt(i) != '\n'){
+
+		//padding to full byte length
+		if (binString.length() % 8 != 0){
+			for (int i = 0; i < 8-binString.length();i++){
+				binString += "0";
+			}
+		}
+
+
+		for (int i = binString.length()-1; i>=0; i--){
+			if (binString.charAt(i) != '\n'){
 				digitCount++;
-				tempDigit = mapDescriptor.charAt(i) + tempDigit;
-				if (mapDescriptor.charAt(i) == '1'){
+				tempDigit = binString.charAt(i) + tempDigit;
+				if (binString.charAt(i) == '1'){
 					int temp = 1;
 					for (int k = 0; k < digitCount-1; k++){
 						temp *= 2;
@@ -492,27 +519,27 @@ public class Simulator extends JFrame{
 			if (digitCount == 4){
 
 				if (sum < 10){
-					mapDescriptorHex = Integer.toString(sum) + mapDescriptorHex;
+					hexString = Integer.toString(sum) + hexString;
 				}
 				else {
 					switch (sum){
 						case 10:
-							mapDescriptorHex = "A" + mapDescriptorHex;
+							hexString = "A" + hexString;
 							break;
 						case 11:
-							mapDescriptorHex = "B" + mapDescriptorHex;
+							hexString = "B" + hexString;
 							break;
 						case 12:
-							mapDescriptorHex = "C" + mapDescriptorHex;
+							hexString = "C" + hexString;
 							break;
 						case 13:
-							mapDescriptorHex = "D" + mapDescriptorHex;
+							hexString = "D" + hexString;
 							break;
 						case 14:
-							mapDescriptorHex = "E" + mapDescriptorHex;
+							hexString = "E" + hexString;
 							break;
 						case 15:
-							mapDescriptorHex = "F" + mapDescriptorHex;
+							hexString = "F" + hexString;
 							break;
 					}
 				}
@@ -521,11 +548,7 @@ public class Simulator extends JFrame{
 				tempDigit = "";
 			}
 		}
-
-
-
-		return mapDescriptorHex;
-
+		return hexString;
 	}
 
 }
