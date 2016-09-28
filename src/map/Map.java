@@ -110,6 +110,14 @@ public class Map extends JPanel{
 		}
 	}
 
+	public void removeAllObstacle(){           //exclude border
+		for (int i = 1; i<MapConstants.MAP_ROW-1; i++){
+			for (int j = 1; j<MapConstants.MAP_COL-1; j++){
+				this.grids[i][j].setObstacle(false);
+			}
+		}
+	}
+
 	public void addBorder(){
 		for (int i=0;i<MapConstants.MAP_ROW;i++){
 			for (int j=0; j<MapConstants.MAP_COL;j++){

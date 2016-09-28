@@ -134,9 +134,10 @@ public class ShortestPathAlgo{
 							
 				path = generatePath(goal);
 				//printPath(path);
+
 				moveRobot();
 
-
+				
 				return generatePath(goal);  //get the path towards goal
 		}
 		System.out.println("Path NOT Found!");
@@ -270,13 +271,16 @@ public class ShortestPathAlgo{
 		stpRobot.setPosition(start);
 		while (!movePath.isEmpty()){
 			System.out.println(stpRobot.getPosition().toString());
-			stpMap.repaint();
 			MapGrid nextMove = movePath.pop();
+			System.out.println(nextMove.toString());
+			stpMap.repaint();
+
 			switch(stpRobot.getHeading()){
 				case 1:
-					if (nextMove.getCol() == stpRobot.getPosition().getCol()+1){
+					if (nextMove.getRow() == stpRobot.getPosition().getRow() && nextMove.getCol() == stpRobot.getPosition().getCol()+1){
 						robotMoveForward();
-					} else if (nextMove.getRow() == stpRobot.getPosition().getRow()+1){
+					}
+					if (nextMove.getCol() == stpRobot.getPosition().getCol() && nextMove.getRow() == stpRobot.getPosition().getRow()+1){
 						robotTurnLeft();
 						try{
 							TimeUnit.MILLISECONDS.sleep(1000/stpRobot.getSpeed());
@@ -285,8 +289,26 @@ public class ShortestPathAlgo{
 						}
 						stpMap.repaint();
 						robotMoveForward();
-					} else if (nextMove.getRow() == stpRobot.getPosition().getRow()-1){
+					} 
+					if (nextMove.getCol() == stpRobot.getPosition().getCol() && nextMove.getRow() == stpRobot.getPosition().getRow()-1){
 						robotTurnRight();
+						try{
+							TimeUnit.MILLISECONDS.sleep(1000/stpRobot.getSpeed());
+						} catch(InterruptedException e){
+							System.out.println("InterruptedException");
+						}
+						stpMap.repaint();
+						robotMoveForward();
+					}
+					if (nextMove.getRow() == stpRobot.getPosition().getRow() && nextMove.getCol() == stpRobot.getPosition().getCol()-1){
+						robotTurnLeft();
+						try{
+							TimeUnit.MILLISECONDS.sleep(1000/stpRobot.getSpeed());
+						} catch(InterruptedException e){
+							System.out.println("InterruptedException");
+						}
+						stpMap.repaint();
+						robotTurnLeft();
 						try{
 							TimeUnit.MILLISECONDS.sleep(1000/stpRobot.getSpeed());
 						} catch(InterruptedException e){
@@ -297,9 +319,10 @@ public class ShortestPathAlgo{
 					}
 					break;
 				case 2:
-					if (nextMove.getRow() == stpRobot.getPosition().getRow()-1){
+					if (nextMove.getCol() == stpRobot.getPosition().getCol() && nextMove.getRow() == stpRobot.getPosition().getRow()-1){
 						robotMoveForward();
-					} else if (nextMove.getCol() == stpRobot.getPosition().getCol()+1){
+					}
+					if (nextMove.getRow() == stpRobot.getPosition().getRow() && nextMove.getCol() == stpRobot.getPosition().getCol()+1){
 						robotTurnLeft();
 						try{
 							TimeUnit.MILLISECONDS.sleep(1000/stpRobot.getSpeed());
@@ -308,7 +331,25 @@ public class ShortestPathAlgo{
 						}
 						stpMap.repaint();
 						robotMoveForward();
-					} else if (nextMove.getCol() == stpRobot.getPosition().getCol()-1){
+					}
+					if (nextMove.getRow() == stpRobot.getPosition().getRow() && nextMove.getCol() == stpRobot.getPosition().getCol()-1){
+						robotTurnRight();
+						try{
+							TimeUnit.MILLISECONDS.sleep(1000/stpRobot.getSpeed());
+						} catch(InterruptedException e){
+							System.out.println("InterruptedException");
+						}
+						stpMap.repaint();
+						robotMoveForward();
+					}
+					if (nextMove.getCol() == stpRobot.getPosition().getCol() && nextMove.getRow() == stpRobot.getPosition().getRow()+1){
+						robotTurnRight();
+						try{
+							TimeUnit.MILLISECONDS.sleep(1000/stpRobot.getSpeed());
+						} catch(InterruptedException e){
+							System.out.println("InterruptedException");
+						}
+						stpMap.repaint();
 						robotTurnRight();
 						try{
 							TimeUnit.MILLISECONDS.sleep(1000/stpRobot.getSpeed());
@@ -320,9 +361,10 @@ public class ShortestPathAlgo{
 					}
 					break;
 				case 3:
-					if (nextMove.getCol() == stpRobot.getPosition().getCol()-1){
+					if (nextMove.getRow() == stpRobot.getPosition().getRow() && nextMove.getCol() == stpRobot.getPosition().getCol()-1){
 						robotMoveForward();
-					} else if (nextMove.getRow() == stpRobot.getPosition().getRow()-1){
+					}
+					if (nextMove.getCol() == stpRobot.getPosition().getCol() && nextMove.getRow() == stpRobot.getPosition().getRow()-1){
 						robotTurnLeft();
 						try{
 							TimeUnit.MILLISECONDS.sleep(1000/stpRobot.getSpeed());
@@ -331,7 +373,25 @@ public class ShortestPathAlgo{
 						}
 						stpMap.repaint();
 						robotMoveForward();
-					} else if (nextMove.getRow() == stpRobot.getPosition().getRow()+1){
+					}
+					if (nextMove.getCol() == stpRobot.getPosition().getCol() && nextMove.getRow() == stpRobot.getPosition().getRow()+1){
+						robotTurnRight();
+						try{
+							TimeUnit.MILLISECONDS.sleep(1000/stpRobot.getSpeed());
+						} catch(InterruptedException e){
+							System.out.println("InterruptedException");
+						}
+						stpMap.repaint();
+						robotMoveForward();
+					}
+					if (nextMove.getRow() == stpRobot.getPosition().getRow() && nextMove.getCol() == stpRobot.getPosition().getCol()+1){
+						robotTurnRight();
+						try{
+							TimeUnit.MILLISECONDS.sleep(1000/stpRobot.getSpeed());
+						} catch(InterruptedException e){
+							System.out.println("InterruptedException");
+						}
+						stpMap.repaint();
 						robotTurnRight();
 						try{
 							TimeUnit.MILLISECONDS.sleep(1000/stpRobot.getSpeed());
@@ -343,9 +403,10 @@ public class ShortestPathAlgo{
 					}
 					break;
 				case 4:
-					if (nextMove.getRow() == stpRobot.getPosition().getRow()+1){
+					if (nextMove.getCol() == stpRobot.getPosition().getCol() && nextMove.getRow() == stpRobot.getPosition().getRow()+1){
 						robotMoveForward();
-					} else if (nextMove.getCol() == stpRobot.getPosition().getCol()-1){
+					}
+					if (nextMove.getRow() == stpRobot.getPosition().getRow() && nextMove.getCol() == stpRobot.getPosition().getCol()-1){
 						robotTurnLeft();
 						try{
 							TimeUnit.MILLISECONDS.sleep(1000/stpRobot.getSpeed());
@@ -354,8 +415,26 @@ public class ShortestPathAlgo{
 						}
 						stpMap.repaint();
 						robotMoveForward();
-					} else if (nextMove.getCol() == stpRobot.getPosition().getCol()+1){
+					}
+					if (nextMove.getRow() == stpRobot.getPosition().getRow() && nextMove.getCol() == stpRobot.getPosition().getCol()+1){
 						robotTurnRight();
+						try{
+							TimeUnit.MILLISECONDS.sleep(1000/stpRobot.getSpeed());
+						} catch(InterruptedException e){
+							System.out.println("InterruptedException");
+						}
+						stpMap.repaint();
+						robotMoveForward();
+					}
+					if (nextMove.getCol() == stpRobot.getPosition().getCol() && nextMove.getRow() == stpRobot.getPosition().getRow()-1){
+						robotTurnLeft();
+						try{
+							TimeUnit.MILLISECONDS.sleep(1000/stpRobot.getSpeed());
+						} catch(InterruptedException e){
+							System.out.println("InterruptedException");
+						}
+						stpMap.repaint();
+						robotTurnLeft();
 						try{
 							TimeUnit.MILLISECONDS.sleep(1000/stpRobot.getSpeed());
 						} catch(InterruptedException e){

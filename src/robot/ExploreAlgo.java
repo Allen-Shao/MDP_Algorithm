@@ -109,7 +109,15 @@ public class ExploreAlgo{
 				limitReached = true;
 			}
 
+
 			//3. reach time limit
+			if (step/expRobot.getSpeed() >= timeLimitInSecond){
+				endFlag = true;
+				limitReached = true;
+				System.out.println(step);
+			}
+
+			
 
 		}
 

@@ -340,6 +340,8 @@ public class Simulator extends JFrame{
 				mdpRobot.setHeading(1);
 
 				exploredCoverLimitMap.setUnExplored();
+				exploredCoverLimitMap.removeAllObstacle();
+				exploredCoverLimitMap.removeVirtualWall();
 
 				CardLayout cl = ((CardLayout) mainCards.getLayout());
 				cl.show(mainCards, "COVERAGEEXPLO");
@@ -370,6 +372,7 @@ public class Simulator extends JFrame{
 				public void mousePressed(MouseEvent e) {
 						coverLimit = (Double.parseDouble(coverageTF.getText()));
 						new CoverLimitedExploration().execute();
+						d3.setVisible(false);
 					}
 				});
 		        d3.add(new JLabel("Enter coverage for exploration ( % of the maze squares): "));
@@ -382,6 +385,56 @@ public class Simulator extends JFrame{
 		mainButtons.add(btnCoverLimitedExploration);
 
 		//Timelimit Exploration
+		class TimeLimitedExploration extends SwingWorker<Integer, String>{
+			protected Integer doInBackground() throws Exception{
+				mdpRobot.setPosition(new MapGrid(2, 2));
+				mdpRobot.setHeading(1);
+
+				exploredTimeLimitMap.setUnExplored();
+				exploredTimeLimitMap.removeAllObstacle();
+				exploredTimeLimitMap.removeVirtualWall();
+
+				CardLayout cl = ((CardLayout) mainCards.getLayout());
+				cl.show(mainCards, "TIMEEXPLO");
+				exploredTimeLimitMap.repaint();
+				ExploreAlgo e = new ExploreAlgo(trueMap, exploredTimeLimitMap, mdpRobot, 1.0, timeLimit);
+				e.runExploration();
+
+
+				return 1;
+
+			}
+		}
+
+		JButton btnTimeLimitedExploration = new JButton("Time Limited");
+		btnTimeLimitedExploration.setFont(new Font("Arial", Font.BOLD, 13));
+		btnTimeLimitedExploration.setFocusPainted(false);
+		btnTimeLimitedExploration.addMouseListener(new MouseAdapter(){
+			public void mousePressed(MouseEvent e){
+				// CardLayout cl = ((CardLayout) mainCards.getLayout());
+				// cl.show(mainCards, "COVERAGEEXPLO");
+				JDialog d2=new JDialog(appFrame,"Time Limit Exploration",true);
+				d2.setSize(400,100);
+				d2.setLayout(new FlowLayout());
+				JTextField timeTF = new JTextField(5);
+				JButton timeSaveButton = new JButton("Save");
+
+				timeSaveButton.addMouseListener(new MouseAdapter() {
+				public void mousePressed(MouseEvent e) {
+						timeLimit = (Integer.parseInt(timeTF.getText()));
+						new TimeLimitedExploration().execute();
+						d2.setVisible(false);
+					}
+				});
+		        d2.add(new JLabel("Enter time limit for exploration (in second): "));
+		        d2.add(timeTF);
+		        d2.add(timeSaveButton);
+		        d2.setVisible(true);
+				
+			}
+		});
+		mainButtons.add(btnTimeLimitedExploration);
+
 	}
 
 	private static String generateMapDescriptor(){
