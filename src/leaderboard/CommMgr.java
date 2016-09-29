@@ -2,6 +2,7 @@ package leaderboard;
 
 import java.io.*;
 import java.net.*;
+import java.util.Scanner;
 
 public class CommMgr{
 	private static CommMgr commMgr = null;
@@ -10,8 +11,8 @@ public class CommMgr{
 
 	private static final int PORT = 5201;   //Raspberry Pi port
 
-	public static final String MSG_TYPE_ANDROID = "Android, ";
-	public static final String MSG_TYPE_ARDUINO = "Arduino, ";
+	public static final String MSG_TYPE_ANDROID = "a ";
+	public static final String MSG_TYPE_ARDUINO = "h ";
 
 	private static Socket conn = null;
 
@@ -20,6 +21,7 @@ public class CommMgr{
 	private static PrintWriter pw = null;
 	private static BufferedWriter bw = null;
 	private static BufferedReader br = null;
+	private static Scanner sc = null;
 
 	private CommMgr(){
 
@@ -43,6 +45,7 @@ public class CommMgr{
 			pw = new PrintWriter(bos, true);
 			bw = new BufferedWriter(osw);
 			br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+			sc = new Scanner(conn.getInputStream());
 
 			System.out.println("setConnection() -->"+" Connection established successfully!");
 
@@ -86,7 +89,7 @@ public class CommMgr{
 
 	public boolean sendMsg(String msg, String msgType){
 		try {
-			String outputMsg = msgType + msg + "\n";
+			String outputMsg = msgType + msg + " |" + "\n";
 
 			//outputMsg = String.format("%-128s", outputMsg);
 			System.out.print("Sending out message: " + outputMsg);
@@ -113,13 +116,14 @@ public class CommMgr{
 
 	public String recvMsg(){
 		try{
-			String input = br.readLine();
+			// String input = br.readLine();
+
+			String input = sc.nextLine();
+
 			if (input != null && input.length() > 0){
 				System.out.println(input);
 				return input;
 			}
-		} catch (IOException e){
-			System.out.println("receive message --> IO Exception");
 		} catch (Exception e){
 			System.out.println("receive message --> Exception");
 		}
