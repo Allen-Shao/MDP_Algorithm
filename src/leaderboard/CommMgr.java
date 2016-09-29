@@ -1,4 +1,4 @@
-package communication;
+package leaderboard;
 
 import java.io.*;
 import java.net.*;

@@ -84,13 +84,14 @@ public class ShortestPathAlgo{
 			//check if goal is reached
 			if (closed.contains(stpMap.getGrid(goal.getRow(), goal.getCol()))){
 				System.out.println("Shortest Path found.");
-				//To be implemented
+
 				// for (int i = 0; i < MapConstants.MAP_ROW;i++){
 				// 	for (int j = 0; j < MapConstants.MAP_COL;j++){
 				// 		System.out.printf("%6.1f ", gscore[i][j]);
 				// 	}
 				// 	System.out.println();
-				// }				
+				// }
+
 				path = generatePath(goal);
 
 				moveRobot();
@@ -129,17 +130,17 @@ public class ShortestPathAlgo{
 					
 			}
 		} while(!opened.isEmpty());
+
 		if (closed.contains(stpMap.getGrid(goal.getRow(), goal.getCol()))){
 				System.out.println("Shortest Path found.");
 							
 				path = generatePath(goal);
 				//printPath(path);
-
 				moveRobot();
 
-				
 				return generatePath(goal);  //get the path towards goal
 		}
+		
 		System.out.println("Path NOT Found!");
 		// for (int i = 0; i < MapConstants.MAP_ROW;i++){
 		// 	for (int j = 0; j < MapConstants.MAP_COL;j++){
@@ -188,6 +189,7 @@ public class ShortestPathAlgo{
 			turn = RobotConstants.TURN_COST; //turning once;
 		}
 		return (move + turn);
+
 	}
 
 	private double calculateGscore(MapGrid cur, MapGrid next, int heading){

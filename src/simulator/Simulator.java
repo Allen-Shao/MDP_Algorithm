@@ -15,7 +15,8 @@ import robot.Sensor;
 import robot.RobotConstants;
 import robot.ExploreAlgo;
 import robot.ShortestPathAlgo;
-import communication.*;
+import leaderboard.CommMgr;
+
 
 public class Simulator extends JFrame{
 
@@ -92,7 +93,8 @@ public class Simulator extends JFrame{
 
 		// CommMgr.getCommMgr().setConnection(10000);
 
-		// //CommMgr.getCommMgr().sendMsg("test", CommMgr.MSG_TYPE_ANDROID);
+
+		// CommMgr.getCommMgr().sendMsg("test", CommMgr.MSG_TYPE_ANDROID);
 
 
 		
@@ -102,6 +104,8 @@ public class Simulator extends JFrame{
 		// System.out.println(CommMgr.getCommMgr().isConnected());
 
 		/*-----------------------------------------------*/
+
+
 
 		//initialize robot and map
 		mdpRobot = new Robot(new MapGrid(2,2), 1);
