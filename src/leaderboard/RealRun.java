@@ -31,8 +31,8 @@ public class RealRun extends JFrame{
 		realMap.addBoarder();
 
 
-		ExploreAlgo e = new ExploreAlgo(realMap, realMap, realRobot);
-		
+		ExploreAlgo e = new ExploreAlgo(null, realMap, realRobot); //first parameter not used in real run;
+		ShortestPathAlgo s = new ShortestPathAlgo(realMap, realRobot);
 
 
 

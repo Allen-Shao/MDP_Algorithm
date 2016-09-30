@@ -362,8 +362,6 @@ public class Simulator extends JFrame{
 		btnCoverLimitedExploration.setFocusPainted(false);
 		btnCoverLimitedExploration.addMouseListener(new MouseAdapter(){
 			public void mousePressed(MouseEvent e){
-				// CardLayout cl = ((CardLayout) mainCards.getLayout());
-				// cl.show(mainCards, "COVERAGEEXPLO");
 				JDialog d3=new JDialog(appFrame,"Coverage Limit Exploration",true);
 				d3.setSize(400,100);
 				d3.setLayout(new FlowLayout());
@@ -413,8 +411,7 @@ public class Simulator extends JFrame{
 		btnTimeLimitedExploration.setFocusPainted(false);
 		btnTimeLimitedExploration.addMouseListener(new MouseAdapter(){
 			public void mousePressed(MouseEvent e){
-				// CardLayout cl = ((CardLayout) mainCards.getLayout());
-				// cl.show(mainCards, "COVERAGEEXPLO");
+		
 				JDialog d2=new JDialog(appFrame,"Time Limit Exploration",true);
 				d2.setSize(400,100);
 				d2.setLayout(new FlowLayout());
