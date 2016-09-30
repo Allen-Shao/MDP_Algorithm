@@ -102,17 +102,17 @@ public class Simulator extends JFrame{
 
 		/*----------------------------------------------*/
 
-		CommMgr.getCommMgr().setConnection(10000);
+		// CommMgr.getCommMgr().setConnection(10000);
 
 
-		CommMgr.getCommMgr().sendMsg("test", CommMgr.MSG_TYPE_ANDROID);
+		// CommMgr.getCommMgr().sendMsg("test", CommConstants.MSG_TYPE_ANDROID);
 
 
 		
-		String test = CommMgr.getCommMgr().recvMsg();
+		// String test = CommMgr.getCommMgr().recvMsg();
 
 
-		System.out.println(CommMgr.getCommMgr().isConnected());
+		// System.out.println(CommMgr.getCommMgr().isConnected());
 
 		/*-----------------------------------------------*/
 
@@ -568,86 +568,5 @@ public class Simulator extends JFrame{
 
 }
 
-	// 	class timeExploration extends SwingWorker<Integer, String>{
-	// 	    protected Integer doInBackground() throws Exception{
-	// 			bot.setRobotPos(1,1);
-	// 			CardLayout cl = ((CardLayout) _mainCards.getLayout());
-	// 		    cl.show(_mainCards, "TIMEEXPLO");
-	// 			simTimeExMap.repaint();
-	// 			ExplorationAlgo timeExpo = new ExplorationAlgo(simTimeExMap, simShortestPathMap, bot);
-	// 			timeExpo.runExploration(timeLimited);
-	// 			return 333;
-	// 		}
-	// 	}
-	// 	// Time-limited Exploration button
-	// 	JButton btn_TimeExploration = new JButton("Time-limited");
-	// 	btn_TimeExploration.setFont(new Font("Arial", Font.BOLD, 13));
-	// 	btn_TimeExploration.setFocusPainted(false);
-	// 	btn_TimeExploration.addMouseListener(new MouseAdapter() {
-	// 		public void mousePressed(MouseEvent e) {
-	// 			JDialog d2=new JDialog(_appFrame,"Time Limit Exploration",true);
-	// 			d2.setSize(400,400);
-	// 			d2.setLayout(new FlowLayout());
-	// 			JTextField timeTF = new JTextField(5);
-	// 			JButton timeSaveButton = new JButton("Save");
-				
-	// 			timeSaveButton.addMouseListener(new MouseAdapter() {
-	// 			public void mousePressed(MouseEvent e) {
-	// 					timeLimited = (Integer.parseInt(timeTF.getText()));
-	// 					CardLayout cl = ((CardLayout) _mainCards.getLayout());
-	// 				    cl.show(_mainCards, "TIMEEXPLO");
-	// 				    new timeExploration().execute();
-	// 				}
-	// 			});
-
-	// 	        d2.add(new JLabel("Enter time for exploration (in Second): "));
-	// 	        d2.add(timeTF);
-	// 	        d2.add(timeSaveButton);
-
-	// 	        d2.setVisible(true);
-		        
-	// 		}
-	// 	});
-	// 	_mainButtons.add(btn_TimeExploration);
-
-	// 	// for multithreading
-	// 	class coverageExploration extends SwingWorker<Integer, String>{
-	// 	    protected Integer doInBackground() throws Exception{
-	// 			bot.setRobotPos(1,1);
-	// 			CardLayout cl = ((CardLayout) _mainCards.getLayout());
-	// 		    cl.show(_mainCards, "COVERAGEEXPLO");
-	// 			simCoverageExMap.repaint();
-
-	// 			ExplorationAlgo coverageExpo = new ExplorationAlgo(simCoverageExMap, simShortestPathMap, bot);
-	// 			coverageExpo.runExploration(coverageLimited);
-	// 			return 444;
-	// 		}
-	// 	}
-	// 	// Coverage-limited Exploration button
-	// 	JButton btn_CoverageExploration = new JButton("Coverage-limited");
-	// 	btn_CoverageExploration.setFont(new Font("Arial", Font.BOLD, 13));
-	// 	btn_CoverageExploration.setFocusPainted(false);
-	// 	btn_CoverageExploration.addMouseListener(new MouseAdapter() {
-	// 		public void mousePressed(MouseEvent e) {
-	// 			JDialog d3=new JDialog(_appFrame,"Coverage Limit Exploration",true);
-	// 			d3.setSize(400,400);
-	// 			d3.setLayout(new FlowLayout());
-	// 			JTextField coverageTF = new JTextField(5);
-	// 			JButton coverageSaveButton = new JButton("Save");
-				
-	// 			coverageSaveButton.addMouseListener(new MouseAdapter() {
-	// 			public void mousePressed(MouseEvent e) {
-	// 					coverageLimited = (Integer.parseInt(coverageTF.getText()));
-	// 					new coverageExploration().execute();
-	// 				}
-	// 			});
-	// 	        d3.add(new JLabel("Enter coverage for exploration ( % of the maze squares): "));
-	// 	        d3.add(coverageTF);
-	// 	        d3.add(coverageSaveButton);
-	// 	        d3.setVisible(true);
-	// 		}
-	// 	});
-	// 	_mainButtons.add(btn_CoverageExploration);
-	// }
 
 
