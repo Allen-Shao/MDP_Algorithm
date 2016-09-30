@@ -10,6 +10,8 @@ import robot.ShortestPathAlgo;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+import leaderboard.CommMgr;
+
 public class ExploreAlgo{
 
 	private Map trueMap;
@@ -121,6 +123,8 @@ public class ExploreAlgo{
 
 		}
 
+		//System.out.println("Exploration Ends.");
+
 		if (limitReached){
 			//mark all the unexplored area as obstacle.
 			//use shortest path to go back to the start point
@@ -137,18 +141,14 @@ public class ExploreAlgo{
 
 		}
 
-		//System.out.println("Exploration Ends.");
-
-		//trueMap.printMap();
-
-		//return knownMap;
 		
+		//trueMap.printMap();		
 
 	}
 
 	public void runRealExploration(){
 		CommMgr commMgr = CommMgr.getCommMgr();
-		if (commMgr.isConnected){
+		if (commMgr.isConnected()){
 			ArrayList<Sensor> allSensors = expRobot.getSensors();
 
 			boolean endFlag = false;

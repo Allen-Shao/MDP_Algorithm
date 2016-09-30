@@ -25,8 +25,25 @@ public class RealRun extends JFrame{
 
 
 
-		//initialize
+		//initialize robot
 		realRobot = new Robot(new MapGrid(2, 2), 1);
+
+		//front sensor
+		Sensor s1 = new Sensor(3, 1, 0, 1);
+		Sensor s4 = new Sensor(3, 1, -1, 1);
+		Sensor s5 = new Sensor(3, 1, 1, 1);
+		//left sensor
+		Sensor s2 = new Sensor(3, 2, -1, 1);
+		//right sensor
+		Sensor s3 = new Sensor(3, 4, 1, 1);
+
+		mdpRobot.addSensor(s1);
+		mdpRobot.addSensor(s2);
+		mdpRobot.addSensor(s3);
+		mdpRobot.addSensor(s4);
+		mdpRobot.addSensor(s5);
+
+		//initialize map
 		realMap = new Map(realRobot);
 		realMap.addBoarder();
 
