@@ -94,7 +94,7 @@ public class Simulator extends JFrame{
 		CommMgr.getCommMgr().setConnection(10000);
 
 
-		CommMgr.getCommMgr().sendMsg("test", CommMgr.MSG_TYPE_ANDROID);
+		CommMgr.getCommMgr().sendMsg("test", CommConstants.MSG_TYPE_ANDROID);
 
 
 		
