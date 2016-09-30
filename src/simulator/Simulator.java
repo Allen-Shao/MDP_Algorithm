@@ -1,21 +1,32 @@
 package simulator;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Toolkit;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.Stack;
 
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.SwingWorker;
 
-import java.util.*;
-import java.io.*;
+import leaderboard.CommMgr;
 import map.Map;
 import map.MapConstants;
 import map.MapGrid;
+import robot.ExploreAlgo;
 import robot.Robot;
 import robot.Sensor;
-import robot.RobotConstants;
-import robot.ExploreAlgo;
 import robot.ShortestPathAlgo;
-import leaderboard.CommMgr;
 
 
 public class Simulator extends JFrame{

@@ -2,33 +2,35 @@ package simulator;
 
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
+
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
 import map.Map;
 import map.MapConstants;
 import map.MapGrid;
 import robot.ExploreAlgo;
 import robot.Robot;
 import robot.ShortestPathAlgo;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.JProgressBar;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
-import java.awt.GridLayout;
-import javax.swing.SpinnerModel;
-import javax.swing.SpinnerNumberModel;
-import java.awt.Font;
-import java.awt.Graphics;
-import javax.swing.JSpinner;
 
 public class Mainframe extends JFrame {
 
@@ -52,7 +54,7 @@ public class Mainframe extends JFrame {
 	private static Robot stpRobot = null;
 	private static Map stpMap = null; // shortest path map
 	private static Map trueMap = null;
-	private static Map newMap = new Map();
+	//private static Map newMap = new Map();
 	private MapGrid grids[][] = new MapGrid[MapConstants.MAP_ROW][MapConstants.MAP_COL];
 	private Stack<MapGrid> stpStack = new Stack<MapGrid>();
 
@@ -136,7 +138,7 @@ public class Mainframe extends JFrame {
 			public void mouseClicked(MouseEvent arg0) {
 				// robot moving, call paint function
 				selectSpeed();
-				// pass the result from selectSpeed() 
+				// pass the result from selectSpeed()
 				ShortestPathAlgo s = new ShortestPathAlgo(stpMap, stpRobot);
 				s.runShortestPath();
 				int original_s_size = stpStack.size();
@@ -171,10 +173,10 @@ public class Mainframe extends JFrame {
 			public void mouseClicked(MouseEvent arg0) {
 				// btnShortestPath.setEnabled(false);
 				selectSpeed();
-				// pass the result from selectSpeed() 
+				// pass the result from selectSpeed()
 				// robot start moving, call paint
-				ExploreAlgo e = new ExploreAlgo(trueMap, mdpRobot);
-				e.runExploration();
+				// ExploreAlgo e = new ExploreAlgo(trueMap, mdpRobot);
+				// e.runExploration();
 				// save to grid
 				// set button to explored(blue)
 				// set map with obstacles
@@ -237,7 +239,7 @@ public class Mainframe extends JFrame {
 					btn.setEnabled(false);
 					if (btn.getBackground() == Color.WHITE) {
 						btn.setBackground(Color.BLACK);
-						newMap.addObstacle(row, col);
+						//newMap.addObstacle(row, col);
 						System.out.println("r" + row + ", c" + col + " set false");
 					}
 				} else {

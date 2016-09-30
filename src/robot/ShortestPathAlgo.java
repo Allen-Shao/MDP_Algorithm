@@ -1,12 +1,13 @@
 package robot;
 
-import map.Map;
-import map.MapGrid;
-import map.MapConstants;
-import robot.Robot;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Stack;
 import java.util.concurrent.TimeUnit;
+
+import map.Map;
+import map.MapConstants;
+import map.MapGrid;
 
 public class ShortestPathAlgo{
 	private Map stpMap;     //shortest path map

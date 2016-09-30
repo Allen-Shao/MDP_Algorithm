@@ -1,12 +1,14 @@
 package map;
 
-import java.util.*;
-import java.io.*;
-import robot.Robot;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import javax.swing.JPanel;
+
+import robot.Robot;
 
 public class Map extends JPanel{
 
