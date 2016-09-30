@@ -7,6 +7,8 @@ import map.Map;
 import map.MapConstants;
 import map.MapGrid;
 
+import leaderboard.CommMgr;
+
 public class ExploreAlgo{
 
 	private Map trueMap;
@@ -118,6 +120,8 @@ public class ExploreAlgo{
 
 		}
 
+		//System.out.println("Exploration Ends.");
+
 		if (limitReached){
 			//mark all the unexplored area as obstacle.
 			//use shortest path to go back to the start point
@@ -134,14 +138,116 @@ public class ExploreAlgo{
 
 		}
 
-		//System.out.println("Exploration Ends.");
-
-		//trueMap.printMap();
-
-		//return knownMap;
 		
+		//trueMap.printMap();		
 
 	}
+
+	public void runRealExploration(){
+		CommMgr commMgr = CommMgr.getCommMgr();
+		if (commMgr.isConnected()){
+			ArrayList<Sensor> allSensors = expRobot.getSensors();
+
+			boolean endFlag = false;
+			boolean limitReached = false;
+
+			int step = 0;
+			// knownMap.repaint();
+			while(!endFlag){
+
+
+				knownMap.printExplorationProgress();
+				knownMap.repaint();
+
+
+				markCurrentPosition();
+				sensorDetect();
+				//finite state machine (make only one step per loop)
+				if (!hasObstacleOnRight()){
+					robotTurnRight();
+					if (!hasObstacleInFront()){ //forward checking
+						robotMoveForward();
+						try{
+							TimeUnit.MILLISECONDS.sleep(1000/expRobot.getSpeed());
+						} catch(InterruptedException e){
+							System.out.println("InterruptedException");
+						}
+						step++; //count one more step
+					}
+				} else if (!hasObstacleInFront()){
+					robotMoveForward();
+				} else if (!hasObstacleOnLeft()){
+					robotTurnLeft();
+				} else {
+					robotTurnRight();
+				}
+
+
+				try{
+					TimeUnit.MILLISECONDS.sleep(1000/expRobot.getSpeed());
+				} catch(InterruptedException e){
+					System.out.println("InterruptedException");
+				}
+				step++; //count the step
+
+				//for debugging
+				// Scanner sc = new Scanner(System.in);
+				// System.out.println("Press any key to continue...");
+				// sc.nextLine();
+
+
+				//set for ending condition
+
+				//1. go back to start point
+				if (sameGrid(expRobot.getPosition(), new MapGrid(MapConstants.START_X_CENTER, MapConstants.START_Y_CENTER)))
+					endFlag = true;
+
+				//2. reach cover limit
+
+				//System.out.println(calculateCoverRate());
+				if (calculateCoverRate() >= coverLimit){
+					endFlag = true;
+					limitReached = true;
+				}
+
+
+				//3. reach time limit
+				if (step/expRobot.getSpeed() >= timeLimitInSecond){
+					endFlag = true;
+					limitReached = true;
+					System.out.println(step);
+				}
+
+				
+
+			}
+
+			if (limitReached){
+				//mark all the unexplored area as obstacle.
+				//use shortest path to go back to the start point
+				for (int i = 1; i < MapConstants.MAP_ROW-1; i++){
+					for (int j = 1; j < MapConstants.MAP_COL-1; j++){
+						if (!knownMap.getGrid(i, j).isExplored()){
+							knownMap.addObstacle(i, j);
+						}
+					}
+				}
+
+				ShortestPathAlgo s = new ShortestPathAlgo(knownMap, expRobot, expRobot.getPosition(), new MapGrid(MapConstants.START_X_CENTER, MapConstants.START_Y_CENTER));
+				s.runShortestPath();
+
+			}
+		}
+
+
+
+	}
+
+
+
+
+
+
 
 	private void markCurrentPosition(){
 		for (int i = -1; i <= 1; i++){
