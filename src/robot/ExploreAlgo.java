@@ -7,7 +7,7 @@ import map.Map;
 import map.MapConstants;
 import map.MapGrid;
 
-import leaderboard.CommMgr;
+import leaderboard.*;
 
 public class ExploreAlgo{
 
@@ -17,6 +17,7 @@ public class ExploreAlgo{
 
 	private double coverLimit;
 	private int timeLimitInSecond;
+	CommMgr commMgr = CommMgr.getCommMgr();
 
 	public ExploreAlgo(Map tMp, Map kMp, Robot r){
 		this.trueMap = tMp;
@@ -43,7 +44,6 @@ public class ExploreAlgo{
 
 	public void runExploration(){
 
-		ArrayList<Sensor> allSensors = expRobot.getSensors();
 
 		boolean endFlag = false;
 		boolean limitReached = false;
@@ -144,9 +144,9 @@ public class ExploreAlgo{
 	}
 
 	public void runRealExploration(){
-		CommMgr commMgr = CommMgr.getCommMgr();
+		
 		if (commMgr.isConnected()){
-			ArrayList<Sensor> allSensors = expRobot.getSensors();
+			//ArrayList<Sensor> allSensors = expRobot.getSensors();
 
 			boolean endFlag = false;
 			boolean limitReached = false;
@@ -161,34 +161,26 @@ public class ExploreAlgo{
 
 
 				markCurrentPosition();
-				sensorDetect();
+				updateSensorsReading();
 				//finite state machine (make only one step per loop)
 				if (!hasObstacleOnRight()){
 					robotTurnRight();
+					commMgr.sendMsg(CommConstants.ROBOT_TURN_RIGHT, CommConstants.MSG_TO_ARDUINO);
 					if (!hasObstacleInFront()){ //forward checking
 						robotMoveForward();
-						try{
-							TimeUnit.MILLISECONDS.sleep(1000/expRobot.getSpeed());
-						} catch(InterruptedException e){
-							System.out.println("InterruptedException");
-						}
-						step++; //count one more step
+						commMgr.sendMsg(CommConstants.ROBOT_MOVE_FORWARD, CommConstants.MSG_TO_ARDUINO);
 					}
 				} else if (!hasObstacleInFront()){
 					robotMoveForward();
+					commMgr.sendMsg(CommConstants.ROBOT_MOVE_FORWARD, CommConstants.MSG_TO_ARDUINO);
 				} else if (!hasObstacleOnLeft()){
 					robotTurnLeft();
+					commMgr.sendMsg(CommConstants.ROBOT_TURN_LEFT, CommConstants.MSG_TO_ARDUINO);
 				} else {
 					robotTurnRight();
+					commMgr.sendMsg(CommConstants.ROBOT_TURN_RIGHT, CommConstants.MSG_TO_ARDUINO);
 				}
 
-
-				try{
-					TimeUnit.MILLISECONDS.sleep(1000/expRobot.getSpeed());
-				} catch(InterruptedException e){
-					System.out.println("InterruptedException");
-				}
-				step++; //count the step
 
 				//for debugging
 				// Scanner sc = new Scanner(System.in);
@@ -200,25 +192,7 @@ public class ExploreAlgo{
 
 				//1. go back to start point
 				if (sameGrid(expRobot.getPosition(), new MapGrid(MapConstants.START_X_CENTER, MapConstants.START_Y_CENTER)))
-					endFlag = true;
-
-				//2. reach cover limit
-
-				//System.out.println(calculateCoverRate());
-				if (calculateCoverRate() >= coverLimit){
-					endFlag = true;
-					limitReached = true;
-				}
-
-
-				//3. reach time limit
-				if (step/expRobot.getSpeed() >= timeLimitInSecond){
-					endFlag = true;
-					limitReached = true;
-					System.out.println(step);
-				}
-
-				
+					endFlag = true;				
 
 			}
 
@@ -238,10 +212,77 @@ public class ExploreAlgo{
 
 			}
 		}
+	}
 
 
+	private void updateSensorsReading(){
+		//request sensor reading
+		commMgr.sendMsg("r", CommConstants.MSG_TO_ARDUINO);
+
+		//get sensors reading
+		int[] sensorReading = new int[5];
+		for (int i = 0; i < 5; i++){
+			sensorReading[i] = Integer.parseInt(commMgr.recvMsg());
+		}
+		ArrayList<Sensor> sensors = expRobot.getSensors();
+		int k = 0;
+		for (Sensor s : sensors){
+			int detectDirection = getDetectDirection(s.getDirection(), expRobot.getHeading());
+			int xtemp, ytemp;
+			MapGrid sensorCurPos = getSensorCurrentPosition(s);
+			for (int i=1; i<=s.getRange();i++){
+				switch (detectDirection){
+					case 1:
+						xtemp = sensorCurPos.getRow();
+						ytemp = sensorCurPos.getCol()+i;
+
+						if (realDetectCurrentGrid(xtemp, ytemp, i, sensorReading, k))
+							i = s.getRange()+1;   //break the loop
+						break;
+					case 2:
+						xtemp = sensorCurPos.getRow()-i;
+						ytemp = sensorCurPos.getCol();
+
+
+						if (realDetectCurrentGrid(xtemp, ytemp, i, sensorReading, k))
+							i = s.getRange()+1;   //break the loop
+						break;
+					case 3:
+						xtemp = sensorCurPos.getRow();
+						ytemp = sensorCurPos.getCol()-i;
+
+
+						if (realDetectCurrentGrid(xtemp, ytemp, i, sensorReading, k))
+							i = s.getRange()+1;   //break the loop
+						break;
+					case 4:
+						xtemp = sensorCurPos.getRow()+i;
+						ytemp = sensorCurPos.getCol();
+
+
+						if (realDetectCurrentGrid(xtemp, ytemp, i, sensorReading, k))
+							i = s.getRange()+1;   //break the loop
+						break;
+				}
+			}
+			k++;
+		}
 
 	}
+
+
+	private boolean realDetectCurrentGrid(int x, int y, int length, int[] sensorReading, int k){
+		
+		knownMap.getGrid(x, y).setExplored(true);
+		//System.out.println(trueGrid.isObstacle());
+		if (length == sensorReading[k]){
+			knownMap.addObstacle(x, y);
+			return true;
+		} else {
+			return false;
+		}		
+	}
+
 
 
 
