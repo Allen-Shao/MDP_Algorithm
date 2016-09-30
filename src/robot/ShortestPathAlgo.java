@@ -61,13 +61,7 @@ public class ShortestPathAlgo{
 					gscore[i][j] = - RobotConstants.INFINITY;
 				}
 			}
-		}
-		// for (int i = 0; i < MapConstants.MAP_ROW;i++){
-		// 	for (int j = 0; j < MapConstants.MAP_COL;j++){
-		// 		System.out.printf("%6.1f ", gscore[i][j]);
-		// 	}
-		// 	System.out.println();
-		// }			
+		}		
 
 		//set gscore for start point
 		gscore[start.getRow()][start.getCol()] = 0;
@@ -84,13 +78,6 @@ public class ShortestPathAlgo{
 			//check if goal is reached
 			if (closed.contains(stpMap.getGrid(goal.getRow(), goal.getCol()))){
 				System.out.println("Shortest Path found.");
-
-				// for (int i = 0; i < MapConstants.MAP_ROW;i++){
-				// 	for (int j = 0; j < MapConstants.MAP_COL;j++){
-				// 		System.out.printf("%6.1f ", gscore[i][j]);
-				// 	}
-				// 	System.out.println();
-				// }
 
 				path = generatePath(goal);
 
@@ -140,17 +127,9 @@ public class ShortestPathAlgo{
 
 				return generatePath(goal);  //get the path towards goal
 		}
-		
+
 		System.out.println("Path NOT Found!");
-		// for (int i = 0; i < MapConstants.MAP_ROW;i++){
-		// 	for (int j = 0; j < MapConstants.MAP_COL;j++){
-		// 		System.out.printf("%6.1f ", gscore[i][j]);
-		// 	}
-		// 	System.out.println();
-		// }
-		//printPath(generatePath(goal));
-		//System.out.println(closed.toString());
-		//System.out.println(closed.contains(stpMap.getGrid(goal.getRow(), goal.getCol())));
+
 		return null;
 	}
 
@@ -526,6 +505,15 @@ public class ShortestPathAlgo{
 			System.out.print(path.pop().toString() + " ");
 		}
 		System.out.println();
+	}
+
+	private void printGScore(){
+		for (int i = 0; i < MapConstants.MAP_ROW;i++){
+			for (int j = 0; j < MapConstants.MAP_COL;j++){
+				System.out.printf("%6.1f ", gscore[i][j]);
+			}
+			System.out.println();
+		}
 	}
 
 }

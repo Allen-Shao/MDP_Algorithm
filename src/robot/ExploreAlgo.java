@@ -373,11 +373,5 @@ public class ExploreAlgo{
 		return (a.getCol() == b.getCol()) && (a.getRow() == b.getCol());
 	}
 
-	// private boolean withInBoundary(int x, int y){
-	// 	return (x>0 && x<MapConstants.MAP_ROW && y>0 && y<MapConstants.MAP_COL);
-	// }
-
-
-
 
 }
