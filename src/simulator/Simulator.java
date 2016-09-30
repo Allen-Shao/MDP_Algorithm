@@ -15,7 +15,7 @@ import robot.Sensor;
 import robot.RobotConstants;
 import robot.ExploreAlgo;
 import robot.ShortestPathAlgo;
-import leaderboard.CommMgr;
+import leaderboard.*;
 
 
 public class Simulator extends JFrame{
@@ -91,17 +91,17 @@ public class Simulator extends JFrame{
 
 		/*----------------------------------------------*/
 
-		// CommMgr.getCommMgr().setConnection(10000);
+		CommMgr.getCommMgr().setConnection(10000);
 
 
-		// CommMgr.getCommMgr().sendMsg("test", CommConstants.MSG_TYPE_ANDROID);
-
+		CommMgr.getCommMgr().sendMsg("test", CommConstants.MSG_TYPE_ANDROID);
 
 		
-		// String test = CommMgr.getCommMgr().recvMsg();
+		String test = CommMgr.getCommMgr().recvMsg();
+		// test = CommMgr.getCommMgr().recvMsg();
 
 
-		// System.out.println(CommMgr.getCommMgr().isConnected());
+		System.out.println(CommMgr.getCommMgr().isConnected());
 
 		/*-----------------------------------------------*/
 
