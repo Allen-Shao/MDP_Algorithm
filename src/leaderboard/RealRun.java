@@ -1,7 +1,13 @@
 package leaderboard;
 
-import map.*;
-import robot.*;
+import map.Map;
+import map.MapGrid;
+import map.MapConstants;
+import robot.Robot;
+import robot.RobotConstants;
+import robot.Sensor;
+import robot.ShortestPathAlgo;
+import robot.ExploreAlgo;
 import java.util.*;
 import java.io.*;
 
@@ -20,6 +26,8 @@ public class RealRun extends JFrame{
 
 	public static void main(String args[]){
 
+		System.out.println("Real Run Starts!");
+
 		//set connection
 		commMgr.setConnection(10000);
 
@@ -37,18 +45,18 @@ public class RealRun extends JFrame{
 		//right sensor
 		Sensor s3 = new Sensor(3, 4, 1, 1);
 
-		mdpRobot.addSensor(s1);
-		mdpRobot.addSensor(s2);
-		mdpRobot.addSensor(s3);
-		mdpRobot.addSensor(s4);
-		mdpRobot.addSensor(s5);
+		realRobot.addSensor(s1);
+		realRobot.addSensor(s2);
+		realRobot.addSensor(s3);
+		realRobot.addSensor(s4);
+		realRobot.addSensor(s5);
 
 		//initialize map
 		realMap = new Map(realRobot);
-		realMap.addBoarder();
+		realMap.addBorder();
 
 
-		ExploreAlgo e = new ExploreAlgo(null, realMap, realRobot); //first parameter not used in real run;
+		ExploreAlgo e = new ExploreAlgo(null, realMap, realRobot); 
 		ShortestPathAlgo s = new ShortestPathAlgo(realMap, realRobot);
 
 

@@ -91,17 +91,17 @@ public class Simulator extends JFrame{
 
 		/*----------------------------------------------*/
 
-		CommMgr.getCommMgr().setConnection(10000);
+		// CommMgr.getCommMgr().setConnection(10000);
 
 
-		CommMgr.getCommMgr().sendMsg("test", CommConstants.MSG_TYPE_ANDROID);
+		// CommMgr.getCommMgr().sendMsg("test", CommConstants.MSG_TYPE_ANDROID);
 
 		
-		String test = CommMgr.getCommMgr().recvMsg();
-		// test = CommMgr.getCommMgr().recvMsg();
+		// String test = CommMgr.getCommMgr().recvMsg();
+		// // test = CommMgr.getCommMgr().recvMsg();
 
 
-		System.out.println(CommMgr.getCommMgr().isConnected());
+		// System.out.println(CommMgr.getCommMgr().isConnected());
 
 		/*-----------------------------------------------*/
 
@@ -122,11 +122,11 @@ public class Simulator extends JFrame{
 		Sensor s3 = new Sensor(5, 4, 1, 1);
 
 
+		mdpRobot.addSensor(s5);
 		mdpRobot.addSensor(s1);
+		mdpRobot.addSensor(s4);
 		mdpRobot.addSensor(s2);
 		mdpRobot.addSensor(s3);
-		mdpRobot.addSensor(s4);
-		mdpRobot.addSensor(s5);
 
 
 		stpMap = new Map(mdpRobot);

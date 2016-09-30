@@ -3,8 +3,8 @@ package leaderboard;
 public class CommConstants{
 
 	//headers
-	public static final String MSG_TYPE_ANDROID = "a ";
-	public static final String MSG_TYPE_ARDUINO = "h ";
+	public static final String MSG_TO_ANDROID = "a ";
+	public static final String MSG_TO_ARDUINO = "h ";
 
 	//Messages
 	public static final String ROBOT_MOVE_FORWARD = "w";
@@ -17,5 +17,5 @@ public class CommConstants{
 	//3.front(right)
 	//4.left
 	//5.right
-	
+
 }
