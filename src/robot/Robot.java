@@ -1,7 +1,8 @@
 package robot;
 
-import map.*;
-import java.util.*;
+import java.util.ArrayList;
+
+import map.MapGrid;
 
 
 

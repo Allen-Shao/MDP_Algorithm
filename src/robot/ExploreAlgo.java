@@ -1,14 +1,11 @@
 package robot;
 
-import map.Map;
-import map.MapGrid;
-import map.MapConstants;
-import robot.Robot;
-import robot.Sensor;
-import robot.ShortestPathAlgo;
-
-import java.util.*;
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
+
+import map.Map;
+import map.MapConstants;
+import map.MapGrid;
 
 import leaderboard.*;
 
