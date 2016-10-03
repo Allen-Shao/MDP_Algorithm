@@ -317,7 +317,7 @@ public class Map extends JPanel{
 					System.out.print("1");						//obstacle
 				}
 				else if (grids[i][j].isVirtualWall()){
-					System.out.print("2");						//virtual wall
+					System.out.print("0");						//virtual wall
 				}
 				else {
 					System.out.print("0");						//empty area(can go)

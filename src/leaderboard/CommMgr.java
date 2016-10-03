@@ -34,7 +34,7 @@ public class CommMgr{
 		return commMgr;
 	}
 
-	public boolean setConnection(int timeoutInMs){
+	public boolean setConnection(){
 		try{
 			conn = new Socket(HOST, PORT);
 			//conn.connect(new InetSocketAddress(HOST, PORT), timeoutInMs);
@@ -119,11 +119,10 @@ public class CommMgr{
 			// String input = br.readLine();
 
 			String input = sc.nextLine();
-
+			System.out.print("Received Message: ");
+			System.out.println(input);
 			// Sßystem.out.println(input);
 			if (input != null && input.length() > 0){
-				System.out.print("Received Message: ");
-				System.out.println(input);
 				return input;
 			}
 		} catch (Exception e){

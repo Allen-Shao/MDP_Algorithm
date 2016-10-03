@@ -26,10 +26,9 @@ public class RealRun extends JFrame{
 
 	public static void main(String args[]){
 
-		System.out.println("Real Run Starts!");
 
 		//set connection
-		commMgr.setConnection(10000);
+		commMgr.setConnection();
 
 
 
@@ -40,16 +39,16 @@ public class RealRun extends JFrame{
 		Sensor s1 = new Sensor(3, 1, 0, 1);
 		Sensor s4 = new Sensor(3, 1, -1, 1);
 		Sensor s5 = new Sensor(3, 1, 1, 1);
-		//left sensor
-		Sensor s2 = new Sensor(3, 2, -1, 1);
 		//right sensor
-		Sensor s3 = new Sensor(3, 4, 1, 1);
+		Sensor s2 = new Sensor(3, 2, -1, 1);
+		//left sensor
+		Sensor s3 = new Sensor(5, 4, 1, 1);
 
-		realRobot.addSensor(s1);
-		realRobot.addSensor(s2);
-		realRobot.addSensor(s3);
-		realRobot.addSensor(s4);
 		realRobot.addSensor(s5);
+		realRobot.addSensor(s1);
+		realRobot.addSensor(s4);
+		realRobot.addSensor(s3);
+		realRobot.addSensor(s2);
 
 		//initialize map
 		realMap = new Map(realRobot);
@@ -58,6 +57,8 @@ public class RealRun extends JFrame{
 
 		ExploreAlgo e = new ExploreAlgo(null, realMap, realRobot); 
 		ShortestPathAlgo s = new ShortestPathAlgo(realMap, realRobot);
+
+		e.runRealExploration();
 
 
 

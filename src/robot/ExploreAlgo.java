@@ -49,6 +49,7 @@ public class ExploreAlgo{
 
 
 		boolean endFlag = false;
+		boolean leaveStart = false;
 		boolean limitReached = false;
 
 		int step = 0;
@@ -100,8 +101,13 @@ public class ExploreAlgo{
 			//set for ending condition
 
 			//1. go back to start point
-			if (sameGrid(expRobot.getPosition(), new MapGrid(MapConstants.START_X_CENTER, MapConstants.START_Y_CENTER)))
+			if (sameGrid(expRobot.getPosition(), new MapGrid(MapConstants.START_X_CENTER, MapConstants.START_Y_CENTER))&&leaveStart)
 				endFlag = true;
+
+			if (!sameGrid(expRobot.getPosition(), new MapGrid(MapConstants.START_X_CENTER, MapConstants.START_Y_CENTER))){
+				leaveStart = true;
+			}
+	
 
 			//2. reach cover limit
 
@@ -153,14 +159,13 @@ public class ExploreAlgo{
 
 			boolean endFlag = false;
 			boolean limitReached = false;
+			boolean leaveStart = false;
 
-			int step = 0;
+			//int step = 0;
 			// knownMap.repaint();
+			knownMap.printExplorationProgress();
+			knownMap.repaint();
 			while(!endFlag){
-
-
-				knownMap.printExplorationProgress();
-				knownMap.repaint();
 
 
 				markCurrentPosition();
@@ -194,38 +199,44 @@ public class ExploreAlgo{
 				//set for ending condition
 
 				//1. go back to start point
-				if (sameGrid(expRobot.getPosition(), new MapGrid(MapConstants.START_X_CENTER, MapConstants.START_Y_CENTER)))
-					endFlag = true;				
+				if (sameGrid(expRobot.getPosition(), new MapGrid(MapConstants.START_X_CENTER, MapConstants.START_Y_CENTER))&&leaveStart)
+				endFlag = true;
 
-			}
-
-			if (limitReached){
-				//mark all the unexplored area as obstacle.
-				//use shortest path to go back to the start point
-				for (int i = 1; i < MapConstants.MAP_ROW-1; i++){
-					for (int j = 1; j < MapConstants.MAP_COL-1; j++){
-						if (!knownMap.getGrid(i, j).isExplored()){
-							knownMap.addObstacle(i, j);
-						}
-					}
+				if (!sameGrid(expRobot.getPosition(), new MapGrid(MapConstants.START_X_CENTER, MapConstants.START_Y_CENTER))){
+					leaveStart = true;
 				}
 
-				ShortestPathAlgo s = new ShortestPathAlgo(knownMap, expRobot, expRobot.getPosition(), new MapGrid(MapConstants.START_X_CENTER, MapConstants.START_Y_CENTER));
-				s.runShortestPath();
+				knownMap.printExplorationProgress();
+				knownMap.repaint();				
 
 			}
+
+			// if (limitReached){
+			// 	//mark all the unexplored area as obstacle.
+			// 	//use shortest path to go back to the start point
+			// 	for (int i = 1; i < MapConstants.MAP_ROW-1; i++){
+			// 		for (int j = 1; j < MapConstants.MAP_COL-1; j++){
+			// 			if (!knownMap.getGrid(i, j).isExplored()){
+			// 				knownMap.addObstacle(i, j);
+			// 			}
+			// 		}
+			// 	}
+
+			// 	ShortestPathAlgo s = new ShortestPathAlgo(knownMap, expRobot, expRobot.getPosition(), new MapGrid(MapConstants.START_X_CENTER, MapConstants.START_Y_CENTER));
+			// 	s.runShortestPath();
+
 		}
 	}
 
 
 	private void updateSensorsReading(){
 		//request sensor reading
-		commMgr.sendMsg("r", CommConstants.MSG_TO_ARDUINO);
+		commMgr.sendMsg(CommConstants.REQUEST_SENSOR_READING, CommConstants.MSG_TO_ARDUINO);
 
 		//get sensors reading
 		int[] sensorReading = new int[5];
 		for (int i = 0; i < 5; i++){
-			sensorReading[i] = Integer.parseInt(commMgr.recvMsg());
+			sensorReading[i] = Integer.parseInt(commMgr.recvMsg())+1;
 		}
 		ArrayList<Sensor> sensors = expRobot.getSensors();
 		int k = 0;
@@ -276,6 +287,10 @@ public class ExploreAlgo{
 
 	private boolean realDetectCurrentGrid(int x, int y, int length, int[] sensorReading, int k){
 		
+		if (x<1||x>MapConstants.MAP_ROW-2||y<1||y>MapConstants.MAP_COL-2){
+			return false;
+		}
+
 		knownMap.getGrid(x, y).setExplored(true);
 		//System.out.println(trueGrid.isObstacle());
 		if (length == sensorReading[k]){
