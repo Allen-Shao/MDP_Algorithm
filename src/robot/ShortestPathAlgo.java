@@ -9,6 +9,10 @@ import map.Map;
 import map.MapConstants;
 import map.MapGrid;
 
+import leaderboard.CommConstants;
+import leaderboard.CommMgr;
+
+
 public class ShortestPathAlgo{
 	private Map stpMap;     //shortest path map
 	private Robot stpRobot;
@@ -23,6 +27,8 @@ public class ShortestPathAlgo{
 	private double[][] gscore = new double[MapConstants.MAP_ROW][MapConstants.MAP_COL];
 
 	private Stack<MapGrid> path;
+
+	private CommMgr commMgr = CommMgr.getCommMgr();
 
 	public ShortestPathAlgo(Map m, Robot r){
 		this.stpMap = m;
@@ -125,6 +131,100 @@ public class ShortestPathAlgo{
 				path = generatePath(goal);
 				//printPath(path);
 				moveRobot();
+
+				return generatePath(goal);  //get the path towards goal
+		}
+
+		System.out.println("Path NOT Found!");
+
+		return null;
+	}
+
+	public void runRealShortestPath(){
+		
+		if (!sameGrid(stpRobot.getPosition(), start)){
+			System.out.println("The robot is not in the start zone!");
+			// System.out.printf("%d %d", stpRobot.getPosition().getRow(), stpRobot.getPosition().getCol());
+			// System.out.printf("%d %d", start.getRow(), start.getCol());
+			return null;
+		}
+
+		stpMap.printMapWithVirtualWall();
+		System.out.printf("%d %d", goal.getRow(), goal.getCol());
+		//initialize gscore
+		for (int i = 0; i < MapConstants.MAP_ROW;i++){
+			for (int j = 0; j < MapConstants.MAP_COL;j++){
+				if (stpMap.getGrid(i, j).isObstacle() || stpMap.getGrid(i, j).isVirtualWall() 
+					|| stpMap.isBorder(i, j)){
+					gscore[i][j] = RobotConstants.INFINITY;
+				}
+				else {
+					gscore[i][j] = - RobotConstants.INFINITY;
+				}
+			}
+		}		
+
+		//set gscore for start point
+		gscore[start.getRow()][start.getCol()] = 0;
+		//add the start point to opened set
+		opened.add(this.start);
+
+		//start A* search algorithm
+		do {
+
+			//evaluate the grid in the opened set with lowest cost;
+			MapGrid current = findMinimumCost(opened, gscore, goal);
+
+
+			//check if goal is reached
+			if (closed.contains(stpMap.getGrid(goal.getRow(), goal.getCol()))){
+				System.out.println("Shortest Path found.");
+
+				path = generatePath(goal);
+
+				moveRealRobot();
+
+				return generatePath(goal);  //get the path towards goal
+			}
+
+			opened.remove(current);
+			closed.add(current);
+
+			//find neighbours
+			ArrayList<MapGrid> neighbours = findNeighbour(current);
+			// System.out.println(neighbours.size());
+
+			for (int i=0; i<neighbours.size();i++){
+				MapGrid curNeighbour = neighbours.get(i);
+				if (!closed.contains(curNeighbour)){  //the neighbour grid has not been evaluated
+					if (!opened.contains(curNeighbour)){
+						parent.put(curNeighbour, current);
+						gscore[curNeighbour.getRow()][curNeighbour.getCol()] = 
+							gscore[current.getRow()][current.getCol()] 
+							+ calculateGscore(current, curNeighbour, stpRobot.getHeading());
+						opened.add(curNeighbour);
+					}
+					else {
+						double currentGscore = gscore[curNeighbour.getRow()][curNeighbour.getCol()];
+						double newGscore = currentGscore 
+							+ calculateGscore(current, curNeighbour, stpRobot.getHeading());
+						if (newGscore < currentGscore){
+							gscore[curNeighbour.getRow()][curNeighbour.getCol()] = newGscore;
+							parent.put(curNeighbour, current);
+						}
+
+					}
+				}
+					
+			}
+		} while(!opened.isEmpty());
+
+		if (closed.contains(stpMap.getGrid(goal.getRow(), goal.getCol()))){
+				System.out.println("Shortest Path found.");
+							
+				path = generatePath(goal);
+				//printPath(path);
+				moveRealRobot();
 
 				return generatePath(goal);  //get the path towards goal
 		}
@@ -424,6 +524,229 @@ public class ShortestPathAlgo{
 						}
 						stpMap.repaint();
 						robotMoveForward();
+					}
+					break;
+				default: break;
+			}
+
+			try{
+				TimeUnit.MILLISECONDS.sleep(1000/stpRobot.getSpeed());
+			} catch(InterruptedException e){
+				System.out.println("InterruptedException");
+			}
+
+		}
+	}
+
+	private void moveRealRobot(){
+		Stack<MapGrid> movePath = path;
+		stpRobot.setPosition(start);
+		while (!movePath.isEmpty()){
+			System.out.println(stpRobot.getPosition().toString());
+			MapGrid nextMove = movePath.pop();
+			System.out.println(nextMove.toString());
+			stpMap.repaint();
+
+			switch(stpRobot.getHeading()){
+				case 1:
+					if (nextMove.getRow() == stpRobot.getPosition().getRow() && nextMove.getCol() == stpRobot.getPosition().getCol()+1){
+						robotMoveForward();
+						commMgr.sendMsg(CommConstants.ROBOT_MOVE_FORWARD, CommConstants.MSG_TO_ARDUINO);
+
+					}
+					if (nextMove.getCol() == stpRobot.getPosition().getCol() && nextMove.getRow() == stpRobot.getPosition().getRow()+1){
+						robotTurnLeft();
+						commMgr.sendMsg(CommConstants.ROBOT_TURN_LEFT, CommConstants.MSG_TO_ARDUINO);
+						try{
+							TimeUnit.MILLISECONDS.sleep(1000/stpRobot.getSpeed());
+						} catch(InterruptedException e){
+							System.out.println("InterruptedException");
+						}
+						stpMap.repaint();
+						robotMoveForward();
+						commMgr.sendMsg(CommConstants.ROBOT_MOVE_FORWARD, CommConstants.MSG_TO_ARDUINO);
+					} 
+					if (nextMove.getCol() == stpRobot.getPosition().getCol() && nextMove.getRow() == stpRobot.getPosition().getRow()-1){
+						robotTurnRight();
+						commMgr.sendMsg(CommConstants.ROBOT_TURN_RIGHT, CommConstants.MSG_TO_ARDUINO);
+						try{
+							TimeUnit.MILLISECONDS.sleep(1000/stpRobot.getSpeed());
+						} catch(InterruptedException e){
+							System.out.println("InterruptedException");
+						}
+						stpMap.repaint();
+						robotMoveForward();
+						commMgr.sendMsg(CommConstants.ROBOT_MOVE_FORWARD, CommConstants.MSG_TO_ARDUINO);
+					}
+					if (nextMove.getRow() == stpRobot.getPosition().getRow() && nextMove.getCol() == stpRobot.getPosition().getCol()-1){
+						robotTurnLeft();
+						commMgr.sendMsg(CommConstants.ROBOT_TURN_LEFT, CommConstants.MSG_TO_ARDUINO);
+						try{
+							TimeUnit.MILLISECONDS.sleep(1000/stpRobot.getSpeed());
+						} catch(InterruptedException e){
+							System.out.println("InterruptedException");
+						}
+						stpMap.repaint();
+						robotTurnLeft();
+						commMgr.sendMsg(CommConstants.ROBOT_TURN_LEFT, CommConstants.MSG_TO_ARDUINO);
+						try{
+							TimeUnit.MILLISECONDS.sleep(1000/stpRobot.getSpeed());
+						} catch(InterruptedException e){
+							System.out.println("InterruptedException");
+						}
+						stpMap.repaint();
+						robotMoveForward();
+						commMgr.sendMsg(CommConstants.ROBOT_MOVE_FORWARD, CommConstants.MSG_TO_ARDUINO);
+					}
+					break;
+				case 2:
+					if (nextMove.getCol() == stpRobot.getPosition().getCol() && nextMove.getRow() == stpRobot.getPosition().getRow()-1){
+						robotMoveForward();
+						commMgr.sendMsg(CommConstants.ROBOT_MOVE_FORWARD, CommConstants.MSG_TO_ARDUINO);
+					}
+					if (nextMove.getRow() == stpRobot.getPosition().getRow() && nextMove.getCol() == stpRobot.getPosition().getCol()+1){
+						robotTurnLeft();
+						commMgr.sendMsg(CommConstants.ROBOT_TURN_LEFT, CommConstants.MSG_TO_ARDUINO);
+						try{
+							TimeUnit.MILLISECONDS.sleep(1000/stpRobot.getSpeed());
+						} catch(InterruptedException e){
+							System.out.println("InterruptedException");
+						}
+						stpMap.repaint();
+						robotMoveForward();
+						commMgr.sendMsg(CommConstants.ROBOT_MOVE_FORWARD, CommConstants.MSG_TO_ARDUINO);
+					}
+					if (nextMove.getRow() == stpRobot.getPosition().getRow() && nextMove.getCol() == stpRobot.getPosition().getCol()-1){
+						robotTurnRight();
+						commMgr.sendMsg(CommConstants.ROBOT_TURN_RIGHT, CommConstants.MSG_TO_ARDUINO);
+						try{
+							TimeUnit.MILLISECONDS.sleep(1000/stpRobot.getSpeed());
+						} catch(InterruptedException e){
+							System.out.println("InterruptedException");
+						}
+						stpMap.repaint();
+						robotMoveForward();
+						commMgr.sendMsg(CommConstants.ROBOT_MOVE_FORWARD, CommConstants.MSG_TO_ARDUINO);
+					}
+					if (nextMove.getCol() == stpRobot.getPosition().getCol() && nextMove.getRow() == stpRobot.getPosition().getRow()+1){
+						robotTurnRight();
+						commMgr.sendMsg(CommConstants.ROBOT_TURN_RIGHT, CommConstants.MSG_TO_ARDUINO);
+						try{
+							TimeUnit.MILLISECONDS.sleep(1000/stpRobot.getSpeed());
+						} catch(InterruptedException e){
+							System.out.println("InterruptedException");
+						}
+						stpMap.repaint();
+						robotTurnRight();
+						commMgr.sendMsg(CommConstants.ROBOT_TURN_RIGHT, CommConstants.MSG_TO_ARDUINO);
+						try{
+							TimeUnit.MILLISECONDS.sleep(1000/stpRobot.getSpeed());
+						} catch(InterruptedException e){
+							System.out.println("InterruptedException");
+						}
+						stpMap.repaint();
+						robotMoveForward();
+						commMgr.sendMsg(CommConstants.ROBOT_MOVE_FORWARD, CommConstants.MSG_TO_ARDUINO);
+					}
+					break;
+				case 3:
+					if (nextMove.getRow() == stpRobot.getPosition().getRow() && nextMove.getCol() == stpRobot.getPosition().getCol()-1){
+						robotMoveForward();
+						commMgr.sendMsg(CommConstants.ROBOT_MOVE_FORWARD, CommConstants.MSG_TO_ARDUINO);
+					}
+					if (nextMove.getCol() == stpRobot.getPosition().getCol() && nextMove.getRow() == stpRobot.getPosition().getRow()-1){
+						robotTurnLeft();
+						commMgr.sendMsg(CommConstants.ROBOT_TURN_LEFT, CommConstants.MSG_TO_ARDUINO);
+						try{
+							TimeUnit.MILLISECONDS.sleep(1000/stpRobot.getSpeed());
+						} catch(InterruptedException e){
+							System.out.println("InterruptedException");
+						}
+						stpMap.repaint();
+						robotMoveForward();
+						commMgr.sendMsg(CommConstants.ROBOT_MOVE_FORWARD, CommConstants.MSG_TO_ARDUINO);
+					}
+					if (nextMove.getCol() == stpRobot.getPosition().getCol() && nextMove.getRow() == stpRobot.getPosition().getRow()+1){
+						robotTurnRight();
+						commMgr.sendMsg(CommConstants.ROBOT_TURN_RIGHT, CommConstants.MSG_TO_ARDUINO);
+						try{
+							TimeUnit.MILLISECONDS.sleep(1000/stpRobot.getSpeed());
+						} catch(InterruptedException e){
+							System.out.println("InterruptedException");
+						}
+						stpMap.repaint();
+						robotMoveForward();
+						commMgr.sendMsg(CommConstants.ROBOT_MOVE_FORWARD, CommConstants.MSG_TO_ARDUINO);
+					}
+					if (nextMove.getRow() == stpRobot.getPosition().getRow() && nextMove.getCol() == stpRobot.getPosition().getCol()+1){
+						robotTurnRight();
+						commMgr.sendMsg(CommConstants.ROBOT_TURN_RIGHT, CommConstants.MSG_TO_ARDUINO);
+						try{
+							TimeUnit.MILLISECONDS.sleep(1000/stpRobot.getSpeed());
+						} catch(InterruptedException e){
+							System.out.println("InterruptedException");
+						}
+						stpMap.repaint();
+						robotTurnRight();
+						commMgr.sendMsg(CommConstants.ROBOT_TURN_RIGHT, CommConstants.MSG_TO_ARDUINO);
+						try{
+							TimeUnit.MILLISECONDS.sleep(1000/stpRobot.getSpeed());
+						} catch(InterruptedException e){
+							System.out.println("InterruptedException");
+						}
+						stpMap.repaint();
+						robotMoveForward();
+						commMgr.sendMsg(CommConstants.ROBOT_MOVE_FORWARD, CommConstants.MSG_TO_ARDUINO);
+					}
+					break;
+				case 4:
+					if (nextMove.getCol() == stpRobot.getPosition().getCol() && nextMove.getRow() == stpRobot.getPosition().getRow()+1){
+						robotMoveForward();
+						commMgr.sendMsg(CommConstants.ROBOT_MOVE_FORWARD, CommConstants.MSG_TO_ARDUINO);
+					}
+					if (nextMove.getRow() == stpRobot.getPosition().getRow() && nextMove.getCol() == stpRobot.getPosition().getCol()-1){
+						robotTurnLeft();
+						commMgr.sendMsg(CommConstants.ROBOT_TURN_LEFT, CommConstants.MSG_TO_ARDUINO);
+						try{
+							TimeUnit.MILLISECONDS.sleep(1000/stpRobot.getSpeed());
+						} catch(InterruptedException e){
+							System.out.println("InterruptedException");
+						}
+						stpMap.repaint();
+						robotMoveForward();
+						commMgr.sendMsg(CommConstants.ROBOT_MOVE_FORWARD, CommConstants.MSG_TO_ARDUINO);
+					}
+					if (nextMove.getRow() == stpRobot.getPosition().getRow() && nextMove.getCol() == stpRobot.getPosition().getCol()+1){
+						robotTurnRight();
+						commMgr.sendMsg(CommConstants.ROBOT_TURN_RIGHT, CommConstants.MSG_TO_ARDUINO);
+						try{
+							TimeUnit.MILLISECONDS.sleep(1000/stpRobot.getSpeed());
+						} catch(InterruptedException e){
+							System.out.println("InterruptedException");
+						}
+						stpMap.repaint();
+						robotMoveForward();
+						commMgr.sendMsg(CommConstants.ROBOT_MOVE_FORWARD, CommConstants.MSG_TO_ARDUINO);
+					}
+					if (nextMove.getCol() == stpRobot.getPosition().getCol() && nextMove.getRow() == stpRobot.getPosition().getRow()-1){
+						robotTurnLeft();
+						commMgr.sendMsg(CommConstants.ROBOT_TURN_LEFT, CommConstants.MSG_TO_ARDUINO);
+						try{
+							TimeUnit.MILLISECONDS.sleep(1000/stpRobot.getSpeed());
+						} catch(InterruptedException e){
+							System.out.println("InterruptedException");
+						}
+						stpMap.repaint();
+						robotTurnLeft();
+						commMgr.sendMsg(CommConstants.ROBOT_TURN_LEFT, CommConstants.MSG_TO_ARDUINO);
+						try{
+							TimeUnit.MILLISECONDS.sleep(1000/stpRobot.getSpeed());
+						} catch(InterruptedException e){
+							System.out.println("InterruptedException");
+						}
+						stpMap.repaint();
+						robotMoveForward();
+						commMgr.sendMsg(CommConstants.ROBOT_MOVE_FORWARD, CommConstants.MSG_TO_ARDUINO);
 					}
 					break;
 				default: break;

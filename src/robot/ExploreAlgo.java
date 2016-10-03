@@ -17,7 +17,7 @@ public class ExploreAlgo{
 
 	private double coverLimit;
 	private int timeLimitInSecond;
-	CommMgr commMgr = CommMgr.getCommMgr();
+	private CommMgr commMgr = CommMgr.getCommMgr();
 
 	public ExploreAlgo(Map tMp, Map kMp, Robot r){
 		this.trueMap = tMp;
@@ -155,7 +155,7 @@ public class ExploreAlgo{
 			//ArrayList<Sensor> allSensors = expRobot.getSensors();
 
 			boolean endFlag = false;
-			boolean limitReached = false;
+			//boolean limitReached = false;
 			boolean leaveStart = false;
 
 			//int step = 0;
@@ -172,6 +172,11 @@ public class ExploreAlgo{
 					robotTurnRight();
 					commMgr.sendMsg(CommConstants.ROBOT_TURN_RIGHT, CommConstants.MSG_TO_ARDUINO);
 					if (!hasObstacleInFront()){ //forward checking
+						try{
+							TimeUnit.MILLISECONDS.sleep(1000);
+						} catch(InterruptedException e){
+							System.out.println("InterruptedException");
+						}
 						robotMoveForward();
 						commMgr.sendMsg(CommConstants.ROBOT_MOVE_FORWARD, CommConstants.MSG_TO_ARDUINO);
 					}

@@ -56,9 +56,10 @@ public class RealRun extends JFrame{
 
 
 		ExploreAlgo e = new ExploreAlgo(null, realMap, realRobot); 
-		ShortestPathAlgo s = new ShortestPathAlgo(realMap, realRobot);
 
 		e.runRealExploration();
+
+		ShortestPathAlgo s = new ShortestPathAlgo(realMap, realRobot);
 
 
 
