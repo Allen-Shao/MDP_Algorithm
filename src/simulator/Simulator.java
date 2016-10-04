@@ -106,10 +106,10 @@ public class Simulator extends JFrame{
 
 		/*----------------------------------------------*/
 
-		// CommMgr.getCommMgr().setConnection(10000);
+		// CommMgr.getCommMgr().setConnection();
 
 
-		// CommMgr.getCommMgr().sendMsg("test", CommConstants.MSG_TYPE_ANDROID);
+		// CommMgr.getCommMgr().sendMsg("r", CommConstants.MSG_TO_ARDUINO);
 
 		
 		// String test = CommMgr.getCommMgr().recvMsg();
@@ -130,11 +130,11 @@ public class Simulator extends JFrame{
 		Sensor s5 = new Sensor(3, 1, 1, 1);
 
 
-		//left sensor
-		Sensor s2 = new Sensor(3, 2, -1, 1);
-
 		//right sensor
-		Sensor s3 = new Sensor(5, 4, 1, 1);
+		Sensor s2 = new Sensor(5, 2, -1, 1);
+
+		//left sensor
+		Sensor s3 = new Sensor(3, 4, 1, 1);
 
 
 		mdpRobot.addSensor(s5);

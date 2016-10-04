@@ -18,6 +18,11 @@ import java.awt.event.*;
 
 public class RealRun extends JFrame{
 
+	private static JFrame appFrame = null;
+	private static JPanel mainCards = null;
+	private static JPanel buttonsCards = null;
+	private static JPanel mainButtons = null;
+
 	private static Robot realRobot;
 
 	private static Map realMap;
@@ -26,10 +31,9 @@ public class RealRun extends JFrame{
 
 	public static void main(String args[]){
 
-		System.out.println("Real Run Starts!");
 
 		//set connection
-		commMgr.setConnection(10000);
+		commMgr.setConnection();
 
 
 
@@ -40,16 +44,16 @@ public class RealRun extends JFrame{
 		Sensor s1 = new Sensor(3, 1, 0, 1);
 		Sensor s4 = new Sensor(3, 1, -1, 1);
 		Sensor s5 = new Sensor(3, 1, 1, 1);
-		//left sensor
-		Sensor s2 = new Sensor(3, 2, -1, 1);
 		//right sensor
-		Sensor s3 = new Sensor(3, 4, 1, 1);
+		Sensor s2 = new Sensor(3, 2, -1, 1);
+		//left sensor
+		Sensor s3 = new Sensor(5, 4, 1, 1);
 
-		realRobot.addSensor(s1);
-		realRobot.addSensor(s2);
-		realRobot.addSensor(s3);
-		realRobot.addSensor(s4);
 		realRobot.addSensor(s5);
+		realRobot.addSensor(s1);
+		realRobot.addSensor(s4);
+		realRobot.addSensor(s3);
+		realRobot.addSensor(s2);
 
 		//initialize map
 		realMap = new Map(realRobot);
@@ -57,12 +61,71 @@ public class RealRun extends JFrame{
 
 
 		ExploreAlgo e = new ExploreAlgo(null, realMap, realRobot); 
+
+		e.runRealExploration();
+
 		ShortestPathAlgo s = new ShortestPathAlgo(realMap, realRobot);
 
 
+		//Real-time GUI
+
+		displayEverythings();
+
+		class Exploration extends SwingWorker<Integer, String>{
+			protected Integer doInBackground() throws Exception{
+				
+				realMap.repaint();
+
+				ExploreAlgo e = new ExploreAlgo(null, realMap, realRobot); 
+				e.runRealExploration();
+
+				//String mapDescriptor = generateMapDescriptor();
+
+				//System.out.println(mapDescriptor);
+
+				return 1;
+			}
+		}
+
+		new Exploration().execute();
 
 
+	}
 
+	private static void displayEverythings(){
+		// Main frame for displaying everything
+		appFrame = new JFrame();
+		appFrame.setTitle("MDP Group 2 Simulator");
+		appFrame.setSize(new Dimension(800, 870));
+		appFrame.setResizable(false);
+		
+		// Center the app frame
+		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+		appFrame.setLocation(dim.width/2 - appFrame.getSize().width/2, dim.height/2 - appFrame.getSize().height/2);
+		
+		// Create the CardLayouts for storing the different views
+		mainCards = new JPanel(new CardLayout());
+		
+		// Initialize the main CardLayout
+		initMainLayout();
+		
+		// Add CardLayouts to content pane
+		Container contentPane = appFrame.getContentPane();
+		contentPane.add(mainCards, BorderLayout.CENTER);
+		contentPane.add(buttonsCards, BorderLayout.SOUTH);
+		
+		// Display the application
+		appFrame.setVisible(true);
+		appFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+
+	private static void initMainLayout() {
+		
+		// Initialize the Map for simulation
+		mainCards.add(realMap, "MAIN");
+		
+		CardLayout cl = ((CardLayout) mainCards.getLayout());
+	    cl.show(mainCards, "MAIN");		
 	}
 
 
