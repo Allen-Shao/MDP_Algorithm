@@ -127,7 +127,7 @@ public class CommMgr{
 
 			String input = sc.nextLine();
 
-			// Sßystem.out.println(input);
+			// System.out.println(input);
 			if (input != null && input.length() > 0){
 				System.out.print("Received Message: ");
 				System.out.println(input);
