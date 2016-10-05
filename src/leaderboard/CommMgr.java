@@ -126,14 +126,11 @@ public class CommMgr{
 			// String input = br.readLine();
 
 			String input = sc.nextLine();
-<<<<<<< HEAD
 
 			// System.out.println(input);
-=======
 			System.out.print("Received Message: ");
 			System.out.println(input);
-			// Sßystem.out.println(input);
->>>>>>> f304cd05b49e22b6484750f9f114b917a6551cf9
+
 			if (input != null && input.length() > 0){
 				return input;
 			}

@@ -27,10 +27,9 @@ import robot.ExploreAlgo;
 import robot.Robot;
 import robot.Sensor;
 import robot.ShortestPathAlgo;
-<<<<<<< HEAD
-=======
+
 import leaderboard.*;
->>>>>>> e96a005b3b928cd665f40d28879b8b395f46be73
+
 
 
 public class Simulator extends JFrame{

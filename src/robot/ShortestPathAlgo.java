@@ -146,7 +146,7 @@ public class ShortestPathAlgo{
 			System.out.println("The robot is not in the start zone!");
 			// System.out.printf("%d %d", stpRobot.getPosition().getRow(), stpRobot.getPosition().getCol());
 			// System.out.printf("%d %d", start.getRow(), start.getCol());
-			return null;
+
 		}
 
 		stpMap.printMapWithVirtualWall();
@@ -184,7 +184,7 @@ public class ShortestPathAlgo{
 
 				moveRealRobot();
 
-				return generatePath(goal);  //get the path towards goal
+				//return generatePath(goal);  //get the path towards goal
 			}
 
 			opened.remove(current);
@@ -226,12 +226,12 @@ public class ShortestPathAlgo{
 				//printPath(path);
 				moveRealRobot();
 
-				return generatePath(goal);  //get the path towards goal
+				//return generatePath(goal);  //get the path towards goal
 		}
 
 		System.out.println("Path NOT Found!");
 
-		return null;
+		//return null;
 	}
 
 	private MapGrid findMinimumCost(ArrayList<MapGrid> list, double[][] gscore, MapGrid goal){

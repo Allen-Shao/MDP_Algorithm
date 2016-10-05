@@ -95,7 +95,7 @@ public class RealRun extends JFrame{
 	private static void displayEverythings(){
 		// Main frame for displaying everything
 		appFrame = new JFrame();
-		appFrame.setTitle("MDP Group 2 Simulator");
+		appFrame.setTitle("MDP Group 2");
 		appFrame.setSize(new Dimension(800, 870));
 		appFrame.setResizable(false);
 		

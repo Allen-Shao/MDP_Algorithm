@@ -88,6 +88,23 @@ public class Map extends JPanel{
 		}
 	}
 
+	public void removeObstacle(int i, int j){
+		this.grids[i][j].setObstacle(false);
+		this.grids[i][j].setVirtualWall(false); //if it is set to obstacle, it is not a virtual wall
+
+		//set virtual wall
+		for (int m=-1; m<2; m++){
+			for (int n=-1; n<2; n++){
+				if ((i+m)>0 && (i+m)<MapConstants.MAP_ROW && (j+n)>0 && (j+n)<MapConstants.MAP_COL){
+					if (grids[i+m][j+n].isObstacle() == false && grids[i+m][j+n].isVirtualWall() == true){
+						// System.out.printf("%d %d\n", i+m, j+n);
+						this.grids[i+m][j+n].setVirtualWall(false);
+					}
+				}
+			}
+		}
+	}
+
 	public void setAllExplored(){
 		for (int i = 1; i<MapConstants.MAP_ROW-1; i++){
 			for (int j = 1; j<MapConstants.MAP_COL-1; j++){
@@ -319,7 +336,7 @@ public class Map extends JPanel{
 					System.out.print("1");						//obstacle
 				}
 				else if (grids[i][j].isVirtualWall()){
-					System.out.print("0");						//virtual wall
+					System.out.print("2");						//virtual wall
 				}
 				else {
 					System.out.print("0");						//empty area(can go)
