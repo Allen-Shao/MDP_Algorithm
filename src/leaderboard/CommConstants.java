@@ -11,6 +11,7 @@ public class CommConstants{
 	public static final String ROBOT_TURN_LEFT = "a";
 	public static final String ROBOT_TURN_RIGHT = "d";
 	public static final String REQUEST_SENSOR_READING = "r";
+	public static final String ROBOT_CALIBRATION = "c";
 	//sensor order
 	//1.front(left)
 	//2.front(middle)

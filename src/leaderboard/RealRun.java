@@ -33,7 +33,7 @@ public class RealRun extends JFrame{
 
 
 		//set connection
-		//commMgr.setConnection();
+		commMgr.setConnection();
 
 
 

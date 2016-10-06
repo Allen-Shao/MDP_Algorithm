@@ -144,7 +144,6 @@ public class ExploreAlgo{
 
 		}
 
-		
 		//trueMap.printMap();		
 
 	}
@@ -168,7 +167,21 @@ public class ExploreAlgo{
 
 
 				markCurrentPosition();
-				updateSensorsReading();
+				
+				//calibration
+				if (hasObstacleInFront() && hasObstacleInFrontRight() && hasObstacleInFrontLeft()){
+					//robot calibration
+					System.out.println("Robot calibration");
+					System.out.println("Waiting for calibration");
+					commMgr.sendMsg(CommConstants.ROBOT_CALIBRATION, CommConstants.MSG_TO_ARDUINO);
+					String ack = commMgr.recvMsg();
+					System.out.println("Calibration completed!");
+				} else {
+					updateSensorsReading();
+				}
+
+
+
 				//finite state machine (make only one step per loop)
 				if (!hasObstacleOnRight()){
 					robotTurnRight();
@@ -477,6 +490,52 @@ public class ExploreAlgo{
 		return true;
 	}
 
+	private boolean hasObstacleInFrontRight(){
+		MapGrid curPos = expRobot.getPosition();
+		MapGrid frontGrid;
+		int curRow = curPos.getRow();
+		int curCol = curPos.getCol();
+		int curHeading = expRobot.getHeading();
+		switch (curHeading){
+			case 1:
+				frontGrid = knownMap.getGrid(curRow-1, curCol+1);
+				return !frontGrid.isExplored() || frontGrid.isObstacle() || frontGrid.isVirtualWall();
+			case 2:
+				frontGrid = knownMap.getGrid(curRow-1, curCol-1);
+				return !frontGrid.isExplored() || frontGrid.isObstacle() || frontGrid.isVirtualWall();
+			case 3:
+				frontGrid = knownMap.getGrid(curRow+1, curCol-1);
+				return !frontGrid.isExplored() || frontGrid.isObstacle() || frontGrid.isVirtualWall();
+			case 4:
+				frontGrid = knownMap.getGrid(curRow+1, curCol+1);
+				return !frontGrid.isExplored() || frontGrid.isObstacle() || frontGrid.isVirtualWall();
+		}
+		return true;
+	}
+
+	private boolean hasObstacleInFrontLeft(){
+		MapGrid curPos = expRobot.getPosition();
+		MapGrid frontGrid;
+		int curRow = curPos.getRow();
+		int curCol = curPos.getCol();
+		int curHeading = expRobot.getHeading();
+		switch (curHeading){
+			case 1:
+				frontGrid = knownMap.getGrid(curRow+1, curCol+1);
+				return !frontGrid.isExplored() || frontGrid.isObstacle() || frontGrid.isVirtualWall();
+			case 2:
+				frontGrid = knownMap.getGrid(curRow-1, curCol+1);
+				return !frontGrid.isExplored() || frontGrid.isObstacle() || frontGrid.isVirtualWall();
+			case 3:
+				frontGrid = knownMap.getGrid(curRow-1, curCol-1);
+				return !frontGrid.isExplored() || frontGrid.isObstacle() || frontGrid.isVirtualWall();
+			case 4:
+				frontGrid = knownMap.getGrid(curRow+1, curCol-1);
+				return !frontGrid.isExplored() || frontGrid.isObstacle() || frontGrid.isVirtualWall();
+		}
+		return true;
+	}
+
 	private boolean hasObstacleOnLeft(){
 		MapGrid curPos = expRobot.getPosition();
 		MapGrid leftGrid;
@@ -521,6 +580,122 @@ public class ExploreAlgo{
 				return !rightGrid.isExplored() || rightGrid.isObstacle() || rightGrid.isVirtualWall();
 		}
 		return true;
+	}
+
+	private String generateMapDescriptor(){
+		String mapDescriptor = "";
+
+		//part1
+		mapDescriptor += "11\n";
+		for (int i=1;i<MapConstants.MAP_ROW-1;i++){
+			for (int j=1; j<MapConstants.MAP_COL-1;j++){
+				if (knownMap.getGrid(i, j).isExplored()){
+					mapDescriptor += "1";
+				}
+				else {
+					mapDescriptor += "0";
+				}
+			}
+			mapDescriptor += "\n"; 
+		}
+		mapDescriptor += "11\n";
+
+		String part1Hex = stringBinaryToHex(mapDescriptor);
+
+		System.out.println();
+		System.out.println("Map mapDescriptor:");
+		System.out.println("Part 1");
+		System.out.println(part1Hex);
+
+		System.out.println(mapDescriptor);
+
+		//part2
+		mapDescriptor = "";
+		for (int i=1;i<MapConstants.MAP_ROW-1;i++){
+			for (int j=1; j<MapConstants.MAP_COL-1;j++){
+				if (knownMap.getGrid(i, j).isExplored()){
+					if (knownMap.getGrid(i, j).isObstacle()){
+						mapDescriptor += "1";
+					}
+					else {
+						mapDescriptor += "0";
+					}
+				}
+			}
+			mapDescriptor += "\n"; 
+		}
+
+		String part2Hex = stringBinaryToHex(mapDescriptor);
+		System.out.println();
+		System.out.println("Part 2");
+		System.out.println(part2Hex);
+		System.out.println(mapDescriptor);
+
+		return part1Hex+part2Hex;
+		
+	}
+
+	private String stringBinaryToHex(String binString){
+		String hexString = "";
+		int digitCount = 0;
+		int sum = 0;
+		String tempDigit = "";
+
+		//padding to full byte length
+		if (binString.length() % 8 != 0){
+			for (int i = 0; i < 8-binString.length();i++){
+				binString += "0";
+			}
+		}
+
+
+		for (int i = binString.length()-1; i>=0; i--){
+			if (binString.charAt(i) != '\n'){
+				digitCount++;
+				tempDigit = binString.charAt(i) + tempDigit;
+				if (binString.charAt(i) == '1'){
+					int temp = 1;
+					for (int k = 0; k < digitCount-1; k++){
+						temp *= 2;
+					}
+					sum += temp;
+				}
+
+			}
+
+			if (digitCount == 4){
+
+				if (sum < 10){
+					hexString = Integer.toString(sum) + hexString;
+				}
+				else {
+					switch (sum){
+						case 10:
+							hexString = "A" + hexString;
+							break;
+						case 11:
+							hexString = "B" + hexString;
+							break;
+						case 12:
+							hexString = "C" + hexString;
+							break;
+						case 13:
+							hexString = "D" + hexString;
+							break;
+						case 14:
+							hexString = "E" + hexString;
+							break;
+						case 15:
+							hexString = "F" + hexString;
+							break;
+					}
+				}
+				digitCount = 0;
+				sum = 0;
+				tempDigit = "";
+			}
+		}
+		return hexString;
 	}
 
 	private double calculateCoverRate(){
