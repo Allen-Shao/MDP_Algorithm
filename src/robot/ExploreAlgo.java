@@ -167,18 +167,14 @@ public class ExploreAlgo{
 
 
 				markCurrentPosition();
-				
+				updateSensorsReading();
 				//calibration
-				if (hasObstacleInFront() && hasObstacleInFrontRight() && hasObstacleInFrontLeft()){
-					//robot calibration
-					System.out.println("Robot calibration");
-					System.out.println("Waiting for calibration");
+				if (shouldCalibration()){
 					commMgr.sendMsg(CommConstants.ROBOT_CALIBRATION, CommConstants.MSG_TO_ARDUINO);
 					String ack = commMgr.recvMsg();
-					System.out.println("Calibration completed!");
-				} else {
-					updateSensorsReading();
+					System.out.println(ack);
 				}
+
 
 
 
@@ -205,6 +201,12 @@ public class ExploreAlgo{
 					robotTurnRight();
 					commMgr.sendMsg(CommConstants.ROBOT_TURN_RIGHT, CommConstants.MSG_TO_ARDUINO);
 				}
+
+				// try{
+				// 	TimeUnit.MILLISECONDS.sleep(1000);
+				// } catch(InterruptedException e){
+				// 	System.out.println("InterruptedException");
+				// }
 
 
 				//for debugging
@@ -490,51 +492,7 @@ public class ExploreAlgo{
 		return true;
 	}
 
-	private boolean hasObstacleInFrontRight(){
-		MapGrid curPos = expRobot.getPosition();
-		MapGrid frontGrid;
-		int curRow = curPos.getRow();
-		int curCol = curPos.getCol();
-		int curHeading = expRobot.getHeading();
-		switch (curHeading){
-			case 1:
-				frontGrid = knownMap.getGrid(curRow-1, curCol+1);
-				return !frontGrid.isExplored() || frontGrid.isObstacle() || frontGrid.isVirtualWall();
-			case 2:
-				frontGrid = knownMap.getGrid(curRow-1, curCol-1);
-				return !frontGrid.isExplored() || frontGrid.isObstacle() || frontGrid.isVirtualWall();
-			case 3:
-				frontGrid = knownMap.getGrid(curRow+1, curCol-1);
-				return !frontGrid.isExplored() || frontGrid.isObstacle() || frontGrid.isVirtualWall();
-			case 4:
-				frontGrid = knownMap.getGrid(curRow+1, curCol+1);
-				return !frontGrid.isExplored() || frontGrid.isObstacle() || frontGrid.isVirtualWall();
-		}
-		return true;
-	}
-
-	private boolean hasObstacleInFrontLeft(){
-		MapGrid curPos = expRobot.getPosition();
-		MapGrid frontGrid;
-		int curRow = curPos.getRow();
-		int curCol = curPos.getCol();
-		int curHeading = expRobot.getHeading();
-		switch (curHeading){
-			case 1:
-				frontGrid = knownMap.getGrid(curRow+1, curCol+1);
-				return !frontGrid.isExplored() || frontGrid.isObstacle() || frontGrid.isVirtualWall();
-			case 2:
-				frontGrid = knownMap.getGrid(curRow-1, curCol+1);
-				return !frontGrid.isExplored() || frontGrid.isObstacle() || frontGrid.isVirtualWall();
-			case 3:
-				frontGrid = knownMap.getGrid(curRow-1, curCol-1);
-				return !frontGrid.isExplored() || frontGrid.isObstacle() || frontGrid.isVirtualWall();
-			case 4:
-				frontGrid = knownMap.getGrid(curRow+1, curCol-1);
-				return !frontGrid.isExplored() || frontGrid.isObstacle() || frontGrid.isVirtualWall();
-		}
-		return true;
-	}
+	
 
 	private boolean hasObstacleOnLeft(){
 		MapGrid curPos = expRobot.getPosition();
@@ -580,6 +538,44 @@ public class ExploreAlgo{
 				return !rightGrid.isExplored() || rightGrid.isObstacle() || rightGrid.isVirtualWall();
 		}
 		return true;
+	}
+
+	private boolean shouldCalibration(){
+		MapGrid curPos = expRobot.getPosition();
+		MapGrid frontGrid = null;
+		MapGrid frontRightGrid = null;
+		MapGrid frontLeftGrid = null;
+		int curRow = curPos.getRow();
+		int curCol = curPos.getCol();
+		int curHeading = expRobot.getHeading();
+		switch (curHeading){
+			case 1:
+				frontGrid = knownMap.getGrid(curRow, curCol+2);
+				frontRightGrid = knownMap.getGrid(curRow-1, curCol+2);
+				frontLeftGrid = knownMap.getGrid(curRow+1, curCol+2);
+				break;
+			case 2:
+				frontGrid = knownMap.getGrid(curRow-2, curCol);
+				frontRightGrid = knownMap.getGrid(curRow-2, curCol-1);
+				frontLeftGrid = knownMap.getGrid(curRow-2, curCol+1);
+				break;
+			case 3:
+				frontGrid = knownMap.getGrid(curRow, curCol-2);
+				frontRightGrid = knownMap.getGrid(curRow+1, curCol-2);
+				frontLeftGrid = knownMap.getGrid(curRow-1, curCol-2);
+				break;
+			case 4:
+				frontGrid = knownMap.getGrid(curRow+2, curCol);
+				frontRightGrid = knownMap.getGrid(curRow+2, curCol+1);
+				frontLeftGrid = knownMap.getGrid(curRow+2, curCol-1);
+				break;
+		}
+		System.out.println(curPos.toString());
+		System.out.println(curHeading);
+		System.out.println(frontGrid.toString());
+		System.out.println(frontRightGrid.toString());
+		System.out.println(frontLeftGrid.toString());
+		return frontGrid.isObstacle() && frontRightGrid.isObstacle() && frontLeftGrid.isObstacle();
 	}
 
 	private String generateMapDescriptor(){
