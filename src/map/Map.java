@@ -277,8 +277,24 @@ public class Map extends JPanel{
 		}
 	}	
 
-
-
+	public String[] generateMapStreamToAndroid(){
+		String[] stream = new String[2];
+		stream[0] = "\"robotPosition\" : ["+Integer.toString(mapRobot.getPosition().getRow())+","+Integer.toString(mapRobot.getPosition().getCol())+","+Integer.toString(mapRobot.getHeading())+"]";
+		stream[1] = "\"grid\" : \"";
+		for (int i=1;i<MapConstants.MAP_ROW-1;i++){
+			for (int j=1; j<MapConstants.MAP_COL-1;j++){
+				if(grids[i][j].isObstacle()){
+					stream[1] += "1";
+				}
+				else {
+					stream[1] += "0";
+				}
+			}
+			//System.out.println();
+		}
+		stream[1] += "\"";
+		return stream;
+	}
 
 
 	//Print for debugging

@@ -202,11 +202,11 @@ public class ExploreAlgo{
 					commMgr.sendMsg(CommConstants.ROBOT_TURN_RIGHT, CommConstants.MSG_TO_ARDUINO);
 				}
 
-				// try{
-				// 	TimeUnit.MILLISECONDS.sleep(1000);
-				// } catch(InterruptedException e){
-				// 	System.out.println("InterruptedException");
-				// }
+				try{
+					TimeUnit.MILLISECONDS.sleep(1000);
+				} catch(InterruptedException e){
+					System.out.println("InterruptedException");
+				}
 
 
 				//for debugging
@@ -570,13 +570,15 @@ public class ExploreAlgo{
 				frontLeftGrid = knownMap.getGrid(curRow+2, curCol-1);
 				break;
 		}
-		System.out.println(curPos.toString());
-		System.out.println(curHeading);
-		System.out.println(frontGrid.toString());
-		System.out.println(frontRightGrid.toString());
-		System.out.println(frontLeftGrid.toString());
+		// System.out.println(curPos.toString());
+		// System.out.println(curHeading);
+		// System.out.println(frontGrid.toString());
+		// System.out.println(frontRightGrid.toString());
+		// System.out.println(frontLeftGrid.toString());
 		return frontGrid.isObstacle() && frontRightGrid.isObstacle() && frontLeftGrid.isObstacle();
 	}
+
+	
 
 	private String generateMapDescriptor(){
 		String mapDescriptor = "";

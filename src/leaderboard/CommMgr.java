@@ -99,7 +99,7 @@ public class CommMgr{
 			String outputMsg = msgType + msg + " |" + "\n";
 
 			//outputMsg = String.format("%-128s", outputMsg);
-			System.out.print("Sending out message: " + outputMsg);
+			
 
 			// osw.write(outputMsg);
 			// osw.flush();
@@ -109,6 +109,7 @@ public class CommMgr{
 
 			bw.write(outputMsg);
 			bw.flush();
+			System.out.print("Sending out message: " + outputMsg);
 
 			return true;
 

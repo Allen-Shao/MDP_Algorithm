@@ -37,6 +37,8 @@ public class RealRun extends JFrame{
 
 
 
+
+
 		//initialize robot
 		realRobot = new Robot(new MapGrid(2, 2), 1);
 
@@ -47,7 +49,7 @@ public class RealRun extends JFrame{
 		//right sensor
 		Sensor s2 = new Sensor(3, 2, -1, 1);
 		//left sensor
-		Sensor s3 = new Sensor(5, 4, 1, 1);
+		Sensor s3 = new Sensor(3, 4, 1, 1);
 
 		realRobot.addSensor(s5);
 		realRobot.addSensor(s1);
@@ -58,6 +60,14 @@ public class RealRun extends JFrame{
 		//initialize map
 		realMap = new Map(realRobot);
 		realMap.addBorder();
+
+		// realMap.addObstacle(5,5);
+
+		// String[] stream = realMap.generateMapStreamToAndroid();
+
+
+		// commMgr.sendMsg(stream[0], CommConstants.MSG_TO_ANDROID);
+		// commMgr.sendMsg(stream[1], CommConstants.MSG_TO_ANDROID);
 
 
 		//ExploreAlgo e = new ExploreAlgo(null, realMap, realRobot); 
