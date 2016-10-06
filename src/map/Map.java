@@ -185,7 +185,7 @@ public class Map extends JPanel{
 	// }
 
 	public void paintComponent(Graphics g){
-		System.out.println("GUI paint");
+		//System.out.println("GUI paint");
 		// Calculate the map grids for rendering
 		guiGrids = new GUIGrid[MapConstants.MAP_ROW][MapConstants.MAP_COL];
 		for (int mapRow = 1; mapRow < MapConstants.MAP_ROW-1; mapRow++) {

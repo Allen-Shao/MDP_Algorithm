@@ -33,7 +33,7 @@ public class RealRun extends JFrame{
 
 
 		//set connection
-		commMgr.setConnection();
+		//commMgr.setConnection();
 
 
 
@@ -60,20 +60,24 @@ public class RealRun extends JFrame{
 		realMap.addBorder();
 
 
-		ExploreAlgo e = new ExploreAlgo(null, realMap, realRobot); 
+		//ExploreAlgo e = new ExploreAlgo(null, realMap, realRobot); 
 
-		e.runRealExploration();
+		//e.runRealExploration();
 
-		ShortestPathAlgo s = new ShortestPathAlgo(realMap, realRobot);
+		//ShortestPathAlgo s = new ShortestPathAlgo(realMap, realRobot);
 
 
 		//Real-time GUI
+
+		System.out.println("showing gui");
 
 		displayEverythings();
 
 		class Exploration extends SwingWorker<Integer, String>{
 			protected Integer doInBackground() throws Exception{
-				
+
+				CardLayout cl = ((CardLayout) mainCards.getLayout());
+				cl.show(mainCards, "MAIN");
 				realMap.repaint();
 
 				ExploreAlgo e = new ExploreAlgo(null, realMap, realRobot); 
@@ -112,7 +116,7 @@ public class RealRun extends JFrame{
 		// Add CardLayouts to content pane
 		Container contentPane = appFrame.getContentPane();
 		contentPane.add(mainCards, BorderLayout.CENTER);
-		contentPane.add(buttonsCards, BorderLayout.SOUTH);
+		//contentPane.add(buttonsCards, BorderLayout.SOUTH);
 		
 		// Display the application
 		appFrame.setVisible(true);

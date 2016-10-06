@@ -150,6 +150,8 @@ public class ExploreAlgo{
 	}
 
 	public void runRealExploration(){
+
+		System.out.println("Start real Exploration");
 		
 		if (commMgr.isConnected()){
 			//ArrayList<Sensor> allSensors = expRobot.getSensors();
