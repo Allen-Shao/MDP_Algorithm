@@ -279,7 +279,7 @@ public class Map extends JPanel{
 
 	public String[] generateMapStreamToAndroid(){
 		String[] stream = new String[2];
-		stream[0] = "\"robotPosition\" : ["+Integer.toString(mapRobot.getPosition().getRow())+","+Integer.toString(mapRobot.getPosition().getCol())+","+Integer.toString(mapRobot.getHeading())+"]";
+		stream[0] = "\"robotPosition\" : {["+Integer.toString(mapRobot.getPosition().getRow())+","+Integer.toString(mapRobot.getPosition().getCol())+","+Integer.toString(mapRobot.getHeading())+"]}";
 		stream[1] = "\"grid\" : \"";
 		for (int i=1;i<MapConstants.MAP_ROW-1;i++){
 			for (int j=1; j<MapConstants.MAP_COL-1;j++){
@@ -294,6 +294,126 @@ public class Map extends JPanel{
 		}
 		stream[1] += "\"";
 		return stream;
+	}
+
+	public String[] generateMapDescriptor(){
+		String mapDescriptor = "";
+
+		//part1
+		mapDescriptor += "11\n";
+		for (int i=1;i<MapConstants.MAP_ROW-1;i++){
+			for (int j=1; j<MapConstants.MAP_COL-1;j++){
+				if (grids[i][j].isExplored()){
+					mapDescriptor += "1";
+				}
+				else {
+					mapDescriptor += "0";
+				}
+			}
+			mapDescriptor += "\n"; 
+		}
+		mapDescriptor += "11\n";
+
+		String part1Hex = stringBinaryToHex(mapDescriptor);
+
+		System.out.println();
+		System.out.println("Map mapDescriptor:");
+		System.out.println("Part 1");
+		System.out.println(part1Hex);
+
+		System.out.println(mapDescriptor);
+
+		//part2
+		mapDescriptor = "";
+		for (int i=1;i<MapConstants.MAP_ROW-1;i++){
+			for (int j=1; j<MapConstants.MAP_COL-1;j++){
+				if (grids[i][j].isExplored()){
+					if (grids[i][j].getGrid(i, j).isObstacle()){
+						mapDescriptor += "1";
+					}
+					else {
+						mapDescriptor += "0";
+					}
+				}
+			}
+			mapDescriptor += "\n"; 
+		}
+
+		String part2Hex = stringBinaryToHex(mapDescriptor);
+		System.out.println();
+		System.out.println("Part 2");
+		System.out.println(part2Hex);
+		System.out.println(mapDescriptor);
+
+		String[] mD = new String[2];
+		mD[0] = part1Hex;
+		mD[1] = part2Hex;
+
+		return mD;
+		
+	}
+
+	private String stringBinaryToHex(String binString){
+		String hexString = "";
+		int digitCount = 0;
+		int sum = 0;
+		String tempDigit = "";
+
+		//padding to full byte length
+		if (binString.length() % 8 != 0){
+			for (int i = 0; i < 8-binString.length();i++){
+				binString += "0";
+			}
+		}
+
+
+		for (int i = binString.length()-1; i>=0; i--){
+			if (binString.charAt(i) != '\n'){
+				digitCount++;
+				tempDigit = binString.charAt(i) + tempDigit;
+				if (binString.charAt(i) == '1'){
+					int temp = 1;
+					for (int k = 0; k < digitCount-1; k++){
+						temp *= 2;
+					}
+					sum += temp;
+				}
+
+			}
+
+			if (digitCount == 4){
+
+				if (sum < 10){
+					hexString = Integer.toString(sum) + hexString;
+				}
+				else {
+					switch (sum){
+						case 10:
+							hexString = "A" + hexString;
+							break;
+						case 11:
+							hexString = "B" + hexString;
+							break;
+						case 12:
+							hexString = "C" + hexString;
+							break;
+						case 13:
+							hexString = "D" + hexString;
+							break;
+						case 14:
+							hexString = "E" + hexString;
+							break;
+						case 15:
+							hexString = "F" + hexString;
+							break;
+					}
+				}
+				digitCount = 0;
+				sum = 0;
+				tempDigit = "";
+			}
+		}
+		return hexString;
 	}
 
 
