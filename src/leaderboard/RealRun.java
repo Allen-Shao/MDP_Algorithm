@@ -33,7 +33,7 @@ public class RealRun extends JFrame{
 
 
 		//set connection
-		// commMgr.setConnection();
+		commMgr.setConnection();
 
 
 
@@ -61,14 +61,14 @@ public class RealRun extends JFrame{
 		realMap = new Map(realRobot);
 		realMap.addBorder();
 
-		realMap.addObstacle(5,5);
-		realMap.addObstacle(5,6);
-		realMap.addObstacle(5,7);
+		// realMap.addObstacle(5,5);
+		// realMap.addObstacle(5,6);
+		// realMap.addObstacle(5,7);
 
-		realMap.printMapWithVirtualWall();
+		// realMap.printMapWithVirtualWall();
 
-		realMap.removeObstacle(5, 7);
-		realMap.printMapWithVirtualWall();
+		// realMap.removeObstacle(5, 7);
+		// realMap.printMapWithVirtualWall();
 
 		// String[] stream = realMap.generateMapStreamToAndroid();
 

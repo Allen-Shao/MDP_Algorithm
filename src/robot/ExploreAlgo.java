@@ -317,6 +317,7 @@ public class ExploreAlgo{
 			knownMap.addObstacle(x, y);
 			return true;
 		} else {
+			knownMap.removeObstacle(x, y);
 			return false;
 		}		
 	}
