@@ -96,13 +96,28 @@ public class Map extends JPanel{
 		for (int m=-1; m<2; m++){
 			for (int n=-1; n<2; n++){
 				if ((i+m)>0 && (i+m)<MapConstants.MAP_ROW && (j+n)>0 && (j+n)<MapConstants.MAP_COL){
-					if (grids[i+m][j+n].isObstacle() == false && grids[i+m][j+n].isVirtualWall() == true){
-						// System.out.printf("%d %d\n", i+m, j+n);
-						this.grids[i+m][j+n].setVirtualWall(false);
+					if (grids[i+m][j+n].isObstacle() == false){
+						if (determineVirtualWall(i+m, j+n))
+							grids[i+m][j+n].setVirtualWall(true);
+						else
+							grids[i+m][j+n].setVirtualWall(false);
 					}
 				}
 			}
 		}
+	}
+
+	private boolean determineVirtualWall(int i, int j){
+		for (int m=-1; m<2; m++){
+			for (int n=-1; n<2; n++){
+				if ((i+m)>0 && (i+m)<MapConstants.MAP_ROW && (j+n)>0 && (j+n)<MapConstants.MAP_COL){
+					if (grids[i+m][j+n].isObstacle()){
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 	public void setAllExplored(){
@@ -279,9 +294,9 @@ public class Map extends JPanel{
 
 	public String[] generateMapStreamToAndroid(){
 		String[] stream = new String[2];
-		stream[0] = "\"robotPosition\" : {["+Integer.toString(mapRobot.getPosition().getRow())+","+Integer.toString(mapRobot.getPosition().getCol())+","+Integer.toString(mapRobot.getHeading())+"]}";
-		stream[1] = "\"grid\" : \"";
-		for (int i=1;i<MapConstants.MAP_ROW-1;i++){
+		stream[0] = "{\"robotPosition\" : ["+Integer.toString(mapRobot.getPosition().getRow())+","+Integer.toString(mapRobot.getPosition().getCol())+","+Integer.toString(mapRobot.getHeading())+"]}";
+		stream[1] = "{\"grid\" : \"";
+		for (int i=MapConstants.MAP_ROW-2;i>0;i--){
 			for (int j=1; j<MapConstants.MAP_COL-1;j++){
 				if(grids[i][j].isObstacle()){
 					stream[1] += "1";
@@ -292,7 +307,7 @@ public class Map extends JPanel{
 			}
 			//System.out.println();
 		}
-		stream[1] += "\"";
+		stream[1] += "\"}";
 		return stream;
 	}
 
@@ -328,7 +343,7 @@ public class Map extends JPanel{
 		for (int i=1;i<MapConstants.MAP_ROW-1;i++){
 			for (int j=1; j<MapConstants.MAP_COL-1;j++){
 				if (grids[i][j].isExplored()){
-					if (grids[i][j].getGrid(i, j).isObstacle()){
+					if (grids[i][j].isObstacle()){
 						mapDescriptor += "1";
 					}
 					else {

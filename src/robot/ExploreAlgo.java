@@ -226,23 +226,24 @@ public class ExploreAlgo{
 				}
 
 				knownMap.printExplorationProgress();
-				knownMap.repaint();				
+				knownMap.repaint();
+
+				//send stream to android
+				String[] stream = knownMap.generateMapStreamToAndroid();
+				commMgr.sendMsg(stream[0], CommConstants.MSG_TO_ANDROID);
+				commMgr.sendMsg(stream[1], CommConstants.MSG_TO_ANDROID);
+				try{
+					TimeUnit.MILLISECONDS.sleep(1000);
+				} catch(InterruptedException e){
+					System.out.println("InterruptedException");
+				}				
 
 			}
 
-			// if (limitReached){
-			// 	//mark all the unexplored area as obstacle.
-			// 	//use shortest path to go back to the start point
-			// 	for (int i = 1; i < MapConstants.MAP_ROW-1; i++){
-			// 		for (int j = 1; j < MapConstants.MAP_COL-1; j++){
-			// 			if (!knownMap.getGrid(i, j).isExplored()){
-			// 				knownMap.addObstacle(i, j);
-			// 			}
-			// 		}
-			// 	}
+			String[] mapDescriptor = knownMap.generateMapDescriptor();
 
-			// 	ShortestPathAlgo s = new ShortestPathAlgo(knownMap, expRobot, expRobot.getPosition(), new MapGrid(MapConstants.START_X_CENTER, MapConstants.START_Y_CENTER));
-			// 	s.runShortestPath();
+			commMgr.sendMsg(mapDescriptor[0], CommConstants.MSG_TO_ANDROID);
+			commMgr.sendMsg(mapDescriptor[1], CommConstants.MSG_TO_ANDROID);
 
 		}
 	}
@@ -542,32 +543,32 @@ public class ExploreAlgo{
 
 	private boolean shouldCalibration(){
 		MapGrid curPos = expRobot.getPosition();
-		MapGrid frontGrid = null;
-		MapGrid frontRightGrid = null;
-		MapGrid frontLeftGrid = null;
+		MapGrid rightGrid = null;
+		MapGrid rightUpGrid = null;
+		MapGrid rightDownGrid = null;
 		int curRow = curPos.getRow();
 		int curCol = curPos.getCol();
 		int curHeading = expRobot.getHeading();
 		switch (curHeading){
 			case 1:
-				frontGrid = knownMap.getGrid(curRow, curCol+2);
-				frontRightGrid = knownMap.getGrid(curRow-1, curCol+2);
-				frontLeftGrid = knownMap.getGrid(curRow+1, curCol+2);
+				rightGrid = knownMap.getGrid(curRow-2, curCol);
+				rightUpGrid = knownMap.getGrid(curRow-2, curCol+1);
+				rightDownGrid = knownMap.getGrid(curRow-2, curCol-1);
 				break;
 			case 2:
-				frontGrid = knownMap.getGrid(curRow-2, curCol);
-				frontRightGrid = knownMap.getGrid(curRow-2, curCol-1);
-				frontLeftGrid = knownMap.getGrid(curRow-2, curCol+1);
+				rightGrid = knownMap.getGrid(curRow, curCol-2);
+				rightUpGrid = knownMap.getGrid(curRow-1, curCol-2);
+				rightDownGrid = knownMap.getGrid(curRow+1, curCol-2);
 				break;
 			case 3:
-				frontGrid = knownMap.getGrid(curRow, curCol-2);
-				frontRightGrid = knownMap.getGrid(curRow+1, curCol-2);
-				frontLeftGrid = knownMap.getGrid(curRow-1, curCol-2);
+				rightGrid = knownMap.getGrid(curRow+2, curCol);
+				rightUpGrid = knownMap.getGrid(curRow+2, curCol-1);
+				rightDownGrid = knownMap.getGrid(curRow+2, curCol+1);
 				break;
 			case 4:
-				frontGrid = knownMap.getGrid(curRow+2, curCol);
-				frontRightGrid = knownMap.getGrid(curRow+2, curCol+1);
-				frontLeftGrid = knownMap.getGrid(curRow+2, curCol-1);
+				rightGrid = knownMap.getGrid(curRow, curCol+2);
+				rightUpGrid = knownMap.getGrid(curRow+1, curCol+2);
+				rightDownGrid = knownMap.getGrid(curRow-1, curCol+2);
 				break;
 		}
 		// System.out.println(curPos.toString());
@@ -575,7 +576,7 @@ public class ExploreAlgo{
 		// System.out.println(frontGrid.toString());
 		// System.out.println(frontRightGrid.toString());
 		// System.out.println(frontLeftGrid.toString());
-		return frontGrid.isObstacle() && frontRightGrid.isObstacle() && frontLeftGrid.isObstacle();
+		return rightGrid.isObstacle() && rightUpGrid.isObstacle() && rightDownGrid.isObstacle();
 	}
 
 	
