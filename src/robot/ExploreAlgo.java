@@ -50,7 +50,7 @@ public class ExploreAlgo{
 		boolean limitReached = false;
 
 		int step = 0;
-		// knownMap.repaint();
+
 		while(!endFlag){
 
 
@@ -150,30 +150,41 @@ public class ExploreAlgo{
 
 	public void runRealExploration(){
 
-		System.out.println("Start real Exploration");
+		
 		
 		if (commMgr.isConnected()){
-			//ArrayList<Sensor> allSensors = expRobot.getSensors();
 
 			boolean endFlag = false;
-			//boolean limitReached = false;
 			boolean leaveStart = false;
 
-			//int step = 0;
-			// knownMap.repaint();
+			int calibrationStepCount = 0;
+			
 			knownMap.printExplorationProgress();
 			knownMap.repaint();
+
+			String startSignal = "";
+
+			while (!startSignal.equals("explore")){
+				startSignal = commMgr.recvMsg();
+			}
+
+			System.out.println("Start real Exploration.\n");
+
 			while(!endFlag){
 
 
 				markCurrentPosition();
 				updateSensorsReading();
+
+
 				//calibration
-				if (shouldCalibration()){
-					commMgr.sendMsg(CommConstants.ROBOT_CALIBRATION, CommConstants.MSG_TO_ARDUINO);
-					String ack = commMgr.recvMsg();
-					System.out.println(ack);
+				if (calibrationStepCount >= 5){
+					if (shouldCalibration()){
+						expRobot.calibrate();
+						calibrationStepCount = 0;
+					}
 				}
+				
 
 
 
@@ -190,6 +201,7 @@ public class ExploreAlgo{
 						}
 						robotMoveForward();
 						commMgr.sendMsg(CommConstants.ROBOT_MOVE_FORWARD, CommConstants.MSG_TO_ARDUINO);
+						calibrationStepCount++;
 					}
 				} else if (!hasObstacleInFront()){
 					robotMoveForward();
@@ -208,12 +220,7 @@ public class ExploreAlgo{
 					System.out.println("InterruptedException");
 				}
 
-
-				//for debugging
-				// Scanner sc = new Scanner(System.in);
-				// System.out.println("Press any key to continue...");
-				// sc.nextLine();
-
+				calibrationStepCount++;
 
 				//set for ending condition
 
@@ -239,6 +246,8 @@ public class ExploreAlgo{
 				}				
 
 			}
+
+			System.out.println("Exploration complete.\n");
 
 			String[] mapDescriptor = knownMap.generateMapDescriptor();
 

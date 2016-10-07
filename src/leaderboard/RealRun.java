@@ -32,11 +32,13 @@ public class RealRun extends JFrame{
 	public static void main(String args[]){
 
 
+
+
 		//set connection
 		commMgr.setConnection();
 
 
-
+		System.out.println("Start RealRun!\n");
 
 
 		//initialize robot
@@ -89,7 +91,7 @@ public class RealRun extends JFrame{
 
 		//Real-time GUI
 
-		System.out.println("showing gui");
+		System.out.println("Showing GUI.\n");
 
 		displayEverythings();
 

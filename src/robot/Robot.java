@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import map.MapGrid;
 
+import leaderboard.CommMgr;
+import leaderboard.CommConstants;
 
 
 public class Robot {
@@ -55,6 +57,12 @@ public class Robot {
 
 	public void removeSensor(Sensor s){
 		sensors.remove(s);
+	}
+
+
+	public void calibrate(){
+		CommMgr.getCommMgr().sendMsg(CommConstants.ROBOT_CALIBRATION, CommConstants.MSG_TO_ARDUINO);
+		String ack = CommMgr.getCommMgr().recvMsg();
 	}
 	
 	
