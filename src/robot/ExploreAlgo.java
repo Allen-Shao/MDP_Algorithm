@@ -150,7 +150,7 @@ public class ExploreAlgo{
 
 	public void runRealExploration(){
 
-		
+		long startTime = System.currentTimeMillis();
 		
 		if (commMgr.isConnected()){
 
@@ -178,15 +178,13 @@ public class ExploreAlgo{
 
 
 				//calibration
-				if (calibrationStepCount >= 5){
+				if (calibrationStepCount >= RobotConstants.CALIBRATION_STEP){
 					if (shouldCalibration()){
 						expRobot.calibrate();
-						calibrationStepCount = 0;
+						calibrationStepCount = 0; //Reset the counting
 					}
 				}
 				
-
-
 
 
 				//finite state machine (make only one step per loop)
@@ -232,6 +230,11 @@ public class ExploreAlgo{
 					leaveStart = true;
 				}
 
+				//2. time out
+
+				/*To be implemented*/
+
+
 				knownMap.printExplorationProgress();
 				knownMap.repaint();
 
@@ -243,7 +246,8 @@ public class ExploreAlgo{
 					TimeUnit.MILLISECONDS.sleep(1000);
 				} catch(InterruptedException e){
 					System.out.println("InterruptedException");
-				}				
+				}
+
 
 			}
 
@@ -263,8 +267,9 @@ public class ExploreAlgo{
 		commMgr.sendMsg(CommConstants.REQUEST_SENSOR_READING, CommConstants.MSG_TO_ARDUINO);
 
 		//get sensors reading
-		int[] sensorReading = new int[5];
-		for (int i = 0; i < 5; i++){
+		int sensorNumber = expRobot.getSensors().size();
+		int[] sensorReading = new int[sensorNumber];
+		for (int i = 0; i < sensorNumber; i++){
 			sensorReading[i] = Integer.parseInt(commMgr.recvMsg())+1;
 		}
 		ArrayList<Sensor> sensors = expRobot.getSensors();
