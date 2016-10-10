@@ -182,13 +182,6 @@ public class ShortestPathAlgo{
 
 				path = generatePath(goal);
 
-				System.out.println("Waiting for Android to give command...\n");
-
-				String startSignal = "";
-
-				while (!startSignal.equals("shortest")){
-					startSignal = commMgr.recvMsg();
-				}
 
 				moveRealRobot();
 
@@ -232,14 +225,7 @@ public class ShortestPathAlgo{
 							
 				path = generatePath(goal);
 				//printPath(path);
-				System.out.println("Waiting for Android to give command...\n");
 
-				String startSignal = "";
-
-				while (!startSignal.equals("shortest")){
-					startSignal = commMgr.recvMsg();
-				}
-				
 				moveRealRobot();
 
 				//return generatePath(goal);  //get the path towards goal
@@ -555,6 +541,16 @@ public class ShortestPathAlgo{
 	}
 
 	private void moveRealRobot(){
+
+
+		//Wait for android signal
+		System.out.println("Waiting for Android to give command...\n");
+		String startSignal = "";
+		while (!startSignal.equals("shortest")){
+			startSignal = commMgr.recvMsg();
+		}
+
+
 		Stack<MapGrid> movePath = path;
 		stpRobot.setPosition(start);
 		while (!movePath.isEmpty()){
