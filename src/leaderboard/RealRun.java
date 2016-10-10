@@ -40,9 +40,26 @@ public class RealRun extends JFrame{
 
 		System.out.println("Start RealRun!\n");
 
+		System.out.println("Waiting Android to send Robot Location...\n");
+
+		String robotLocation = commMgr.recvMsg();
+
+		//String robotLocation = "{\"robotPosition\" : [10,11,1]}";
+
+		//Decode the position
+		String[] parts = robotLocation.split(":");
+		String[] loc = parts[1].substring(2, parts[1].length()-2).split(",");
+
+		//System.out.println(parts[1].substring(2, parts[1].length()-2));
+
+		// System.out.println(loc[0]);
+		// System.out.println(loc[1]);
+		// System.out.println(loc[2]);
+
+
 
 		//initialize robot
-		realRobot = new Robot(new MapGrid(2, 2), 1);
+		realRobot = new Robot(new MapGrid(Integer.parseInt(loc[0]), Integer.parseInt(loc[1])), Integer.parseInt(loc[2]));
 
 		//front sensor
 		Sensor s1 = new Sensor(3, 1, 0, 1);

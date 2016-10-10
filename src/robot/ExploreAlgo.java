@@ -162,6 +162,8 @@ public class ExploreAlgo{
 			knownMap.printExplorationProgress();
 			knownMap.repaint();
 
+			System.out.println("Waiting for Android to give command...\n");
+
 			String startSignal = "";
 
 			while (!startSignal.equals("explore")){
