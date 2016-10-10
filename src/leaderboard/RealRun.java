@@ -56,10 +56,6 @@ public class RealRun extends JFrame{
 
 		//System.out.println(parts[1].substring(2, parts[1].length()-2));
 
-		// System.out.println(loc[0]);
-		// System.out.println(loc[1]);
-		// System.out.println(loc[2]);
-
 		//System Log
 		System.out.printf("Setting Robot Location: (%d, %d)\n", r, c);
 		String dir = "";
