@@ -542,7 +542,6 @@ public class ShortestPathAlgo{
 
 	private void moveRealRobot(){
 
-
 		//Wait for android signal
 		System.out.println("Waiting for Android to give command...\n");
 		String startSignal = "";
@@ -702,6 +701,13 @@ public class ShortestPathAlgo{
 
 		}
 	}
+
+	private void sendMovingCommand(String msg, int step){
+		
+		commMgr.sendMsg(msg+Ingeter.toString(step), CommConstants.MSG_TO_ARDUINO);
+		
+	}
+
 
 	private void robotMoveForward(){
 		MapGrid curPos = stpRobot.getPosition();
