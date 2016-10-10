@@ -50,16 +50,30 @@ public class RealRun extends JFrame{
 		String[] parts = robotLocation.split(":");
 		String[] loc = parts[1].substring(2, parts[1].length()-2).split(",");
 
+		int r = Integer.parseInt(loc[0]);
+		int c = Integer.parseInt(loc[1]);
+		int h = Integer.parseInt(loc[2]);
+
 		//System.out.println(parts[1].substring(2, parts[1].length()-2));
 
 		// System.out.println(loc[0]);
 		// System.out.println(loc[1]);
 		// System.out.println(loc[2]);
 
-
+		//System Log
+		System.out.printf("Setting Robot Location: (%d, %d)\n", r, c);
+		String dir = "";
+		switch (h){
+			case 1: dir = "Right"; break;
+			case 2: dir = "Down"; break;
+			case 3: dir = "Left"; break;
+			case 4: dir = "Up"; break;
+			default: dir = "error direction"; break;
+		}
+		System.out.println("Robot Heading " + dir);
 
 		//initialize robot
-		realRobot = new Robot(new MapGrid(Integer.parseInt(loc[0]), Integer.parseInt(loc[1])), Integer.parseInt(loc[2]));
+		realRobot = new Robot(new MapGrid(r, c), h);
 
 		//front sensor
 		Sensor s1 = new Sensor(3, 1, 0, 1);
