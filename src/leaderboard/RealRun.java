@@ -122,7 +122,7 @@ public class RealRun extends JFrame{
 
 		displayEverythings();
 
-		class Exploration extends SwingWorker<Integer, String>{
+		class LeaderboardRun extends SwingWorker<Integer, String>{
 			protected Integer doInBackground() throws Exception{
 
 				CardLayout cl = ((CardLayout) mainCards.getLayout());
@@ -132,15 +132,14 @@ public class RealRun extends JFrame{
 				ExploreAlgo e = new ExploreAlgo(null, realMap, realRobot); 
 				e.runRealExploration();
 
-				//String mapDescriptor = generateMapDescriptor();
-
-				//System.out.println(mapDescriptor);
+				ShortestPathAlgo s = new ShortestPathAlgo(realMap, realRobot);
+				s.runRealShortestPath();
 
 				return 1;
 			}
 		}
 
-		new Exploration().execute();
+		new LeaderboardRun().execute();
 
 
 	}

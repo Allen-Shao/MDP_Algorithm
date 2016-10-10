@@ -232,6 +232,14 @@ public class ShortestPathAlgo{
 							
 				path = generatePath(goal);
 				//printPath(path);
+				System.out.println("Waiting for Android to give command...\n");
+
+				String startSignal = "";
+
+				while (!startSignal.equals("shortest")){
+					startSignal = commMgr.recvMsg();
+				}
+				
 				moveRealRobot();
 
 				//return generatePath(goal);  //get the path towards goal
