@@ -162,11 +162,12 @@ public class ExploreAlgo{
 			knownMap.printExplorationProgress();
 			knownMap.repaint();
 
-			System.out.println("Waiting for Android to give command...\n");
+			
 
 			String startSignal = "";
 
-			while (!startSignal.equals("explore")){
+			while (!startSignal.equals(" explore")){
+				System.out.println("Waiting for Android to give command...\n");
 				startSignal = commMgr.recvMsg();
 			}
 
@@ -178,13 +179,20 @@ public class ExploreAlgo{
 				markCurrentPosition();
 				updateSensorsReading();
 
+				knownMap.printExplorationProgress();
+				knownMap.repaint();
+
 
 				//calibration
 				if (calibrationStepCount >= RobotConstants.CALIBRATION_STEP){
-					if (shouldCalibration()){
-						expRobot.calibrate();
+					if (rightCalibration()){
+						expRobot.calibrate(CommConstants.ROBOT_RIGHT_CALIBRATION);
 						calibrationStepCount = 0; //Reset the counting
 					}
+				}
+
+				if (frontCalibration()){
+					expRobot.calibrate(CommConstants.ROBOT_FRONT_CALIBRATION);
 				}
 				
 
@@ -193,9 +201,11 @@ public class ExploreAlgo{
 				if (!hasObstacleOnRight()){
 					robotTurnRight();
 					commMgr.sendMsg(CommConstants.ROBOT_TURN_RIGHT, CommConstants.MSG_TO_ARDUINO);
+					knownMap.printExplorationProgress();
+					knownMap.repaint();
 					if (!hasObstacleInFront()){ //forward checking
 						try{
-							TimeUnit.MILLISECONDS.sleep(1000);
+							TimeUnit.MILLISECONDS.sleep(100);
 						} catch(InterruptedException e){
 							System.out.println("InterruptedException");
 						}
@@ -205,6 +215,7 @@ public class ExploreAlgo{
 					}
 				} else if (!hasObstacleInFront()){
 					robotMoveForward();
+					calibrationStepCount++;
 					commMgr.sendMsg(CommConstants.ROBOT_MOVE_FORWARD, CommConstants.MSG_TO_ARDUINO);
 				} else if (!hasObstacleOnLeft()){
 					robotTurnLeft();
@@ -215,12 +226,12 @@ public class ExploreAlgo{
 				}
 
 				try{
-					TimeUnit.MILLISECONDS.sleep(1000);
+					TimeUnit.MILLISECONDS.sleep(100);
 				} catch(InterruptedException e){
 					System.out.println("InterruptedException");
 				}
 
-				calibrationStepCount++;
+				//calibrationStepCount++;
 
 				//set for ending condition
 
@@ -237,15 +248,14 @@ public class ExploreAlgo{
 				/*To be implemented*/
 
 
-				knownMap.printExplorationProgress();
-				knownMap.repaint();
+				
 
 				//send stream to android
 				String[] stream = knownMap.generateMapStreamToAndroid();
 				commMgr.sendMsg(stream[0], CommConstants.MSG_TO_ANDROID);
 				commMgr.sendMsg(stream[1], CommConstants.MSG_TO_ANDROID);
 				try{
-					TimeUnit.MILLISECONDS.sleep(1000);
+					TimeUnit.MILLISECONDS.sleep(100);
 				} catch(InterruptedException e){
 					System.out.println("InterruptedException");
 				}
@@ -333,7 +343,8 @@ public class ExploreAlgo{
 			knownMap.addObstacle(x, y);
 			return true;
 		} else {
-			knownMap.removeObstacle(x, y);
+			if (knownMap.getGrid(x,y).isObstacle())
+				knownMap.removeObstacle(x, y);
 			return false;
 		}		
 	}
@@ -558,7 +569,7 @@ public class ExploreAlgo{
 		return true;
 	}
 
-	private boolean shouldCalibration(){
+	private boolean rightCalibration(){
 		MapGrid curPos = expRobot.getPosition();
 		MapGrid rightGrid = null;
 		MapGrid rightUpGrid = null;
@@ -594,6 +605,44 @@ public class ExploreAlgo{
 		// System.out.println(frontRightGrid.toString());
 		// System.out.println(frontLeftGrid.toString());
 		return rightGrid.isObstacle() && rightUpGrid.isObstacle() && rightDownGrid.isObstacle();
+	}
+
+	private boolean frontCalibration(){
+		MapGrid curPos = expRobot.getPosition();
+		MapGrid frontGrid = null;
+		MapGrid frontLeftGrid = null;
+		MapGrid frontRightGrid = null;
+		int curRow = curPos.getRow();
+		int curCol = curPos.getCol();
+		int curHeading = expRobot.getHeading();
+		switch (curHeading){
+			case 1:
+				frontGrid = knownMap.getGrid(curRow, curCol+2);
+				frontLeftGrid = knownMap.getGrid(curRow+1, curCol+2);
+				frontRightGrid = knownMap.getGrid(curRow-1, curCol+2);
+				break;
+			case 2:
+				frontGrid = knownMap.getGrid(curRow-2, curCol);
+				frontLeftGrid = knownMap.getGrid(curRow-2, curCol+1);
+				frontRightGrid = knownMap.getGrid(curRow-2, curCol-1);
+				break;
+			case 3:
+				frontGrid = knownMap.getGrid(curRow, curCol-2);
+				frontLeftGrid = knownMap.getGrid(curRow-1, curCol-2);
+				frontRightGrid = knownMap.getGrid(curRow+1, curCol-2);
+				break;
+			case 4:
+				frontGrid = knownMap.getGrid(curRow+2, curCol);
+				frontLeftGrid = knownMap.getGrid(curRow+2, curCol-1);
+				frontRightGrid = knownMap.getGrid(curRow+2, curCol+1);
+				break;
+		}
+		// System.out.println(curPos.toString());
+		// System.out.println(curHeading);
+		// System.out.println(frontGrid.toString());
+		// System.out.println(frontRightGrid.toString());
+		// System.out.println(frontLeftGrid.toString());
+		return frontGrid.isObstacle() && frontLeftGrid.isObstacle() && frontRightGrid.isObstacle();
 	}
 
 	

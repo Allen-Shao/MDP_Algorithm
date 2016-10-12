@@ -60,9 +60,12 @@ public class Robot {
 	}
 
 
-	public void calibrate(){
-		CommMgr.getCommMgr().sendMsg(CommConstants.ROBOT_CALIBRATION, CommConstants.MSG_TO_ARDUINO);
+	public void calibrate(String msg){
+		CommMgr.getCommMgr().sendMsg(msg, CommConstants.MSG_TO_ARDUINO);
 		String ack = CommMgr.getCommMgr().recvMsg();
+		if (ack.equals("Done")){
+			System.out.println("Calibration completed!");
+		}
 	}
 	
 	

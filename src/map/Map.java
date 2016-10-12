@@ -90,7 +90,7 @@ public class Map extends JPanel{
 
 	public void removeObstacle(int i, int j){
 		this.grids[i][j].setObstacle(false);
-		this.grids[i][j].setVirtualWall(false); //if it is set to obstacle, it is not a virtual wall
+		//this.grids[i][j].setVirtualWall(false); //if it is set to obstacle, it is not a virtual wall
 
 		//set virtual wall
 		for (int m=-1; m<2; m++){
@@ -110,7 +110,7 @@ public class Map extends JPanel{
 	private boolean determineVirtualWall(int i, int j){
 		for (int m=-1; m<2; m++){
 			for (int n=-1; n<2; n++){
-				if ((i+m)>0 && (i+m)<MapConstants.MAP_ROW && (j+n)>0 && (j+n)<MapConstants.MAP_COL){
+				if ((i+m)>=0 && (i+m)<=MapConstants.MAP_ROW && (j+n)>=0 && (j+n)<=MapConstants.MAP_COL){
 					if (grids[i+m][j+n].isObstacle()){
 						return true;
 					}

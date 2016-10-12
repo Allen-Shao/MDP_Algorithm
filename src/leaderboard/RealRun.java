@@ -71,6 +71,8 @@ public class RealRun extends JFrame{
 		//initialize robot
 		realRobot = new Robot(new MapGrid(r, c), h);
 
+		// realRobot = new Robot (new MapGrid(2, 2), 1);
+
 		//front sensor
 		Sensor s1 = new Sensor(3, 1, 0, 1);
 		Sensor s4 = new Sensor(3, 1, -1, 1);
