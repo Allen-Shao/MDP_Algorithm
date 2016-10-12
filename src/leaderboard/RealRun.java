@@ -74,13 +74,13 @@ public class RealRun extends JFrame{
 		// realRobot = new Robot (new MapGrid(2, 2), 1);
 
 		//front sensor
-		Sensor s1 = new Sensor(3, 1, 0, 1);
-		Sensor s4 = new Sensor(3, 1, -1, 1);
-		Sensor s5 = new Sensor(3, 1, 1, 1);
+		Sensor s1 = new Sensor(RobotConstants.SENSOR_SHORT_RANGE, 1, 0, 1);
+		Sensor s4 = new Sensor(RobotConstants.SENSOR_SHORT_RANGE, 1, -1, 1);
+		Sensor s5 = new Sensor(RobotConstants.SENSOR_SHORT_RANGE, 1, 1, 1);
 		//right sensor
-		Sensor s2 = new Sensor(3, 2, -1, 1);
+		Sensor s2 = new Sensor(RobotConstants.SENSOR_SHORT_RANGE, 2, -1, 1);
 		//left sensor
-		Sensor s3 = new Sensor(3, 4, 1, 1);
+		Sensor s3 = new Sensor(RobotConstants.SENSOR_SHORT_RANGE, 4, 1, 1);
 
 		realRobot.addSensor(s5);
 		realRobot.addSensor(s1);

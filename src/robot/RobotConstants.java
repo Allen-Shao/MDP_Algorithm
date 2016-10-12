@@ -10,4 +10,7 @@ public final class RobotConstants {
 
 	public static final int CALIBRATION_STEP = 5;
 
+	public static final int SENSOR_LONG_RANGE = 5;
+	public static final int SENSOR_SHORT_RANGE = 3;
+
 }
