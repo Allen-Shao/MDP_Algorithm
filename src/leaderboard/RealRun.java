@@ -42,9 +42,9 @@ public class RealRun extends JFrame{
 
 		System.out.println("Waiting Android to send Robot Location...\n");
 
-		String robotLocation = commMgr.recvMsg();
+		//String robotLocation = commMgr.recvMsg();
 
-		//String robotLocation = "{\"robotPosition\" : [10,11,1]}";
+		String robotLocation = "{\"robotPosition\" : [2,2,1]}";
 
 		//Decode the position
 		String[] parts = robotLocation.split(":");
@@ -53,8 +53,6 @@ public class RealRun extends JFrame{
 		int r = Integer.parseInt(loc[0]);
 		int c = Integer.parseInt(loc[1]);
 		int h = Integer.parseInt(loc[2]);
-
-		//System.out.println(parts[1].substring(2, parts[1].length()-2));
 
 		//System Log
 		System.out.printf("Setting Robot Location: (%d, %d)\n", r, c);

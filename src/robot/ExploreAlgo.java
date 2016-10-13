@@ -164,7 +164,7 @@ public class ExploreAlgo{
 
 			
 
-			String startSignal = "";
+			String startSignal = " explore";
 
 			while (!startSignal.equals(" explore")){
 				System.out.println("Waiting for Android to give command...\n");
@@ -184,6 +184,11 @@ public class ExploreAlgo{
 
 
 				//calibration
+				if (frontCalibration()){
+					expRobot.calibrate(CommConstants.ROBOT_FRONT_CALIBRATION);
+					//calibrationStepCount = 0;
+				}
+
 				if (calibrationStepCount >= RobotConstants.CALIBRATION_STEP){
 					if (rightCalibration()){
 						expRobot.calibrate(CommConstants.ROBOT_RIGHT_CALIBRATION);
@@ -191,9 +196,7 @@ public class ExploreAlgo{
 					}
 				}
 
-				if (frontCalibration()){
-					expRobot.calibrate(CommConstants.ROBOT_FRONT_CALIBRATION);
-				}
+
 				
 
 
@@ -252,8 +255,8 @@ public class ExploreAlgo{
 
 				//send stream to android
 				String[] stream = knownMap.generateMapStreamToAndroid();
-				commMgr.sendMsg(stream[0], CommConstants.MSG_TO_ANDROID);
-				commMgr.sendMsg(stream[1], CommConstants.MSG_TO_ANDROID);
+				//commMgr.sendMsg(stream[0], CommConstants.MSG_TO_ANDROID);
+				//commMgr.sendMsg(stream[1], CommConstants.MSG_TO_ANDROID);
 				try{
 					TimeUnit.MILLISECONDS.sleep(100);
 				} catch(InterruptedException e){
