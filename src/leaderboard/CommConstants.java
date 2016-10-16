@@ -15,6 +15,8 @@ public class CommConstants{
 	public static final String ROBOT_RIGHT_CALIBRATION = "x";
 
 	public static final String ROBOT_FASTESTPATH = "f";
+
+	public static final int COMM_DELAY_TIME = 100;
 	//sensor order
 	//1.front(left)
 	//2.front(middle)
