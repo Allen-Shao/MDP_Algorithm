@@ -201,7 +201,10 @@ public class ExploreAlgo{
 
 
 				//finite state machine (make only one step per loop)
-				if (!hasObstacleOnRight()){
+				if (!hasObstacleOnRight() && !hasObstacleInFront() && !hasObstacleOnLeft()){
+					robotMoveForward();
+					commMgr.sendMsg(CommConstants.ROBOT_MOVE_FORWARD, CommConstants.MSG_TO_ARDUINO);
+				} else if (!hasObstacleOnRight()){
 					robotTurnRight();
 					commMgr.sendMsg(CommConstants.ROBOT_TURN_RIGHT, CommConstants.MSG_TO_ARDUINO);
 					knownMap.printExplorationProgress();
