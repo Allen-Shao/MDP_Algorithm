@@ -30,6 +30,8 @@ public class ShortestPathAlgo{
 
 	private CommMgr commMgr = CommMgr.getCommMgr();
 
+	private String movingCommand = "";
+
 	public ShortestPathAlgo(Map m, Robot r){
 		this.stpMap = m;
 		this.stpRobot = r;
@@ -56,7 +58,7 @@ public class ShortestPathAlgo{
 		}
 
 		stpMap.printMapWithVirtualWall();
-		System.out.printf("%d %d", goal.getRow(), goal.getCol());
+		//System.out.printf("%d %d", goal.getRow(), goal.getCol());
 		//initialize gscore
 		for (int i = 0; i < MapConstants.MAP_ROW;i++){
 			for (int j = 0; j < MapConstants.MAP_COL;j++){
@@ -150,12 +152,12 @@ public class ShortestPathAlgo{
 		}
 
 		stpMap.printMapWithVirtualWall();
-		System.out.printf("%d %d", goal.getRow(), goal.getCol());
+		//System.out.printf("%d %d", goal.getRow(), goal.getCol());
 		//initialize gscore
 		for (int i = 0; i < MapConstants.MAP_ROW;i++){
 			for (int j = 0; j < MapConstants.MAP_COL;j++){
 				if (stpMap.getGrid(i, j).isObstacle() || stpMap.getGrid(i, j).isVirtualWall() 
-					|| stpMap.isBorder(i, j)){
+					|| stpMap.isBorder(i, j) || !stpMap.getGrid(i, j).isExplored()){
 					gscore[i][j] = RobotConstants.INFINITY;
 				}
 				else {
@@ -184,6 +186,7 @@ public class ShortestPathAlgo{
 
 
 				moveRealRobot();
+				return;
 
 				//return generatePath(goal);  //get the path towards goal
 			}
@@ -227,6 +230,7 @@ public class ShortestPathAlgo{
 				//printPath(path);
 
 				moveRealRobot();
+				return;
 
 				//return generatePath(goal);  //get the path towards goal
 		}
@@ -551,19 +555,21 @@ public class ShortestPathAlgo{
 
 		System.out.println("Sending command to switch to fastest path mode!!!");
 
-		commMgr.sendMsg(CommConstants.ROBOT_FASTESTPATH, CommConstants.MSG_TO_ARDUINO);
+		movingCommand += "f";
 
 
 		Stack<MapGrid> movePath = path;
 		stpRobot.setPosition(start);
+
+		String currentMove = CommConstants.ROBOT_MOVE_FORWARD;
+		int currentStep = 0;
+
 		while (!movePath.isEmpty()){
 			MapGrid nextMove = movePath.pop();
 			System.out.printf("Moving from %s --> %s \n", stpRobot.getPosition().toString(), nextMove.toString());
 			stpMap.repaint();
 
-			String currentMove = CommConstants.ROBOT_MOVE_FORWARD;
-			int currentStep = 0;
-
+			
 			switch(stpRobot.getHeading()){
 				case 1:
 					if (nextMove.getRow() == stpRobot.getPosition().getRow() && nextMove.getCol() == stpRobot.getPosition().getCol()+1){
@@ -573,10 +579,10 @@ public class ShortestPathAlgo{
 
 					}
 					if (nextMove.getCol() == stpRobot.getPosition().getCol() && nextMove.getRow() == stpRobot.getPosition().getRow()+1){
-						sendMovingCommand(CommConstants.ROBOT_MOVE_FORWARD, currentStep);
-
+						addForwardCommand(currentStep);
+				
 						robotTurnLeft();
-						commMgr.sendMsg(CommConstants.ROBOT_TURN_LEFT, CommConstants.MSG_TO_ARDUINO);
+						movingCommand += CommConstants.ROBOT_TURN_LEFT;
 						
 						
 						robotMoveForward();
@@ -584,10 +590,12 @@ public class ShortestPathAlgo{
 						currentStep = 1;
 					} 
 					if (nextMove.getCol() == stpRobot.getPosition().getCol() && nextMove.getRow() == stpRobot.getPosition().getRow()-1){
-						sendMovingCommand(CommConstants.ROBOT_MOVE_FORWARD, currentStep);
+						addForwardCommand(currentStep);
+						
 
 						robotTurnRight();
-						commMgr.sendMsg(CommConstants.ROBOT_TURN_RIGHT, CommConstants.MSG_TO_ARDUINO);
+						movingCommand += CommConstants.ROBOT_TURN_RIGHT;
+				
 						
 						stpMap.repaint();
 						robotMoveForward();
@@ -595,14 +603,16 @@ public class ShortestPathAlgo{
 						//commMgr.sendMsg(CommConstants.ROBOT_MOVE_FORWARD, CommConstants.MSG_TO_ARDUINO);
 					}
 					if (nextMove.getRow() == stpRobot.getPosition().getRow() && nextMove.getCol() == stpRobot.getPosition().getCol()-1){
-						sendMovingCommand(CommConstants.ROBOT_MOVE_FORWARD, currentStep);
+						addForwardCommand(currentStep);
+						
 
 						robotTurnLeft();
-						commMgr.sendMsg(CommConstants.ROBOT_TURN_LEFT, CommConstants.MSG_TO_ARDUINO);
+						movingCommand += CommConstants.ROBOT_TURN_LEFT;
+						
 						
 						stpMap.repaint();
 						robotTurnLeft();
-						commMgr.sendMsg(CommConstants.ROBOT_TURN_LEFT, CommConstants.MSG_TO_ARDUINO);
+						movingCommand += CommConstants.ROBOT_TURN_LEFT;
 						
 						stpMap.repaint();
 						robotMoveForward();
@@ -617,9 +627,9 @@ public class ShortestPathAlgo{
 						currentStep++;
 					}
 					if (nextMove.getRow() == stpRobot.getPosition().getRow() && nextMove.getCol() == stpRobot.getPosition().getCol()+1){
-						sendMovingCommand(CommConstants.ROBOT_MOVE_FORWARD, currentStep);
+						addForwardCommand(currentStep);
 						robotTurnLeft();
-						commMgr.sendMsg(CommConstants.ROBOT_TURN_LEFT, CommConstants.MSG_TO_ARDUINO);
+						movingCommand += CommConstants.ROBOT_TURN_LEFT;
 						
 						stpMap.repaint();
 						robotMoveForward();
@@ -627,9 +637,10 @@ public class ShortestPathAlgo{
 						currentStep = 1;
 					}
 					if (nextMove.getRow() == stpRobot.getPosition().getRow() && nextMove.getCol() == stpRobot.getPosition().getCol()-1){
-						sendMovingCommand(CommConstants.ROBOT_MOVE_FORWARD, currentStep);
+						addForwardCommand(currentStep);
 						robotTurnRight();
-						commMgr.sendMsg(CommConstants.ROBOT_TURN_RIGHT, CommConstants.MSG_TO_ARDUINO);
+						movingCommand += CommConstants.ROBOT_TURN_RIGHT;
+						
 						
 						stpMap.repaint();
 						robotMoveForward();
@@ -637,13 +648,16 @@ public class ShortestPathAlgo{
 						currentStep = 1;
 					}
 					if (nextMove.getCol() == stpRobot.getPosition().getCol() && nextMove.getRow() == stpRobot.getPosition().getRow()+1){
-						sendMovingCommand(CommConstants.ROBOT_MOVE_FORWARD, currentStep);
+						addForwardCommand(currentStep);
+						
 						robotTurnRight();
-						commMgr.sendMsg(CommConstants.ROBOT_TURN_RIGHT, CommConstants.MSG_TO_ARDUINO);
+						movingCommand += CommConstants.ROBOT_TURN_RIGHT;
+						
 						
 						stpMap.repaint();
 						robotTurnRight();
-						commMgr.sendMsg(CommConstants.ROBOT_TURN_RIGHT, CommConstants.MSG_TO_ARDUINO);
+						movingCommand += CommConstants.ROBOT_TURN_RIGHT;
+						
 					
 						stpMap.repaint();
 						robotMoveForward();
@@ -658,9 +672,11 @@ public class ShortestPathAlgo{
 						currentStep++;
 					}
 					if (nextMove.getCol() == stpRobot.getPosition().getCol() && nextMove.getRow() == stpRobot.getPosition().getRow()-1){
-						sendMovingCommand(CommConstants.ROBOT_MOVE_FORWARD, currentStep);
+						addForwardCommand(currentStep);
+						
 						robotTurnLeft();
-						commMgr.sendMsg(CommConstants.ROBOT_TURN_LEFT, CommConstants.MSG_TO_ARDUINO);
+						movingCommand += CommConstants.ROBOT_TURN_LEFT;
+						
 						
 						stpMap.repaint();
 						robotMoveForward();
@@ -668,9 +684,10 @@ public class ShortestPathAlgo{
 						currentStep = 1;
 					}
 					if (nextMove.getCol() == stpRobot.getPosition().getCol() && nextMove.getRow() == stpRobot.getPosition().getRow()+1){
-						sendMovingCommand(CommConstants.ROBOT_MOVE_FORWARD, currentStep);
+						addForwardCommand(currentStep);
+
 						robotTurnRight();
-						commMgr.sendMsg(CommConstants.ROBOT_TURN_RIGHT, CommConstants.MSG_TO_ARDUINO);
+						movingCommand += CommConstants.ROBOT_TURN_RIGHT;
 						
 						stpMap.repaint();
 						robotMoveForward();
@@ -678,13 +695,13 @@ public class ShortestPathAlgo{
 						currentStep = 1;
 					}
 					if (nextMove.getRow() == stpRobot.getPosition().getRow() && nextMove.getCol() == stpRobot.getPosition().getCol()+1){
-						sendMovingCommand(CommConstants.ROBOT_MOVE_FORWARD, currentStep);
+						addForwardCommand(currentStep);
 						robotTurnRight();
-						commMgr.sendMsg(CommConstants.ROBOT_TURN_RIGHT, CommConstants.MSG_TO_ARDUINO);
+						movingCommand += CommConstants.ROBOT_TURN_RIGHT;
 						
 						stpMap.repaint();
 						robotTurnRight();
-						commMgr.sendMsg(CommConstants.ROBOT_TURN_RIGHT, CommConstants.MSG_TO_ARDUINO);
+						movingCommand += CommConstants.ROBOT_TURN_RIGHT;
 						
 						stpMap.repaint();
 						robotMoveForward();
@@ -699,9 +716,11 @@ public class ShortestPathAlgo{
 						currentStep++;
 					}
 					if (nextMove.getRow() == stpRobot.getPosition().getRow() && nextMove.getCol() == stpRobot.getPosition().getCol()-1){
-						sendMovingCommand(CommConstants.ROBOT_MOVE_FORWARD, currentStep);
+						addForwardCommand(currentStep);
+						
 						robotTurnLeft();
-						commMgr.sendMsg(CommConstants.ROBOT_TURN_LEFT, CommConstants.MSG_TO_ARDUINO);
+						movingCommand += CommConstants.ROBOT_TURN_LEFT;
+						
 						
 						stpMap.repaint();
 						robotMoveForward();
@@ -709,9 +728,11 @@ public class ShortestPathAlgo{
 						currentStep = 1;
 					}
 					if (nextMove.getRow() == stpRobot.getPosition().getRow() && nextMove.getCol() == stpRobot.getPosition().getCol()+1){
-						sendMovingCommand(CommConstants.ROBOT_MOVE_FORWARD, currentStep);
+						addForwardCommand(currentStep);
+						
 						robotTurnRight();
-						commMgr.sendMsg(CommConstants.ROBOT_TURN_RIGHT, CommConstants.MSG_TO_ARDUINO);
+						movingCommand += CommConstants.ROBOT_TURN_RIGHT;
+						
 						
 						stpMap.repaint();
 						robotMoveForward();
@@ -719,13 +740,14 @@ public class ShortestPathAlgo{
 						currentStep = 1; 
 					}
 					if (nextMove.getCol() == stpRobot.getPosition().getCol() && nextMove.getRow() == stpRobot.getPosition().getRow()-1){
-						sendMovingCommand(CommConstants.ROBOT_MOVE_FORWARD, currentStep);
-						robotTurnLeft();
-						commMgr.sendMsg(CommConstants.ROBOT_TURN_LEFT, CommConstants.MSG_TO_ARDUINO);
+						addForwardCommand(currentStep);
 						
+						robotTurnLeft();
+						movingCommand += CommConstants.ROBOT_TURN_LEFT;
+
 						stpMap.repaint();
 						robotTurnLeft();
-						commMgr.sendMsg(CommConstants.ROBOT_TURN_LEFT, CommConstants.MSG_TO_ARDUINO);
+						movingCommand += CommConstants.ROBOT_TURN_LEFT;
 						
 						stpMap.repaint();
 						robotMoveForward();
@@ -737,17 +759,21 @@ public class ShortestPathAlgo{
 			}
 
 		}
+
+		addForwardCommand(currentStep);
+		movingCommand += "q";
+
+		commMgr.sendMsg(movingCommand, CommConstants.MSG_TO_ARDUINO);
+
 	}
 
-	private void sendMovingCommand(String msg, int step){
+	private void addForwardCommand(int step){
+		while (step >= 10){
+			movingCommand += CommConstants.ROBOT_MOVE_FORWARD+Integer.toString(9);
+			step -= 9;
+		}
 
-		commMgr.sendMsg(msg+Integer.toString(step), CommConstants.MSG_TO_ARDUINO);
-
-	}
-
-	private void sendMovingCommand(String msg){
-
-		commMgr.sendMsg(msg, CommConstants.MSG_TO_ARDUINO);
+		movingCommand += CommConstants.ROBOT_MOVE_FORWARD+Integer.toString(step);
 
 	}
 
@@ -803,7 +829,7 @@ public class ShortestPathAlgo{
 
 		for (int i=0; i<tempList.size(); i++){
 			MapGrid temp = tempList.get(i);
-			if (!temp.isObstacle() && !temp.isVirtualWall()){
+			if (!temp.isObstacle() && !temp.isVirtualWall() && temp.isExplored()){
 				neighbours.add(temp);
 			}
 		}

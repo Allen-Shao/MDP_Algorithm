@@ -162,6 +162,17 @@ public class Map extends JPanel{
 		}
 	}
 
+	public void setUnexploredObstacle(){
+		for (int i=1;i<MapConstants.MAP_ROW-1;i++){
+			for (int j=1; j<MapConstants.MAP_COL-1;j++){
+				if (!grids[i][j].isExplored()){
+					//grids[i][j].setExplored(true);
+					addObstacle(i, j);
+				}
+			}
+		}
+	}
+
 
 	public void loadMap(String filename){
 
@@ -173,8 +184,8 @@ public class Map extends JPanel{
 			brStream = new BufferedReader(frStream);
 
 			int input;
-			int i = MapConstants.MAP_ROW-2, j = 1;
-			while (i >= 1){
+			int i = 1, j = 1;
+			while (i <= MapConstants.MAP_ROW-2){
 				while ((input = brStream.read()) != 10 && (input != -1)){
 					if (input == 49){
 						addObstacle(i, j);
@@ -183,7 +194,7 @@ public class Map extends JPanel{
 					//System.out.println(input);
 					j++;
 				}
-				i--; j=1;
+				i++; j=1;
 			}
 		} catch (IOException e){
 			System.out.println(e);

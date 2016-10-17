@@ -164,7 +164,7 @@ public class ExploreAlgo{
 
 			
 
-			String startSignal = " explore";
+			String startSignal = "";
 
 			while (!startSignal.equals(" explore")){
 				System.out.println("Waiting for Android to give command...\n");
@@ -255,8 +255,8 @@ public class ExploreAlgo{
 
 				//send stream to android
 				String[] stream = knownMap.generateMapStreamToAndroid();
-				//commMgr.sendMsg(stream[0], CommConstants.MSG_TO_ANDROID);
-				//commMgr.sendMsg(stream[1], CommConstants.MSG_TO_ANDROID);
+				commMgr.sendMsg(stream[0], CommConstants.MSG_TO_ANDROID);
+				commMgr.sendMsg(stream[1], CommConstants.MSG_TO_ANDROID);
 				try{
 					TimeUnit.MILLISECONDS.sleep(100);
 				} catch(InterruptedException e){
@@ -267,11 +267,16 @@ public class ExploreAlgo{
 			}
 
 			System.out.println("Exploration complete.\n");
+		
 
 			String[] mapDescriptor = knownMap.generateMapDescriptor();
 
 			commMgr.sendMsg(mapDescriptor[0], CommConstants.MSG_TO_ANDROID);
 			commMgr.sendMsg(mapDescriptor[1], CommConstants.MSG_TO_ANDROID);
+
+			//knownMap.setUnexploredObstacle();
+
+
 
 		}
 	}

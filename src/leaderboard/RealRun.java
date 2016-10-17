@@ -42,9 +42,9 @@ public class RealRun extends JFrame{
 
 		System.out.println("Waiting Android to send Robot Location...\n");
 
-		//String robotLocation = commMgr.recvMsg();
+		String robotLocation = commMgr.recvMsg();
 
-		String robotLocation = "{\"robotPosition\" : [2,2,1]}";
+		// String robotLocation = "{\"robotPosition\" : [2,2,2]}";
 
 		//Decode the position
 		String[] parts = robotLocation.split(":");
@@ -131,6 +131,9 @@ public class RealRun extends JFrame{
 
 				ExploreAlgo e = new ExploreAlgo(null, realMap, realRobot); 
 				e.runRealExploration();
+				
+				// realMap.loadMap("map6.txt");
+				// //realMap.printMapWithVirtualWall();
 
 				ShortestPathAlgo s = new ShortestPathAlgo(realMap, realRobot);
 				s.runRealShortestPath();
