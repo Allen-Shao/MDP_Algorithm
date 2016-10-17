@@ -208,7 +208,7 @@ public class ExploreAlgo{
 					knownMap.repaint();
 					if (!hasObstacleInFront()){ //forward checking
 						try{
-							TimeUnit.MILLISECONDS.sleep(100);
+							TimeUnit.MILLISECONDS.sleep(CommConstants.COMM_DELAY_TIME);
 						} catch(InterruptedException e){
 							System.out.println("InterruptedException");
 						}
@@ -229,7 +229,7 @@ public class ExploreAlgo{
 				}
 
 				try{
-					TimeUnit.MILLISECONDS.sleep(100);
+					TimeUnit.MILLISECONDS.sleep(CommConstants.COMM_DELAY_TIME);
 				} catch(InterruptedException e){
 					System.out.println("InterruptedException");
 				}
@@ -258,7 +258,7 @@ public class ExploreAlgo{
 				commMgr.sendMsg(stream[0], CommConstants.MSG_TO_ANDROID);
 				commMgr.sendMsg(stream[1], CommConstants.MSG_TO_ANDROID);
 				try{
-					TimeUnit.MILLISECONDS.sleep(100);
+					TimeUnit.MILLISECONDS.sleep(CommConstants.COMM_DELAY_TIME);
 				} catch(InterruptedException e){
 					System.out.println("InterruptedException");
 				}
