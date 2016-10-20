@@ -17,6 +17,7 @@ public class MapGrid {
 		explored = false;
 		obstacle = false;
 		virtualWall = false;
+		visited = false;
 
 	}
 
@@ -38,6 +39,10 @@ public class MapGrid {
 
 	public boolean isVirtualWall(){
 		return virtualWall;
+	}
+
+	public boolean isVisted(){
+		return visited;
 	}
 
 	public void setRow(int x){
@@ -63,6 +68,7 @@ public class MapGrid {
 	public void setVirtualWall(boolean v){
 		this.virtualWall = v;
 	}
+
 
 	public void reset(){
 		explored = false;

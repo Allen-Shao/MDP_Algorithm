@@ -171,8 +171,11 @@ public class ShortestPathAlgo{
 		//add the start point to opened set
 		opened.add(this.start);
 
+
+
 		//start A* search algorithm
 		do {
+			//System.out.println(opened.toString());
 
 			//evaluate the grid in the opened set with lowest cost;
 			MapGrid current = findMinimumCost(opened, gscore, goal);
@@ -222,6 +225,8 @@ public class ShortestPathAlgo{
 					
 			}
 		} while(!opened.isEmpty());
+
+		//System.out.println(closed.toString());
 
 		if (closed.contains(stpMap.getGrid(goal.getRow(), goal.getCol()))){
 				System.out.println("Shortest Path found.");

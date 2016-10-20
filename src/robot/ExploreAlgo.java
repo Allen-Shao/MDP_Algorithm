@@ -201,10 +201,11 @@ public class ExploreAlgo{
 
 
 				//finite state machine (make only one step per loop)
-				if (!hasObstacleOnRight() && !hasObstacleInFront() && !hasObstacleOnLeft()){
-					robotMoveForward();
-					commMgr.sendMsg(CommConstants.ROBOT_MOVE_FORWARD, CommConstants.MSG_TO_ARDUINO);
-				} else if (!hasObstacleOnRight()){
+				// if (!hasObstacleOnRight() && !hasObstacleInFront() && !hasObstacleOnLeft()){
+				// 	robotTurnRight();
+				// 	commMgr.sendMsg(CommConstants.ROBOT_TURN_RIGHT, CommConstants.MSG_TO_ARDUINO);
+				// } else 
+				if (!hasObstacleOnRight()){
 					robotTurnRight();
 					commMgr.sendMsg(CommConstants.ROBOT_TURN_RIGHT, CommConstants.MSG_TO_ARDUINO);
 					knownMap.printExplorationProgress();
@@ -261,7 +262,7 @@ public class ExploreAlgo{
 				commMgr.sendMsg(stream[0], CommConstants.MSG_TO_ANDROID);
 				commMgr.sendMsg(stream[1], CommConstants.MSG_TO_ANDROID);
 				try{
-					TimeUnit.MILLISECONDS.sleep(CommConstants.COMM_DELAY_TIME);
+					TimeUnit.MILLISECONDS.sleep(CommConstants.COMM_DELAY_TIME*10);
 				} catch(InterruptedException e){
 					System.out.println("InterruptedException");
 				}
@@ -350,7 +351,7 @@ public class ExploreAlgo{
 
 		knownMap.getGrid(x, y).setExplored(true);
 		//System.out.println(trueGrid.isObstacle());
-		if (length == sensorReading[k]){
+		if (length == sensorReading[k] && !knownMap.getGrid(x, y).isVisted()){
 			knownMap.addObstacle(x, y);
 			return true;
 		} else {
@@ -372,6 +373,7 @@ public class ExploreAlgo{
 			for (int j = -1; j <= 1; j++){
 				MapGrid curPos = expRobot.getPosition();
 				knownMap.getGrid(curPos.getRow()+i, curPos.getCol()+j).setExplored(true);
+				knownMap.getGrid(curPos.getRow()+i, curPos.getCol()+j).setVisited(true);
 			}
 		}
 	}
