@@ -13,6 +13,7 @@ public class CommConstants{
 	public static final String REQUEST_SENSOR_READING = "r";
 	public static final String ROBOT_FRONT_CALIBRATION = "c";
 	public static final String ROBOT_RIGHT_CALIBRATION = "x";
+	public static final String ROBOT_LEFT_CALIBRATION = "y";
 
 	public static final String ROBOT_FASTESTPATH = "f";
 

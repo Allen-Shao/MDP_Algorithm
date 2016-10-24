@@ -15,6 +15,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
+import java.util.concurrent.TimeUnit;
+
 
 public class RealRun extends JFrame{
 
@@ -129,14 +131,49 @@ public class RealRun extends JFrame{
 				cl.show(mainCards, "MAIN");
 				realMap.repaint();
 
+				Scanner sc = new Scanner(System.in);
+				System.out.print("Select Exploration Mode(1.Right 2.Left): ");
+				int choice = sc.nextInt();
+
 				ExploreAlgo e = new ExploreAlgo(null, realMap, realRobot); 
-				e.runRealExploration();
+
+				switch (choice){
+					case 1: e.runRealExplorationRight(); break;
+					case 2: e.runRealExplorationLeft();break;
+					default: e.runRealExplorationRight(); break;
+				}
 
 				//realMap.loadMap("map7.txt");
 				//realMap.printMapWithVirtualWall();
 
 				ShortestPathAlgo s = new ShortestPathAlgo(realMap, realRobot);
 				s.runRealShortestPath();
+				// commMgr.sendMsg(CommConstants.ROBOT_RIGHT_CALIBRATION, CommConstants.MSG_TO_ARDUINO);
+
+				// try{
+				// 		TimeUnit.MILLISECONDS.sleep(CommConstants.COMM_DELAY_TIME*10);
+				// 	} catch(InterruptedException e){
+				// 		System.out.println("InterruptedException");
+				// }
+
+				// for (int i=0; i<10; i++){
+				// 	commMgr.sendMsg(CommConstants.ROBOT_TURN_LEFT, CommConstants.MSG_TO_ARDUINO);
+				// 	try{
+				// 			TimeUnit.MILLISECONDS.sleep(CommConstants.COMM_DELAY_TIME*10);
+				// 		} catch(InterruptedException e){
+				// 			System.out.println("InterruptedException");
+				// 	}
+				// }
+
+				// for (int i=0; i<10; i++){
+				// 	commMgr.sendMsg(CommConstants.ROBOT_TURN_RIGHT, CommConstants.MSG_TO_ARDUINO);
+				// 	try{
+				// 			TimeUnit.MILLISECONDS.sleep(CommConstants.COMM_DELAY_TIME*5);
+				// 		} catch(InterruptedException e){
+				// 			System.out.println("InterruptedException");
+				// 		}
+				// }
+
 
 				return 1;
 			}

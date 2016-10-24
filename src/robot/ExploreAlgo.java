@@ -148,7 +148,144 @@ public class ExploreAlgo{
 
 	}
 
-	public void runRealExploration(){
+	// public void runRealExploration(){
+
+	// 	long startTime = System.currentTimeMillis();
+		
+	// 	if (commMgr.isConnected()){
+
+	// 		boolean endFlag = false;
+	// 		boolean leaveStart = false;
+
+	// 		int calibrationStepCount = 0;
+			
+	// 		knownMap.printExplorationProgress();
+	// 		knownMap.repaint();
+
+			
+
+	// 		String startSignal = "";
+
+	// 		while (!startSignal.equals(" explore")){
+	// 			System.out.println("Waiting for Android to give command...\n");
+	// 			startSignal = commMgr.recvMsg();
+	// 		}
+
+	// 		System.out.println("Start real Exploration.\n");
+
+	// 		while(!endFlag){
+
+
+	// 			markCurrentPosition();
+	// 			updateSensorsReading();
+
+	// 			knownMap.printExplorationProgress();
+	// 			knownMap.repaint();
+
+
+	// 			//calibration
+	// 			if (frontCalibration()){
+	// 				expRobot.calibrate(CommConstants.ROBOT_FRONT_CALIBRATION);
+	// 				//calibrationStepCount = 0;
+	// 			}
+
+	// 			if (calibrationStepCount >= RobotConstants.CALIBRATION_STEP){
+	// 				if (rightCalibration()){
+	// 					expRobot.calibrate(CommConstants.ROBOT_RIGHT_CALIBRATION);
+	// 					calibrationStepCount = 0; //Reset the counting
+	// 				}
+	// 			}
+
+
+				
+
+
+	// 			//finite state machine (make only one step per loop)
+	// 			// if (!hasObstacleOnRight() && !hasObstacleInFront() && !hasObstacleOnLeft()){
+	// 			// 	robotTurnRight();
+	// 			// 	commMgr.sendMsg(CommConstants.ROBOT_TURN_RIGHT, CommConstants.MSG_TO_ARDUINO);
+	// 			// } else 
+	// 			if (!hasObstacleOnRight()){
+	// 				robotTurnRight();
+	// 				commMgr.sendMsg(CommConstants.ROBOT_TURN_RIGHT, CommConstants.MSG_TO_ARDUINO);
+	// 				knownMap.printExplorationProgress();
+	// 				knownMap.repaint();
+	// 				if (!hasObstacleInFront()){ //forward checking
+	// 					try{
+	// 						TimeUnit.MILLISECONDS.sleep(CommConstants.COMM_DELAY_TIME);
+	// 					} catch(InterruptedException e){
+	// 						System.out.println("InterruptedException");
+	// 					}
+	// 					robotMoveForward();
+	// 					commMgr.sendMsg(CommConstants.ROBOT_MOVE_FORWARD, CommConstants.MSG_TO_ARDUINO);
+	// 					calibrationStepCount++;
+	// 				}
+	// 			} else if (!hasObstacleInFront()){
+	// 				robotMoveForward();
+	// 				calibrationStepCount++;
+	// 				commMgr.sendMsg(CommConstants.ROBOT_MOVE_FORWARD, CommConstants.MSG_TO_ARDUINO);
+	// 			} else if (!hasObstacleOnLeft()){
+	// 				robotTurnLeft();
+	// 				commMgr.sendMsg(CommConstants.ROBOT_TURN_LEFT, CommConstants.MSG_TO_ARDUINO);
+	// 			} else {
+	// 				robotTurnRight();
+	// 				commMgr.sendMsg(CommConstants.ROBOT_TURN_RIGHT, CommConstants.MSG_TO_ARDUINO);
+	// 			}
+
+	// 			try{
+	// 				TimeUnit.MILLISECONDS.sleep(CommConstants.COMM_DELAY_TIME);
+	// 			} catch(InterruptedException e){
+	// 				System.out.println("InterruptedException");
+	// 			}
+
+	// 			//calibrationStepCount++;
+
+	// 			//set for ending condition
+
+	// 			//1. go back to start point
+	// 			if (sameGrid(expRobot.getPosition(), new MapGrid(MapConstants.START_X_CENTER, MapConstants.START_Y_CENTER))&&leaveStart)
+	// 			endFlag = true;
+
+	// 			if (!sameGrid(expRobot.getPosition(), new MapGrid(MapConstants.START_X_CENTER, MapConstants.START_Y_CENTER))){
+	// 				leaveStart = true;
+	// 			}
+
+	// 			//2. time out
+
+	// 			/*To be implemented*/
+
+
+				
+
+	// 			//send stream to android
+	// 			String[] stream = knownMap.generateMapStreamToAndroid();
+	// 			commMgr.sendMsg(stream[0], CommConstants.MSG_TO_ANDROID);
+	// 			commMgr.sendMsg(stream[1], CommConstants.MSG_TO_ANDROID);
+	// 			try{
+	// 				TimeUnit.MILLISECONDS.sleep(CommConstants.COMM_DELAY_TIME*5);
+	// 			} catch(InterruptedException e){
+	// 				System.out.println("InterruptedException");
+	// 			}
+
+
+	// 		}
+
+	// 		System.out.println("Exploration complete.\n");
+		
+
+	// 		String[] mapDescriptor = knownMap.generateMapDescriptor();
+
+	// 		commMgr.sendMsg(mapDescriptor[0], CommConstants.MSG_TO_ANDROID);
+	// 		commMgr.sendMsg(mapDescriptor[1], CommConstants.MSG_TO_ANDROID);
+
+	// 		//knownMap.setUnexploredObstacle();
+
+
+
+	// 	}
+	// }
+
+	public void runRealExplorationRight(){
 
 		long startTime = System.currentTimeMillis();
 		
@@ -262,7 +399,144 @@ public class ExploreAlgo{
 				commMgr.sendMsg(stream[0], CommConstants.MSG_TO_ANDROID);
 				commMgr.sendMsg(stream[1], CommConstants.MSG_TO_ANDROID);
 				try{
-					TimeUnit.MILLISECONDS.sleep(CommConstants.COMM_DELAY_TIME*10);
+					TimeUnit.MILLISECONDS.sleep(CommConstants.COMM_DELAY_TIME*5);
+				} catch(InterruptedException e){
+					System.out.println("InterruptedException");
+				}
+
+
+			}
+
+			System.out.println("Exploration complete.\n");
+		
+
+			String[] mapDescriptor = knownMap.generateMapDescriptor();
+
+			commMgr.sendMsg(mapDescriptor[0], CommConstants.MSG_TO_ANDROID);
+			commMgr.sendMsg(mapDescriptor[1], CommConstants.MSG_TO_ANDROID);
+
+			//knownMap.setUnexploredObstacle();
+
+
+
+		}
+	}
+
+	public void runRealExplorationLeft(){
+
+		long startTime = System.currentTimeMillis();
+		
+		if (commMgr.isConnected()){
+
+			boolean endFlag = false;
+			boolean leaveStart = false;
+
+			int calibrationStepCount = 0;
+			
+			knownMap.printExplorationProgress();
+			knownMap.repaint();
+
+			
+
+			String startSignal = "";
+
+			while (!startSignal.equals(" explore")){
+				System.out.println("Waiting for Android to give command...\n");
+				startSignal = commMgr.recvMsg();
+			}
+
+			System.out.println("Start real Exploration.\n");
+
+			while(!endFlag){
+
+
+				markCurrentPosition();
+				updateSensorsReading();
+
+				knownMap.printExplorationProgress();
+				knownMap.repaint();
+
+
+				//calibration
+				if (frontCalibration()){
+					expRobot.calibrate(CommConstants.ROBOT_FRONT_CALIBRATION);
+					//calibrationStepCount = 0;
+				}
+
+				if (calibrationStepCount >= RobotConstants.CALIBRATION_STEP){
+					if (leftCalibration()){
+						expRobot.calibrate(CommConstants.ROBOT_LEFT_CALIBRATION);
+						calibrationStepCount = 0; //Reset the counting
+					}
+				}
+
+
+				
+
+
+				//finite state machine (make only one step per loop)
+				// if (!hasObstacleOnRight() && !hasObstacleInFront() && !hasObstacleOnLeft()){
+				// 	robotTurnRight();
+				// 	commMgr.sendMsg(CommConstants.ROBOT_TURN_RIGHT, CommConstants.MSG_TO_ARDUINO);
+				// } else 
+				if (!hasObstacleOnLeft()){
+					robotTurnLeft();
+					commMgr.sendMsg(CommConstants.ROBOT_TURN_LEFT, CommConstants.MSG_TO_ARDUINO);
+					knownMap.printExplorationProgress();
+					knownMap.repaint();
+					if (!hasObstacleInFront()){ //forward checking
+						try{
+							TimeUnit.MILLISECONDS.sleep(CommConstants.COMM_DELAY_TIME);
+						} catch(InterruptedException e){
+							System.out.println("InterruptedException");
+						}
+						robotMoveForward();
+						commMgr.sendMsg(CommConstants.ROBOT_MOVE_FORWARD, CommConstants.MSG_TO_ARDUINO);
+						calibrationStepCount++;
+					}
+				} else if (!hasObstacleInFront()){
+					robotMoveForward();
+					calibrationStepCount++;
+					commMgr.sendMsg(CommConstants.ROBOT_MOVE_FORWARD, CommConstants.MSG_TO_ARDUINO);
+				} else if (!hasObstacleOnRight()){
+					robotTurnLeft();
+					commMgr.sendMsg(CommConstants.ROBOT_TURN_RIGHT, CommConstants.MSG_TO_ARDUINO);
+				} else {
+					robotTurnLeft();
+					commMgr.sendMsg(CommConstants.ROBOT_TURN_LEFT, CommConstants.MSG_TO_ARDUINO);
+				}
+
+				try{
+					TimeUnit.MILLISECONDS.sleep(CommConstants.COMM_DELAY_TIME);
+				} catch(InterruptedException e){
+					System.out.println("InterruptedException");
+				}
+
+				//calibrationStepCount++;
+
+				//set for ending condition
+
+				//1. go back to start point
+				if (sameGrid(expRobot.getPosition(), new MapGrid(MapConstants.START_X_CENTER, MapConstants.START_Y_CENTER))&&leaveStart)
+				endFlag = true;
+
+				if (!sameGrid(expRobot.getPosition(), new MapGrid(MapConstants.START_X_CENTER, MapConstants.START_Y_CENTER))){
+					leaveStart = true;
+				}
+
+				//2. time out
+
+				/*To be implemented*/
+
+
+				
+
+				//send stream to android
+				String[] stream = knownMap.generateMapStreamToAndroid();
+				commMgr.sendMsg(stream[0], CommConstants.MSG_TO_ANDROID);
+				commMgr.sendMsg(stream[1], CommConstants.MSG_TO_ANDROID);
+				try{
+					TimeUnit.MILLISECONDS.sleep(CommConstants.COMM_DELAY_TIME*5);
 				} catch(InterruptedException e){
 					System.out.println("InterruptedException");
 				}
@@ -618,6 +892,44 @@ public class ExploreAlgo{
 		// System.out.println(frontRightGrid.toString());
 		// System.out.println(frontLeftGrid.toString());
 		return rightGrid.isObstacle() && rightUpGrid.isObstacle() && rightDownGrid.isObstacle();
+	}
+
+	private boolean leftCalibration(){
+		MapGrid curPos = expRobot.getPosition();
+		MapGrid leftGrid = null;
+		MapGrid leftUpGrid = null;
+		MapGrid leftDownGrid = null;
+		int curRow = curPos.getRow();
+		int curCol = curPos.getCol();
+		int curHeading = expRobot.getHeading();
+		switch (curHeading){
+			case 1:
+				leftGrid = knownMap.getGrid(curRow+2, curCol);
+				leftUpGrid = knownMap.getGrid(curRow+2, curCol+1);
+				leftDownGrid = knownMap.getGrid(curRow+2, curCol-1);
+				break;
+			case 2:
+				leftGrid = knownMap.getGrid(curRow, curCol+2);
+				leftUpGrid = knownMap.getGrid(curRow-1, curCol+2);
+				leftDownGrid = knownMap.getGrid(curRow+1, curCol+2);
+				break;
+			case 3:
+				leftGrid = knownMap.getGrid(curRow-2, curCol);
+				leftUpGrid = knownMap.getGrid(curRow-2, curCol-1);
+				leftDownGrid = knownMap.getGrid(curRow-2, curCol+1);
+				break;
+			case 4:
+				leftGrid = knownMap.getGrid(curRow, curCol-2);
+				leftUpGrid = knownMap.getGrid(curRow+1, curCol-2);
+				leftDownGrid = knownMap.getGrid(curRow-1, curCol-2);
+				break;
+		}
+		// System.out.println(curPos.toString());
+		// System.out.println(curHeading);
+		// System.out.println(frontGrid.toString());
+		// System.out.println(frontRightGrid.toString());
+		// System.out.println(frontLeftGrid.toString());
+		return leftGrid.isObstacle() && leftUpGrid.isObstacle() && leftDownGrid.isObstacle();
 	}
 
 	private boolean frontCalibration(){
