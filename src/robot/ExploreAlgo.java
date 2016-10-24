@@ -432,6 +432,8 @@ public class ExploreAlgo{
 			boolean leaveStart = false;
 
 			int calibrationStepCount = 0;
+
+			int turnTime = 0;
 			
 			knownMap.printExplorationProgress();
 			knownMap.repaint();
@@ -479,8 +481,51 @@ public class ExploreAlgo{
 				// 	robotTurnRight();
 				// 	commMgr.sendMsg(CommConstants.ROBOT_TURN_RIGHT, CommConstants.MSG_TO_ARDUINO);
 				// } else 
+				if (turnTime > 4){
+					//robotMoveForward();
+					turnTime = 0;
+					calibrationStepCount++;
+					for (int i = 0; i<2; i++){
+						commMgr.sendMsg(CommConstants.ROBOT_MOVE_FORWARD, CommConstants.MSG_TO_ARDUINO);
+						robotMoveForward();
+						try{
+							TimeUnit.MILLISECONDS.sleep(CommConstants.COMM_DELAY_TIME*5);
+						} catch(InterruptedException e){
+							System.out.println("InterruptedException");
+						}
+					}
+
+					commMgr.sendMsg(CommConstants.ROBOT_TURN_LEFT, CommConstants.MSG_TO_ARDUINO);
+					robotTurnLeft();
+					try{
+						TimeUnit.MILLISECONDS.sleep(CommConstants.COMM_DELAY_TIME*5);
+					} catch(InterruptedException e){
+						System.out.println("InterruptedException");
+					}
+
+					while (!hasObstacleInFront()){
+						commMgr.sendMsg(CommConstants.ROBOT_MOVE_FORWARD, CommConstants.MSG_TO_ARDUINO);
+						robotMoveForward();
+						try{
+							TimeUnit.MILLISECONDS.sleep(CommConstants.COMM_DELAY_TIME*5);
+						} catch(InterruptedException e){
+							System.out.println("InterruptedException");
+						}
+					}
+					commMgr.sendMsg(CommConstants.ROBOT_TURN_RIGHT, CommConstants.MSG_TO_ARDUINO);
+					robotTurnRight();
+					try{
+						TimeUnit.MILLISECONDS.sleep(CommConstants.COMM_DELAY_TIME*5);
+					} catch(InterruptedException e){
+						System.out.println("InterruptedException");
+					}
+
+					System.out.println("Force moving forward");     //Avoid stuck after overwriting
+				}
+
 				if (!hasObstacleOnLeft()){
 					robotTurnLeft();
+					turnTime++;
 					commMgr.sendMsg(CommConstants.ROBOT_TURN_LEFT, CommConstants.MSG_TO_ARDUINO);
 					knownMap.printExplorationProgress();
 					knownMap.repaint();
@@ -496,13 +541,16 @@ public class ExploreAlgo{
 					}
 				} else if (!hasObstacleInFront()){
 					robotMoveForward();
+					turnTime = 0;
 					calibrationStepCount++;
 					commMgr.sendMsg(CommConstants.ROBOT_MOVE_FORWARD, CommConstants.MSG_TO_ARDUINO);
 				} else if (!hasObstacleOnRight()){
-					robotTurnLeft();
+					robotTurnRight();
+					turnTime++;
 					commMgr.sendMsg(CommConstants.ROBOT_TURN_RIGHT, CommConstants.MSG_TO_ARDUINO);
 				} else {
 					robotTurnLeft();
+					turnTime++;
 					commMgr.sendMsg(CommConstants.ROBOT_TURN_LEFT, CommConstants.MSG_TO_ARDUINO);
 				}
 
