@@ -495,6 +495,12 @@ public class ExploreAlgo{
 						}
 					}
 
+					markCurrentPosition();
+					updateSensorsReading();
+
+					knownMap.printExplorationProgress();
+					knownMap.repaint();
+
 					commMgr.sendMsg(CommConstants.ROBOT_TURN_LEFT, CommConstants.MSG_TO_ARDUINO);
 					robotTurnLeft();
 					try{
@@ -512,6 +518,12 @@ public class ExploreAlgo{
 							System.out.println("InterruptedException");
 						}
 					}
+
+					markCurrentPosition();
+					updateSensorsReading();
+
+					knownMap.printExplorationProgress();
+					knownMap.repaint();
 					commMgr.sendMsg(CommConstants.ROBOT_TURN_RIGHT, CommConstants.MSG_TO_ARDUINO);
 					robotTurnRight();
 					try{
