@@ -325,6 +325,7 @@ public class ExploreAlgo{
 				//calibration
 				if (frontCalibration()){
 					expRobot.calibrate(CommConstants.ROBOT_FRONT_CALIBRATION);
+					calibrationStepCount--;
 					//calibrationStepCount = 0;
 				}
 
@@ -332,8 +333,7 @@ public class ExploreAlgo{
 					if (rightCalibration()){
 						expRobot.calibrate(CommConstants.ROBOT_RIGHT_CALIBRATION);
 						calibrationStepCount = 0; //Reset the counting
-					}
-					if (leftCalibration()){
+					} else if (leftCalibration()){
 						expRobot.calibrate(CommConstants.ROBOT_LEFT_CALIBRATION);
 						calibrationStepCount = 0; //Reset the counting
 					}
@@ -526,6 +526,7 @@ public class ExploreAlgo{
 				//calibration
 				if (frontCalibration()){
 					expRobot.calibrate(CommConstants.ROBOT_FRONT_CALIBRATION);
+					calibrationStepCount--;
 					//calibrationStepCount = 0;
 				}
 
@@ -533,8 +534,7 @@ public class ExploreAlgo{
 					if (leftCalibration()){
 						expRobot.calibrate(CommConstants.ROBOT_LEFT_CALIBRATION);
 						calibrationStepCount = 0; //Reset the counting
-					}
-					if (rightCalibration()){
+					} else if (rightCalibration()){
 						expRobot.calibrate(CommConstants.ROBOT_RIGHT_CALIBRATION);
 						calibrationStepCount = 0; //Reset the counting
 					}

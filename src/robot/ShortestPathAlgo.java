@@ -3,6 +3,7 @@ package robot;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Stack;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 import map.Map;
@@ -143,6 +144,13 @@ public class ShortestPathAlgo{
 	}
 
 	public void runRealShortestPath(){
+
+		System.out.print("Set the robot heading(1.right 2.down 3.left 4.up): ");
+		Scanner sc = new Scanner(System.in);
+		int h = sc.nextInt();
+
+		stpRobot.setHeading(h);
+		stpMap.repaint();
 		
 		if (!sameGrid(stpRobot.getPosition(), start)){
 			System.out.println("The robot is not in the start zone!");
@@ -294,7 +302,7 @@ public class ShortestPathAlgo{
 		switch (heading) {
 			case 1: //current direction to right
 				if (next.getRow() == cur.getRow()){
-					if (next.getRow() >= cur.getRow()){
+					if (next.getCol() >= cur.getCol()){
 						return 0; // cur -> next no need to turn
 					} else {
 						return 2;  // next cur->   need to turn twice
@@ -307,7 +315,7 @@ public class ShortestPathAlgo{
 				// break;
 			case 2: //current direction to down
 				if (next.getCol() == cur.getCol()){
-					if (next.getCol() <= cur.getCol()){
+					if (next.getRow() <= cur.getRow()){
 						return 0; // cur
 								  // next   no need to turn
 					} else {
@@ -320,7 +328,7 @@ public class ShortestPathAlgo{
 				// break;
 			case 3: //current direction to left
 				if (next.getRow() == cur.getRow()){
-					if (next.getRow() <= cur.getRow()){
+					if (next.getCol() <= cur.getCol()){
 						return 0; // next <- cur no need to turn
 					} else {
 						return 2;  // <-cur next  need to turn twice
@@ -333,7 +341,7 @@ public class ShortestPathAlgo{
 				// break;
 			case 4://current direction to up
 				if (next.getCol() == cur.getCol()){
-					if (next.getCol() >= cur.getCol()){
+					if (next.getRow() >= cur.getRow()){
 						return 0; // next
 								  // cur    no need to turn
 					} else {
