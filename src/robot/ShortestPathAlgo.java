@@ -283,11 +283,16 @@ public class ShortestPathAlgo{
 			return 0.0;
 		}
 
-		if (goal.getCol()-currentGrid.getCol() != 0 
-			&& goal.getRow()-currentGrid.getRow() != 0){
-			turn = RobotConstants.TURN_COST; //turning once;
-		}
-		return (move + turn);
+		if (goal.getCol()-currentGrid.getCol() != 0)
+			turn++;
+		if (goal.getRow()-currentGrid.getRow() != 0)
+			turn++;
+
+		// if (goal.getCol()-currentGrid.getCol() != 0 
+		// 	&& goal.getRow()-currentGrid.getRow() != 0){
+		// 	turn = RobotConstants.TURN_COST; //turning once;
+		// }
+		return (move + turn * RobotConstants.TURN_COST);
 
 	}
 

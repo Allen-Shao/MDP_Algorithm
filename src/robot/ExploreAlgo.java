@@ -323,11 +323,7 @@ public class ExploreAlgo{
 
 
 				//calibration
-				if (frontCalibration()){
-					expRobot.calibrate(CommConstants.ROBOT_FRONT_CALIBRATION);
-					calibrationStepCount--;
-					//calibrationStepCount = 0;
-				}
+				
 
 				if (calibrationStepCount >= RobotConstants.CALIBRATION_STEP){
 					if (rightCalibration()){
@@ -337,6 +333,12 @@ public class ExploreAlgo{
 						expRobot.calibrate(CommConstants.ROBOT_LEFT_CALIBRATION);
 						calibrationStepCount = 0; //Reset the counting
 					}
+				}
+
+				if (frontCalibration()){
+					expRobot.calibrate(CommConstants.ROBOT_FRONT_CALIBRATION);
+					calibrationStepCount = 0;
+					//calibrationStepCount = 0;
 				}
 
 
@@ -410,7 +412,7 @@ public class ExploreAlgo{
 					knownMap.repaint();
 					if (!hasObstacleInFront()){ //forward checking
 						try{
-							TimeUnit.MILLISECONDS.sleep(CommConstants.COMM_DELAY_TIME);
+							TimeUnit.MILLISECONDS.sleep(CommConstants.COMM_DELAY_TIME*2);
 						} catch(InterruptedException e){
 							System.out.println("InterruptedException");
 						}
@@ -463,7 +465,7 @@ public class ExploreAlgo{
 				commMgr.sendMsg(stream[0], CommConstants.MSG_TO_ANDROID);
 				commMgr.sendMsg(stream[1], CommConstants.MSG_TO_ANDROID);
 				try{
-					TimeUnit.MILLISECONDS.sleep(CommConstants.COMM_DELAY_TIME*5);
+					TimeUnit.MILLISECONDS.sleep(CommConstants.COMM_DELAY_TIME);
 				} catch(InterruptedException e){
 					System.out.println("InterruptedException");
 				}
@@ -524,11 +526,7 @@ public class ExploreAlgo{
 
 
 				//calibration
-				if (frontCalibration()){
-					expRobot.calibrate(CommConstants.ROBOT_FRONT_CALIBRATION);
-					calibrationStepCount--;
-					//calibrationStepCount = 0;
-				}
+				
 
 				if (calibrationStepCount >= RobotConstants.CALIBRATION_STEP){
 					if (leftCalibration()){
@@ -540,6 +538,11 @@ public class ExploreAlgo{
 					}
 				}
 
+				if (frontCalibration()){
+					expRobot.calibrate(CommConstants.ROBOT_FRONT_CALIBRATION);
+					calibrationStepCount = 0;
+					//calibrationStepCount = 0;
+				}
 
 				
 
@@ -611,7 +614,7 @@ public class ExploreAlgo{
 					knownMap.repaint();
 					if (!hasObstacleInFront()){ //forward checking
 						try{
-							TimeUnit.MILLISECONDS.sleep(CommConstants.COMM_DELAY_TIME);
+							TimeUnit.MILLISECONDS.sleep(CommConstants.COMM_DELAY_TIME*2);
 						} catch(InterruptedException e){
 							System.out.println("InterruptedException");
 						}
@@ -664,7 +667,7 @@ public class ExploreAlgo{
 				commMgr.sendMsg(stream[0], CommConstants.MSG_TO_ANDROID);
 				commMgr.sendMsg(stream[1], CommConstants.MSG_TO_ANDROID);
 				try{
-					TimeUnit.MILLISECONDS.sleep(CommConstants.COMM_DELAY_TIME*5);
+					TimeUnit.MILLISECONDS.sleep(CommConstants.COMM_DELAY_TIME);
 				} catch(InterruptedException e){
 					System.out.println("InterruptedException");
 				}

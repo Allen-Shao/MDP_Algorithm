@@ -46,7 +46,7 @@ public class RealRun extends JFrame{
 
 		String robotLocation = commMgr.recvMsg();
 
-		//String robotLocation = "{\"robotPosition\" : [2,2,2]}";
+		// String robotLocation = "{\"robotPosition\" : [2,2,1]}";
 
 		//Decode the position
 		String[] parts = robotLocation.split(":");
@@ -148,6 +148,17 @@ public class RealRun extends JFrame{
 
 				ShortestPathAlgo s = new ShortestPathAlgo(realMap, realRobot);
 				s.runRealShortestPath();
+
+
+				// commMgr.sendMsg("fw3aw9w5dw1aw3dw8q", CommConstants.MSG_TO_ARDUINO);
+
+				// commMgr.sendMsg("1111", CommConstants.MSG_TO_ANDROID);
+				// commMgr.sendMsg("2222", CommConstants.MSG_TO_ANDROID);
+
+
+
+
+
 				// commMgr.sendMsg(CommConstants.ROBOT_RIGHT_CALIBRATION, CommConstants.MSG_TO_ARDUINO);
 
 				// try{
@@ -173,6 +184,15 @@ public class RealRun extends JFrame{
 				// 			System.out.println("InterruptedException");
 				// 		}
 				// }
+				// for (int i=0; i<10; i++){
+				// 	commMgr.sendMsg(CommConstants.ROBOT_MOVE_FORWARD, CommConstants.MSG_TO_ARDUINO);
+				// 	try{
+				// 			TimeUnit.MILLISECONDS.sleep(CommConstants.COMM_DELAY_TIME*10);
+				// 		} catch(InterruptedException e){
+				// 			System.out.println("InterruptedException");
+				// 		}
+				// }
+
 
 
 				return 1;
