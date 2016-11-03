@@ -43,10 +43,10 @@ public class RealRun extends JFrame{
 		System.out.println("Start RealRun!\n");
 
 		System.out.println("Waiting Android to send Robot Location...\n");
-
-		String robotLocation = commMgr.recvMsg();
-
-		// String robotLocation = "{\"robotPosition\" : [2,2,1]}";
+		while (robotLocation.charAt(0) != "{"){
+			String robotLocation = commMgr.recvMsg();
+		}
+		// String robotLocation = "{\"robotPosition\" : [2,2,4]}";
 
 		//Decode the position
 		String[] parts = robotLocation.split(":");
@@ -133,7 +133,8 @@ public class RealRun extends JFrame{
 
 				Scanner sc = new Scanner(System.in);
 				System.out.print("Select Exploration Mode(1.Right 2.Left): ");
-				int choice = sc.nextInt();
+				//int choice = sc.nextInt();
+				int choice = 2;
 
 				ExploreAlgo e = new ExploreAlgo(null, realMap, realRobot); 
 
@@ -150,7 +151,7 @@ public class RealRun extends JFrame{
 				s.runRealShortestPath();
 
 
-				// commMgr.sendMsg("fw3aw9w5dw1aw3dw8q", CommConstants.MSG_TO_ARDUINO);
+				// commMgr.sendMsg("fw4dw2aw1dw1aw1dw1aw9w2dw8q", CommConstants.MSG_TO_ARDUINO);
 
 				// commMgr.sendMsg("1111", CommConstants.MSG_TO_ANDROID);
 				// commMgr.sendMsg("2222", CommConstants.MSG_TO_ANDROID);
@@ -187,7 +188,7 @@ public class RealRun extends JFrame{
 				// for (int i=0; i<10; i++){
 				// 	commMgr.sendMsg(CommConstants.ROBOT_MOVE_FORWARD, CommConstants.MSG_TO_ARDUINO);
 				// 	try{
-				// 			TimeUnit.MILLISECONDS.sleep(CommConstants.COMM_DELAY_TIME*10);
+				// 			TimeUnit.MILLISECONDS.sleep(CommConstants.COMM_DELAY_TIME*15);
 				// 		} catch(InterruptedException e){
 				// 			System.out.println("InterruptedException");
 				// 		}

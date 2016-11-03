@@ -544,6 +544,10 @@ public class ExploreAlgo{
 					//calibrationStepCount = 0;
 				}
 
+				// updateSensorsReading();
+
+				// knownMap.printExplorationProgress();
+				// knownMap.repaint();
 				
 
 
@@ -556,38 +560,48 @@ public class ExploreAlgo{
 					//robotMoveForward();
 					turnTime = 0;
 					calibrationStepCount++;
-					for (int i = 0; i<2; i++){
+					while (!hasObstacleInFront()){
 						commMgr.sendMsg(CommConstants.ROBOT_MOVE_FORWARD, CommConstants.MSG_TO_ARDUINO);
 						robotMoveForward();
 						try{
-							TimeUnit.MILLISECONDS.sleep(CommConstants.COMM_DELAY_TIME*5);
+							TimeUnit.MILLISECONDS.sleep(CommConstants.COMM_DELAY_TIME);
 						} catch(InterruptedException e){
 							System.out.println("InterruptedException");
 						}
+						markCurrentPosition();
+						updateSensorsReading();
+
+						knownMap.printExplorationProgress();
+						knownMap.repaint();
 					}
-
-					markCurrentPosition();
-					updateSensorsReading();
-
-					knownMap.printExplorationProgress();
-					knownMap.repaint();
 
 					commMgr.sendMsg(CommConstants.ROBOT_TURN_LEFT, CommConstants.MSG_TO_ARDUINO);
 					robotTurnLeft();
 					try{
-						TimeUnit.MILLISECONDS.sleep(CommConstants.COMM_DELAY_TIME*5);
+						TimeUnit.MILLISECONDS.sleep(CommConstants.COMM_DELAY_TIME);
 					} catch(InterruptedException e){
 						System.out.println("InterruptedException");
 					}
+
+					if (frontCalibration()){
+						expRobot.calibrate(CommConstants.ROBOT_FRONT_CALIBRATION);
+						calibrationStepCount = 0;
+					//calibrationStepCount = 0;
+					}	
 
 					while (!hasObstacleInFront()){
 						commMgr.sendMsg(CommConstants.ROBOT_MOVE_FORWARD, CommConstants.MSG_TO_ARDUINO);
 						robotMoveForward();
 						try{
-							TimeUnit.MILLISECONDS.sleep(CommConstants.COMM_DELAY_TIME*5);
+							TimeUnit.MILLISECONDS.sleep(CommConstants.COMM_DELAY_TIME);
 						} catch(InterruptedException e){
 							System.out.println("InterruptedException");
 						}
+						markCurrentPosition();
+						updateSensorsReading();
+
+						knownMap.printExplorationProgress();
+						knownMap.repaint();
 					}
 
 					markCurrentPosition();
@@ -613,11 +627,11 @@ public class ExploreAlgo{
 					knownMap.printExplorationProgress();
 					knownMap.repaint();
 					if (!hasObstacleInFront()){ //forward checking
-						try{
-							TimeUnit.MILLISECONDS.sleep(CommConstants.COMM_DELAY_TIME*2);
-						} catch(InterruptedException e){
-							System.out.println("InterruptedException");
-						}
+						// try{
+						// 	TimeUnit.MILLISECONDS.sleep(CommConstants.COMM_DELAY_TIME);
+						// } catch(InterruptedException e){
+						// 	System.out.println("InterruptedException");
+						// }
 						robotMoveForward();
 						commMgr.sendMsg(CommConstants.ROBOT_MOVE_FORWARD, CommConstants.MSG_TO_ARDUINO);
 						calibrationStepCount++;
@@ -666,19 +680,26 @@ public class ExploreAlgo{
 				String[] stream = knownMap.generateMapStreamToAndroid();
 				commMgr.sendMsg(stream[0], CommConstants.MSG_TO_ANDROID);
 				commMgr.sendMsg(stream[1], CommConstants.MSG_TO_ANDROID);
-				try{
-					TimeUnit.MILLISECONDS.sleep(CommConstants.COMM_DELAY_TIME);
-				} catch(InterruptedException e){
-					System.out.println("InterruptedException");
-				}
+				// try{
+				// 	TimeUnit.MILLISECONDS.sleep(CommConstants.COMM_DELAY_TIME);
+				// } catch(InterruptedException e){
+				// 	System.out.println("InterruptedException");
+				// }
 
 
 			}
 
 			System.out.println("Exploration complete.\n");
-		
+			
+			expRobot.calibrate(CommConstants.ROBOT_FRONT_CALIBRATION);
 
 			String[] mapDescriptor = knownMap.generateMapDescriptor();
+			
+			try{
+				TimeUnit.MILLISECONDS.sleep(CommConstants.COMM_DELAY_TIME);
+			} catch(InterruptedException e){
+				System.out.println("InterruptedException");
+			}
 
 			commMgr.sendMsg(mapDescriptor[0], CommConstants.MSG_TO_ANDROID);
 			commMgr.sendMsg(mapDescriptor[1], CommConstants.MSG_TO_ANDROID);

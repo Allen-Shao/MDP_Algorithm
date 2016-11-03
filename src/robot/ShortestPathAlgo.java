@@ -33,12 +33,16 @@ public class ShortestPathAlgo{
 
 	private String movingCommand = "";
 
+	private int curHeading;
+
 	public ShortestPathAlgo(Map m, Robot r){
 		this.stpMap = m;
 		this.stpRobot = r;
 
 		this.start = stpMap.getGrid(MapConstants.START_X_CENTER, MapConstants.START_Y_CENTER);
 		this.goal = stpMap.getGrid(MapConstants.GOAL_X_CENTER, MapConstants.GOAL_Y_CENTER);
+
+		curHeading = r.getHeading();
 	}
 
 	public ShortestPathAlgo(Map m, Robot r, MapGrid start, MapGrid goal){
@@ -46,6 +50,8 @@ public class ShortestPathAlgo{
 		this.stpRobot = r;
 		this.start = start;
 		this.goal = goal;
+
+		curHeading = r.getHeading();
 	}
 
 
@@ -78,6 +84,8 @@ public class ShortestPathAlgo{
 		//add the start point to opened set
 		opened.add(this.start);
 
+		//int curHeading = stpRobot.getHeading();
+
 		//start A* search algorithm
 		do {
 
@@ -108,18 +116,40 @@ public class ShortestPathAlgo{
 				if (!closed.contains(curNeighbour)){  //the neighbour grid has not been evaluated
 					if (!opened.contains(curNeighbour)){
 						parent.put(curNeighbour, current);
+						
+
+
 						gscore[curNeighbour.getRow()][curNeighbour.getCol()] = 
 							gscore[current.getRow()][current.getCol()] 
-							+ calculateGscore(current, curNeighbour, stpRobot.getHeading());
+							+ calculateGscore(current, curNeighbour, curHeading);
 						opened.add(curNeighbour);
+
+						//set new heading
+						if (curNeighbour.getRow()==current.getRow() && curNeighbour.getCol()>current.getCol())
+							curHeading = 1;
+						if (curNeighbour.getRow()<current.getRow() && curNeighbour.getCol()==current.getCol())
+							curHeading = 2;
+						if (curNeighbour.getRow()==current.getRow() && curNeighbour.getCol()<current.getCol())
+							curHeading = 3;
+						if (curNeighbour.getRow()>current.getRow() && curNeighbour.getCol()==current.getCol())
+							curHeading = 4;
 					}
 					else {
 						double currentGscore = gscore[curNeighbour.getRow()][curNeighbour.getCol()];
 						double newGscore = currentGscore 
-							+ calculateGscore(current, curNeighbour, stpRobot.getHeading());
+							+ calculateGscore(current, curNeighbour, curHeading);
 						if (newGscore < currentGscore){
 							gscore[curNeighbour.getRow()][curNeighbour.getCol()] = newGscore;
 							parent.put(curNeighbour, current);
+							//set new heading
+							if (curNeighbour.getRow()==current.getRow() && curNeighbour.getCol()>current.getCol())
+								curHeading = 1;
+							if (curNeighbour.getRow()<current.getRow() && curNeighbour.getCol()==current.getCol())
+								curHeading = 2;
+							if (curNeighbour.getRow()==current.getRow() && curNeighbour.getCol()<current.getCol())
+								curHeading = 3;
+							if (curNeighbour.getRow()>current.getRow() && curNeighbour.getCol()==current.getCol())
+								curHeading = 4;
 						}
 
 					}
@@ -145,12 +175,12 @@ public class ShortestPathAlgo{
 
 	public void runRealShortestPath(){
 
-		System.out.print("Set the robot heading(1.right 2.down 3.left 4.up): ");
-		Scanner sc = new Scanner(System.in);
-		int h = sc.nextInt();
+		//System.out.print("Set the robot heading(1.right 2.down 3.left 4.up): ");
+		//Scanner sc = new Scanner(System.in);
+		//int h = sc.nextInt();
 
-		stpRobot.setHeading(h);
-		stpMap.repaint();
+		//stpRobot.setHeading(h);
+		//stpMap.repaint();
 		
 		if (!sameGrid(stpRobot.getPosition(), start)){
 			System.out.println("The robot is not in the start zone!");
@@ -179,6 +209,7 @@ public class ShortestPathAlgo{
 		//add the start point to opened set
 		opened.add(this.start);
 
+		//int curHeading = stpRobot.getHeading();
 
 
 		//start A* search algorithm
@@ -216,16 +247,34 @@ public class ShortestPathAlgo{
 						parent.put(curNeighbour, current);
 						gscore[curNeighbour.getRow()][curNeighbour.getCol()] = 
 							gscore[current.getRow()][current.getCol()] 
-							+ calculateGscore(current, curNeighbour, stpRobot.getHeading());
+							+ calculateGscore(current, curNeighbour, curHeading);
 						opened.add(curNeighbour);
+						//set new heading
+						if (curNeighbour.getRow()==current.getRow() && curNeighbour.getCol()>current.getCol())
+							curHeading = 1;
+						if (curNeighbour.getRow()<current.getRow() && curNeighbour.getCol()==current.getCol())
+							curHeading = 2;
+						if (curNeighbour.getRow()==current.getRow() && curNeighbour.getCol()<current.getCol())
+							curHeading = 3;
+						if (curNeighbour.getRow()>current.getRow() && curNeighbour.getCol()==current.getCol())
+							curHeading = 4;
 					}
 					else {
 						double currentGscore = gscore[curNeighbour.getRow()][curNeighbour.getCol()];
 						double newGscore = currentGscore 
-							+ calculateGscore(current, curNeighbour, stpRobot.getHeading());
+							+ calculateGscore(current, curNeighbour, curHeading);
 						if (newGscore < currentGscore){
 							gscore[curNeighbour.getRow()][curNeighbour.getCol()] = newGscore;
 							parent.put(curNeighbour, current);
+							//set new heading
+							if (curNeighbour.getRow()==current.getRow() && curNeighbour.getCol()>current.getCol())
+								curHeading = 1;
+							if (curNeighbour.getRow()<current.getRow() && curNeighbour.getCol()==current.getCol())
+								curHeading = 2;
+							if (curNeighbour.getRow()==current.getRow() && curNeighbour.getCol()<current.getCol())
+								curHeading = 3;
+							if (curNeighbour.getRow()>current.getRow() && curNeighbour.getCol()==current.getCol())
+								curHeading = 4;
 						}
 
 					}
@@ -283,27 +332,26 @@ public class ShortestPathAlgo{
 			return 0.0;
 		}
 
-		if (goal.getCol()-currentGrid.getCol() != 0)
-			turn++;
-		if (goal.getRow()-currentGrid.getRow() != 0)
-			turn++;
+		// if (goal.getCol()-currentGrid.getCol() != 0)
+		// 	turn++;
+		// if (goal.getRow()-currentGrid.getRow() != 0)
+		// 	turn++;
 
-		// if (goal.getCol()-currentGrid.getCol() != 0 
-		// 	&& goal.getRow()-currentGrid.getRow() != 0){
-		// 	turn = RobotConstants.TURN_COST; //turning once;
-		// }
-		return (move + turn * RobotConstants.TURN_COST);
+		turn = getTurnTimes(stpRobot.getPosition(), goal, curHeading);
+		System.out.println("getTurnTimes: " + turn*RobotConstants.TURN_COST);
+		return (move + turn*RobotConstants.TURN_COST);
 
 	}
 
 	private double calculateGscore(MapGrid cur, MapGrid next, int heading){
 		double move = RobotConstants.MOVE_COST; //always one step
 		double turn = getTurnTimes(cur, next, heading) * RobotConstants.TURN_COST;
-
+		System.out.println("getTurnTimes: " + turn);
 		return (move + turn);
 	}
 
 	private int getTurnTimes(MapGrid cur, MapGrid next, int heading){
+		System.out.println("cur: " + cur.toString() + "next: " + next.toString() + "heading: " + heading);
 		switch (heading) {
 			case 1: //current direction to right
 				if (next.getRow() == cur.getRow()){
@@ -314,8 +362,12 @@ public class ShortestPathAlgo{
 					}
 				}
 				else {
-					return 1; // next
-							  // cur ->         turn once
+					if (next.getCol() == cur.getCol()){
+						return 1; 
+					}
+					else{
+						return 2;
+					}
 				}				
 				// break;
 			case 2: //current direction to down
@@ -328,7 +380,12 @@ public class ShortestPathAlgo{
 					}			   // cur
 				}
 				else {
-					return 1; // next cur   need to turn once
+					if (next.getRow() == cur.getRow()){
+						return 1; 
+					}
+					else{
+						return 2;
+					}
 				}			  				
 				// break;
 			case 3: //current direction to left
@@ -340,8 +397,12 @@ public class ShortestPathAlgo{
 					}
 				}
 				else {
-					return 1; // next
-							  // <- cur         turn once
+					if (next.getCol() == cur.getCol()){
+						return 1; 
+					}
+					else{
+						return 2;
+					}
 				}				
 				// break;
 			case 4://current direction to up
@@ -354,7 +415,12 @@ public class ShortestPathAlgo{
 					}			   // next
 				}
 				else {
-					return 1; // next cur   need to turn once
+					if (next.getRow() == cur.getRow()){
+						return 1; 
+					}
+					else{
+						return 2;
+					}
 				}			  				
 				// break;
 		}
