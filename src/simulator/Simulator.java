@@ -241,9 +241,9 @@ public class Simulator extends JFrame{
 		btnLoadMap.setFocusPainted(false);
 		btnLoadMap.addMouseListener(new MouseAdapter() {
 			public void mousePressed(MouseEvent e) {
-				stpMap.loadMap("map7.txt");
+				stpMap.loadMap("map6.txt");
 				stpMap.setAllExplored();
-				trueMap.loadMap("map7.txt");
+				trueMap.loadMap("map6.txt");
 				trueMap.removeVirtualWall();
 				CardLayout cl = ((CardLayout) mainCards.getLayout());
 	   			cl.show(mainCards, "MAIN");

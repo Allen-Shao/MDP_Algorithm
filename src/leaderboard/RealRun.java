@@ -42,9 +42,11 @@ public class RealRun extends JFrame{
 
 		System.out.println("Start RealRun!\n");
 
-		System.out.println("Waiting Android to send Robot Location...\n");
-		while (robotLocation.charAt(0) != "{"){
-			String robotLocation = commMgr.recvMsg();
+		
+		String robotLocation = "  ";
+		while (robotLocation.charAt(1) != '{'){
+			System.out.println("Waiting Android to send Robot Location...\n");
+			robotLocation = commMgr.recvMsg();
 		}
 		// String robotLocation = "{\"robotPosition\" : [2,2,4]}";
 
@@ -131,8 +133,8 @@ public class RealRun extends JFrame{
 				cl.show(mainCards, "MAIN");
 				realMap.repaint();
 
-				Scanner sc = new Scanner(System.in);
-				System.out.print("Select Exploration Mode(1.Right 2.Left): ");
+				// Scanner sc = new Scanner(System.in);
+				// System.out.print("Select Exploration Mode(1.Right 2.Left): ");
 				//int choice = sc.nextInt();
 				int choice = 2;
 

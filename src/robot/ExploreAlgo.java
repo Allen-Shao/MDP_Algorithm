@@ -323,6 +323,11 @@ public class ExploreAlgo{
 
 
 				//calibration
+				if (frontCalibration()){
+					expRobot.calibrate(CommConstants.ROBOT_FRONT_CALIBRATION);
+					calibrationStepCount = 0;
+					//calibrationStepCount = 0;
+				}
 				
 
 				if (calibrationStepCount >= RobotConstants.CALIBRATION_STEP){
@@ -335,11 +340,7 @@ public class ExploreAlgo{
 					}
 				}
 
-				if (frontCalibration()){
-					expRobot.calibrate(CommConstants.ROBOT_FRONT_CALIBRATION);
-					calibrationStepCount = 0;
-					//calibrationStepCount = 0;
-				}
+				
 
 
 				
@@ -504,7 +505,7 @@ public class ExploreAlgo{
 			knownMap.printExplorationProgress();
 			knownMap.repaint();
 
-			
+			expRobot.calibrate(CommConstants.ROBOT_LEFT_CALIBRATION);
 
 			String startSignal = "";
 
@@ -521,7 +522,7 @@ public class ExploreAlgo{
 				markCurrentPosition();
 				updateSensorsReading();
 
-				knownMap.printExplorationProgress();
+				//knownMap.printExplorationProgress();
 				knownMap.repaint();
 
 
@@ -571,7 +572,7 @@ public class ExploreAlgo{
 						markCurrentPosition();
 						updateSensorsReading();
 
-						knownMap.printExplorationProgress();
+						//knownMap.printExplorationProgress();
 						knownMap.repaint();
 					}
 
@@ -600,7 +601,7 @@ public class ExploreAlgo{
 						markCurrentPosition();
 						updateSensorsReading();
 
-						knownMap.printExplorationProgress();
+						//knownMap.printExplorationProgress();
 						knownMap.repaint();
 					}
 
@@ -624,7 +625,7 @@ public class ExploreAlgo{
 					robotTurnLeft();
 					turnTime++;
 					commMgr.sendMsg(CommConstants.ROBOT_TURN_LEFT, CommConstants.MSG_TO_ARDUINO);
-					knownMap.printExplorationProgress();
+					//knownMap.printExplorationProgress();
 					knownMap.repaint();
 					if (!hasObstacleInFront()){ //forward checking
 						// try{
@@ -694,7 +695,7 @@ public class ExploreAlgo{
 			expRobot.calibrate(CommConstants.ROBOT_FRONT_CALIBRATION);
 
 			String[] mapDescriptor = knownMap.generateMapDescriptor();
-			
+
 			try{
 				TimeUnit.MILLISECONDS.sleep(CommConstants.COMM_DELAY_TIME);
 			} catch(InterruptedException e){
@@ -788,7 +789,19 @@ public class ExploreAlgo{
 	}
 
 
-
+	private void markGoalZone(){
+		MapGrid curPos = new MapGrid(MapConstants.GOAL_X_CENTER, MapConstants.GOAL_Y_CENTER);
+		for (int i = -1; i <= 1; i++){
+			for (int j = -1; j <= 1; j++){
+				// MapGrid curPos = expRobot.getPosition();
+				knownMap.getGrid(curPos.getRow()+i, curPos.getCol()+j).setExplored(true);
+				knownMap.getGrid(curPos.getRow()+i, curPos.getCol()+j).setVisited(true);
+				if (knownMap.getGrid(curPos.getRow()+i, curPos.getCol()+j).isObstacle()){
+					knownMap.removeObstacle(curPos.getRow()+i, curPos.getCol()+j);
+				}
+			}
+		}
+	}
 
 
 

@@ -74,7 +74,7 @@ public class ShortestPathAlgo{
 					gscore[i][j] = RobotConstants.INFINITY;
 				}
 				else {
-					gscore[i][j] = - RobotConstants.INFINITY;
+					gscore[i][j] = - RobotConstants.INFINITY/10;
 				}
 			}
 		}		
@@ -88,9 +88,34 @@ public class ShortestPathAlgo{
 
 		//start A* search algorithm
 		do {
+			//printGScore();
+			//Scanner sc = new Scanner(System.in);
+			//String t = sc.nextLine();
 
 			//evaluate the grid in the opened set with lowest cost;
 			MapGrid current = findMinimumCost(opened, gscore, goal);
+
+
+
+			if (parent.containsKey(current)){
+				MapGrid preMove = parent.get(current);
+				//System.out.println(preMove.toString() + " -> " + current.toString());
+				//set new heading
+				if (preMove.getRow()==current.getRow() && preMove.getCol()<current.getCol()){
+					curHeading = 1;
+				}
+				if (preMove.getRow()>current.getRow() && preMove.getCol()==current.getCol()){
+					curHeading = 2;
+				}
+				if (preMove.getRow()==current.getRow() && preMove.getCol()>current.getCol()){
+					curHeading = 3;
+				}
+				if (preMove.getRow()<current.getRow() && preMove.getCol()==current.getCol()){
+					curHeading = 4;
+				}
+			} else {
+				//curHeading = 4;
+			}
 
 
 			//check if goal is reached
@@ -110,29 +135,20 @@ public class ShortestPathAlgo{
 			//find neighbours
 			ArrayList<MapGrid> neighbours = findNeighbour(current);
 			// System.out.println(neighbours.size());
-
+			MapGrid nextMove = null;
 			for (int i=0; i<neighbours.size();i++){
 				MapGrid curNeighbour = neighbours.get(i);
 				if (!closed.contains(curNeighbour)){  //the neighbour grid has not been evaluated
 					if (!opened.contains(curNeighbour)){
 						parent.put(curNeighbour, current);
-						
-
+					
 
 						gscore[curNeighbour.getRow()][curNeighbour.getCol()] = 
 							gscore[current.getRow()][current.getCol()] 
 							+ calculateGscore(current, curNeighbour, curHeading);
 						opened.add(curNeighbour);
 
-						//set new heading
-						if (curNeighbour.getRow()==current.getRow() && curNeighbour.getCol()>current.getCol())
-							curHeading = 1;
-						if (curNeighbour.getRow()<current.getRow() && curNeighbour.getCol()==current.getCol())
-							curHeading = 2;
-						if (curNeighbour.getRow()==current.getRow() && curNeighbour.getCol()<current.getCol())
-							curHeading = 3;
-						if (curNeighbour.getRow()>current.getRow() && curNeighbour.getCol()==current.getCol())
-							curHeading = 4;
+						
 					}
 					else {
 						double currentGscore = gscore[curNeighbour.getRow()][curNeighbour.getCol()];
@@ -141,21 +157,13 @@ public class ShortestPathAlgo{
 						if (newGscore < currentGscore){
 							gscore[curNeighbour.getRow()][curNeighbour.getCol()] = newGscore;
 							parent.put(curNeighbour, current);
-							//set new heading
-							if (curNeighbour.getRow()==current.getRow() && curNeighbour.getCol()>current.getCol())
-								curHeading = 1;
-							if (curNeighbour.getRow()<current.getRow() && curNeighbour.getCol()==current.getCol())
-								curHeading = 2;
-							if (curNeighbour.getRow()==current.getRow() && curNeighbour.getCol()<current.getCol())
-								curHeading = 3;
-							if (curNeighbour.getRow()>current.getRow() && curNeighbour.getCol()==current.getCol())
-								curHeading = 4;
+						
 						}
 
 					}
-				}
-					
+				}				
 			}
+			
 		} while(!opened.isEmpty());
 
 		if (closed.contains(stpMap.getGrid(goal.getRow(), goal.getCol()))){
@@ -199,7 +207,7 @@ public class ShortestPathAlgo{
 					gscore[i][j] = RobotConstants.INFINITY;
 				}
 				else {
-					gscore[i][j] = - RobotConstants.INFINITY;
+					gscore[i][j] = - RobotConstants.INFINITY/10;
 				}
 			}
 		}		
@@ -219,6 +227,24 @@ public class ShortestPathAlgo{
 			//evaluate the grid in the opened set with lowest cost;
 			MapGrid current = findMinimumCost(opened, gscore, goal);
 
+			if (parent.containsKey(current)){
+				MapGrid preMove = parent.get(current);
+				//set new heading
+				if (preMove.getRow()==current.getRow() && preMove.getCol()<current.getCol()){
+					curHeading = 1;
+				}
+				if (preMove.getRow()>current.getRow() && preMove.getCol()==current.getCol()){
+					curHeading = 2;
+				}
+				if (preMove.getRow()==current.getRow() && preMove.getCol()>current.getCol()){
+					curHeading = 3;
+				}
+				if (preMove.getRow()<current.getRow() && preMove.getCol()==current.getCol()){
+					curHeading = 4;
+				}
+			} else {
+				//curHeading = 4;
+			}
 
 			//check if goal is reached
 			if (closed.contains(stpMap.getGrid(goal.getRow(), goal.getCol()))){
@@ -249,15 +275,7 @@ public class ShortestPathAlgo{
 							gscore[current.getRow()][current.getCol()] 
 							+ calculateGscore(current, curNeighbour, curHeading);
 						opened.add(curNeighbour);
-						//set new heading
-						if (curNeighbour.getRow()==current.getRow() && curNeighbour.getCol()>current.getCol())
-							curHeading = 1;
-						if (curNeighbour.getRow()<current.getRow() && curNeighbour.getCol()==current.getCol())
-							curHeading = 2;
-						if (curNeighbour.getRow()==current.getRow() && curNeighbour.getCol()<current.getCol())
-							curHeading = 3;
-						if (curNeighbour.getRow()>current.getRow() && curNeighbour.getCol()==current.getCol())
-							curHeading = 4;
+					
 					}
 					else {
 						double currentGscore = gscore[curNeighbour.getRow()][curNeighbour.getCol()];
@@ -266,15 +284,7 @@ public class ShortestPathAlgo{
 						if (newGscore < currentGscore){
 							gscore[curNeighbour.getRow()][curNeighbour.getCol()] = newGscore;
 							parent.put(curNeighbour, current);
-							//set new heading
-							if (curNeighbour.getRow()==current.getRow() && curNeighbour.getCol()>current.getCol())
-								curHeading = 1;
-							if (curNeighbour.getRow()<current.getRow() && curNeighbour.getCol()==current.getCol())
-								curHeading = 2;
-							if (curNeighbour.getRow()==current.getRow() && curNeighbour.getCol()<current.getCol())
-								curHeading = 3;
-							if (curNeighbour.getRow()>current.getRow() && curNeighbour.getCol()==current.getCol())
-								curHeading = 4;
+							
 						}
 
 					}
@@ -309,8 +319,8 @@ public class ShortestPathAlgo{
 
 		for (int i = size - 1; i >= 0; i--){
 			MapGrid tempGrid = list.get(i);
-			double tempCost =  gscore[tempGrid.getRow()][tempGrid.getCol()] 
-							+ heuristicFunction(tempGrid, goal);   //calculate the fscore = gscore + hscore
+			double tempCost =  gscore[tempGrid.getRow()][tempGrid.getCol()]; 
+							//+ heuristicFunction(tempGrid, goal);   //calculate the fscore = gscore + hscore
 			if (tempCost < min){
 				min = tempCost;
 				result = tempGrid;
@@ -337,8 +347,11 @@ public class ShortestPathAlgo{
 		// if (goal.getRow()-currentGrid.getRow() != 0)
 		// 	turn++;
 
-		turn = getTurnTimes(stpRobot.getPosition(), goal, curHeading);
-		System.out.println("getTurnTimes: " + turn*RobotConstants.TURN_COST);
+		// turn = getTurnTimes(stpRobot.getPosition(), goal, curHeading);
+		if (goal.getCol()-currentGrid.getCol() != 0 && goal.getRow()-currentGrid.getRow() != 0){
+			turn++;
+		}
+		//System.out.println("getTurnTimes: " + turn*RobotConstants.TURN_COST);
 		return (move + turn*RobotConstants.TURN_COST);
 
 	}
@@ -346,12 +359,12 @@ public class ShortestPathAlgo{
 	private double calculateGscore(MapGrid cur, MapGrid next, int heading){
 		double move = RobotConstants.MOVE_COST; //always one step
 		double turn = getTurnTimes(cur, next, heading) * RobotConstants.TURN_COST;
-		System.out.println("getTurnTimes: " + turn);
+		//System.out.println("getTurnTimes: " + turn);
 		return (move + turn);
 	}
 
 	private int getTurnTimes(MapGrid cur, MapGrid next, int heading){
-		System.out.println("cur: " + cur.toString() + "next: " + next.toString() + "heading: " + heading);
+		//System.out.println("cur: " + cur.toString() + "next: " + next.toString() + "heading: " + heading);
 		switch (heading) {
 			case 1: //current direction to right
 				if (next.getRow() == cur.getRow()){
@@ -933,9 +946,9 @@ public class ShortestPathAlgo{
 	}
 
 	private void printGScore(){
-		for (int i = 0; i < MapConstants.MAP_ROW;i++){
-			for (int j = 0; j < MapConstants.MAP_COL;j++){
-				System.out.printf("%6.1f ", gscore[i][j]);
+		for (int i = MapConstants.MAP_ROW-2; i > 0;i--){
+			for (int j = 1; j < MapConstants.MAP_COL-1;j++){
+				System.out.printf("%8.1f ", gscore[i][j]);
 			}
 			System.out.println();
 		}
